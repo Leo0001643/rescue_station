@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:rescue_station/app/utils/AppLayout.dart';
@@ -94,11 +95,17 @@ class HomePage extends GetView<HomeController> {
             ),
           Gap(AppLayout.width(5)),
           Expanded(
-              child: Marquee(
-              text: '恭喜会员：13556779889 申请金额 50000￥审批通过',
-              style: TextStyle(fontSize: AppLayout.fontSize(16), color: Colors.black87),
-              scrollAxis: Axis.horizontal,
-            )
+              child: Obx((){
+                if(ObjectUtil.isEmpty(controller.data.value)) {
+                  return Container();
+                }
+                return Marquee(
+                  text: "${controller.data.value.content}",
+                  blankSpace: AppLayout.width(18),
+                  style: TextStyle(fontSize: AppLayout.fontSize(16), color: Colors.black87),
+                  scrollAxis: Axis.horizontal,
+                );
+              })
           )
         ],
       ),

@@ -29,6 +29,10 @@ dependencies:
   shared_preferences: ^2.0.15
   #Icon组件
   cupertino_icons: ^1.0.6
+  #工具组件
+  common_utils: ^2.1.0
+  #跨域代理组建
+  shelf_proxy: ^1.0.1
   flutter_easyloading: ^3.0.5
 
 

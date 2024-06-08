@@ -41,6 +41,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
+  common_utils:
+    dependency: "direct main"
+    description:
+      name: common_utils
+      sha256: c26884339b13ff99b0739e56f4b02090c84054ed9dd3a045435cd24e7b99c2c1
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  convert:
+    dependency: transitive
+    description:
+      name: convert
+      sha256: "0f08b14755d163f6e2134cb58222dd25ea2a2ee8a195e53983d57c075324d592"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
+  crypto:
+    dependency: transitive
+    description:
+      name: crypto
+      sha256: ff625774173754681d66daaf4a448684fb04b78f902da9cb3d308c19cc5e8bab
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.3"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -49,6 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  decimal:
+    dependency: transitive
+    description:
+      name: decimal
+      sha256: d40902905d9b1347cdd6cfb7c144025557cd49d12725a87f9177df93abd0d825
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   dio:
     dependency: "direct main"
     description:
@@ -184,6 +216,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.6.6"
+  http:
+    dependency: transitive
+    description:
+      name: http
+      sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   http_parser:
     dependency: transitive
     description:
@@ -328,6 +368,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  rational:
+    dependency: transitive
+    description:
+      name: rational
+      sha256: cb808fb6f1a839e6fc5f7d8cb3b0a10e1db48b3be102de73938c627f0b636336
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.3"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -384,6 +432,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+  shelf:
+    dependency: transitive
+    description:
+      name: shelf
+      sha256: ad29c505aee705f41a4d8963641f91ac4cee3c8fad5947e033390a7bd8180fa4
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.1"
+  shelf_proxy:
+    dependency: "direct main"
+    description:
+      name: shelf_proxy
+      sha256: a71d2307f4393211930c590c3d2c00630f6c5a7a77edc1ef6436dfd85a6a7ee3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   sky_engine:
     dependency: transitive
     description: flutter

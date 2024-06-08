@@ -23,6 +23,7 @@ class TabsController extends GetxController {
     super.onInit();
   }
 
+
   @override
   void onClose() {
     super.onClose();

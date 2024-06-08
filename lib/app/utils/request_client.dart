@@ -12,13 +12,11 @@ class RequestClient {
   late Dio _dio;
   static final RequestClient _singletonRequestClient =
   RequestClient._internal();
-
   factory RequestClient() {
     return _singletonRequestClient;
   }
 
   RequestClient._internal() {
-    ///初始化 dio 配置
     var options = BaseOptions(
         baseUrl: NetWorkConfig.baseUrl,
         connectTimeout: NetWorkConfig.connectTimeOut,
@@ -26,6 +24,7 @@ class RequestClient {
         sendTimeout: NetWorkConfig.writeTimeOut);
     _dio = Dio(options);
   }
+
 
   Future<T?> request<T>(
       String url, {
@@ -40,7 +39,8 @@ class RequestClient {
         ..method = method
         ..headers = headers;
       data = _convertRequestData(data);
-      var  response = await _dio.request(url,queryParameters: queryParameters, data: data, options: options);
+      var response = await _dio.request(url,queryParameters: queryParameters, data: data, options: options);
+      print("request：$url ,result:$response");
       return _handleResponse<T>(response);
     } catch (e) {
       ///创建 ApiException ，调用 onError，当 onError 返回为 true 时即错误信息已被调用方处理，则不抛出异常，否则抛出异常。
