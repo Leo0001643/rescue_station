@@ -1,0 +1,53 @@
+name: rescue_station
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+environment:
+  sdk: '>=3.0.5 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: 4.6.6
+  #间距组件
+  gap: ^3.0.1
+  #网络请求
+  dio: ^4.0.6
+  #文字滚动组件
+  marquee: ^2.2.3
+  #视口组件
+  flutter_screenutil: ^5.5.4
+  #轮播图组件
+  flutter_swiper_view: ^1.1.8
+  #滑动条组件
+  flutter_slidable: ^3.1.0
+  #上下滑动刷新以及分页
+  easy_refresh: ^3.4.0
+  #网格布局组件
+  flutter_staggered_grid_view: ^0.6.2
+  #本地存储组件
+  shared_preferences: ^2.0.15
+  #Icon组件
+  cupertino_icons: ^1.0.6
+  flutter_easyloading: ^3.0.5
+
+
+dependency_overrides:
+  meta: ^1.10.0 # 替换为你需要的meta库的版本号
+  vm_service: 14.2.1
+  intl: 0.19.0
+  fading_edge_scrollview: ^4.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/banner/
+    - assets/images/icon/
+  fonts:
+    - family: rescue
+      fonts:
+        - asset: assets/fonts/iconfont.ttf
