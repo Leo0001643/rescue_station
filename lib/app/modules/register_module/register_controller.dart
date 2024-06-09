@@ -1,11 +1,25 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-/**
- * GetX Template Generator - fb.com/htngu.99
- * */
+import '../../routes/app_pages.dart';
 
-class registerController extends GetxController{
+class RegisterController extends GetxController{
+  var usernameController = TextEditingController();
+  var passwordController = TextEditingController();
+  var confirmPasswordController = TextEditingController();
+  var phoneController = TextEditingController();
 
-  var _obj = ''.obs;
-  set obj(value) => _obj.value = value;
-  get obj => _obj.value;
+  void register() {
+    final username = usernameController.text;
+    final password = passwordController.text;
+    final confirmPassword = confirmPasswordController.text;
+    final phone = phoneController.text;
+
+    if (password == confirmPassword) {
+      print('Username: $username, Password: $password, Phone: $phone');
+      Get.snackbar('Register', 'Registration successful for $username');
+      Get.toNamed(Routes.TABS);
+    } else {
+      Get.snackbar('Error', 'Passwords do not match');
+    }
+  }
 }

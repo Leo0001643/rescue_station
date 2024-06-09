@@ -1,11 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-/**
- * GetX Template Generator - fb.com/htngu.99
- * */
+import 'package:rescue_station/app/routes/app_pages.dart';
 
-class loginController extends GetxController{
+class LoginController extends GetxController{
+  var phoneController = TextEditingController();
+  var passwordController = TextEditingController();
+  var isPasswordLogin = true.obs;
 
-  var _obj = ''.obs;
-  set obj(value) => _obj.value = value;
-  get obj => _obj.value;
+
+  void toggleLoginMethod() {
+    isPasswordLogin.value = !isPasswordLogin.value;
+  }
+
+  void login() {
+    final phone = phoneController.text;
+    final password = passwordController.text;
+    print('Phone: $phone, Password: $password');
+
+    Get.snackbar('Login', 'Login successful for $phone');
+  }
+
+  void forgotPassword() {
+    Get.snackbar('Forgot Password', 'Password recovery process started.');
+  }
+
+  void register() {
+    Get.toNamed(Routes.REGISTER);
+  }
 }

@@ -1,11 +1,16 @@
 import 'package:get/get.dart';
-/**
- * GetX Template Generator - fb.com/htngu.99
- * */
+
 
 class CustomerServiceController extends GetxController{
+ RxInt count = 0.obs;
 
-  var _obj = ''.obs;
-  set obj(value) => _obj.value = value;
-  get obj => _obj.value;
+  @override
+  void onInit() {
+      super.onInit();
+  }
+
+ @override
+  void onReady() {
+
+  }
 }

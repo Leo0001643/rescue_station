@@ -87,13 +87,13 @@ abstract class AppPages {
     ),
     GetPage(
       name: Routes.LOGIN,
-      page: () => loginPage(),
-      binding: loginBinding(),
+      page: () => LoginPage(),
+      binding: LoginBinding(),
     ),
     GetPage(
       name: Routes.REGISTER,
-      page: () => registerPage(),
-      binding: registerBinding(),
+      page: () => RegisterPage(),
+      binding: RegisterBinding(),
     ),
   ];
 }

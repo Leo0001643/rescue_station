@@ -6,6 +6,8 @@ import 'package:rescue_station/app/modules/mine_module/mine_controller.dart';
  * */
 
 class MinePage extends GetView<MineController> {
+  const MinePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
