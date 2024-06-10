@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../utils/Icon.dart';
+import '../../utils/AppLayout.dart';
+import '../../theme/app_colors_theme.dart';
 import 'contacts_controller.dart';
 
 
@@ -10,11 +13,11 @@ class ContactsPage extends GetView<ContactsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('通讯录'),
-        backgroundColor: Colors.purple,
+        title: Text('通讯录',style: TextStyle(fontSize: AppLayout.fontSize(20), color: Colors.white),),
+        backgroundColor: AppStyles.primaryColor,
         actions: [
           IconButton(
-            icon: Icon(Icons.person_add),
+            icon: const Icon(IconFont.CONTACTS_ADD, color: Colors.white),
             onPressed: () {
               // Handle add contact action
             },
