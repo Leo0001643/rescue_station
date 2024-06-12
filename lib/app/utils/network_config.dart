@@ -1,5 +1,5 @@
 class NetWorkConfig {
-  static String baseUrl = "http://127.0.0.1:8088/";
+  static String baseUrl = "http://103.143.80.82:9699/";
   static const connectTimeOut = 10000;
   static const readTimeOut = 10000;
   static const writeTimeOut = 10000;

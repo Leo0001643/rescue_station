@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/modules/customer_service_module/customer_service_controller.dart';
 import 'package:rescue_station/app/modules/mine_module/mine_controller.dart';
 import 'package:rescue_station/app/modules/tabs_module/tabs_pages.dart';
-import '../../routes/app_pages.dart';
 import '../contacts_module/contacts_controller.dart';
 import '../home_module/home_controller.dart';
 import '../login_module/login_page.dart';
