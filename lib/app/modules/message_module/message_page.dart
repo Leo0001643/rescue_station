@@ -1,9 +1,9 @@
-import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:gap/gap.dart';
-import 'package:rescue_station/app/routes/app_pages.dart';
-import 'package:rescue_station/app/theme/app_text_theme.dart';
+import '../../routes/app_pages.dart';
+import '../../theme/app_text_theme.dart';
 import '../../theme/app_colors_theme.dart';
 import '../../utils/AppLayout.dart';
 import '../../utils/Icon.dart';

@@ -9,6 +9,4 @@ class IconFont{
  static const IconData CUSTOMER = IconData(0xe851, fontFamily: "rescue", matchTextDirection: true);
  static const IconData MINE = IconData(0xe7bd, fontFamily: "rescue", matchTextDirection: true);
  static const IconData ADD = IconData(0xe644, fontFamily: "rescue", matchTextDirection: true);
-
-
 }

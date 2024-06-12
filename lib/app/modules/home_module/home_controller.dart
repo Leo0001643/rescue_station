@@ -2,7 +2,7 @@ import 'package:common_utils/common_utils.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/domains/marquee_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
-import 'package:rescue_station/app/utils/request_client.dart';
+import 'package:rescue_station/app/utils/network/request_client.dart';
 
 class HomeController extends GetxController{
   final RequestClient requestClient = RequestClient();
