@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:rescue_station/app/theme/app_colors_theme.dart';
-import '../../routes/app_pages.dart';
-import '../../utils/request_client.dart';
-import '../tabs_module/tabs_controller.dart';
+import '../../theme/app_colors_theme.dart';
+import '../../utils/network/request_client.dart';
 
 
 class LoanController extends GetxController{
@@ -16,9 +14,6 @@ class LoanController extends GetxController{
   var reason = ''.obs;
 
   final formKey = GlobalKey<FormState>();
-
-
-
 
   Future<void> submitForm() async {
     if (formKey.currentState?.validate() ?? false) {

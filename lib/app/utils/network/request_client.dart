@@ -5,7 +5,7 @@ import 'package:rescue_station/app/routes/app_pages.dart';
 import 'RawData.dart';
 import 'api_exception.dart';
 import 'network_config.dart';
-import '../domains/api_response.dart';
+import '../../domains/api_response.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class RequestClient {

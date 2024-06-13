@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
-
-import '../domains/api_response.dart';
+import '../../domains/api_response.dart';
 
 class ApiException implements Exception {
   static const unknownException = "未知错误";
@@ -75,10 +74,10 @@ class ApiException implements Exception {
 
 /// 请求错误
 class BadRequestException extends ApiException {
-  BadRequestException([int? code, String? message]) : super(code, message);
+  BadRequestException([super.code, super.message]);
 }
 
 /// 未认证异常
 class UnauthorisedException extends ApiException {
-  UnauthorisedException([int code = -1, String message = '']) : super(code, message);
+  UnauthorisedException([int super.code = -1, String super.message = '']);
 }
