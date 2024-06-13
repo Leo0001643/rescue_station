@@ -1,6 +1,6 @@
 class Api{
   ///*********************HTTP协议接口***********************
-  ///*************** 会员消息类别接口 ***************
+  ///*************** 会员消息接口 ***************
   ///首页广播
   static const  MARQUEE = '/marquee/info';
 
@@ -36,7 +36,7 @@ class Api{
 
 
 
-  ///*************** 群类消息别接口 ***************
+  ///*************** 群类消息接口 ***************
   ///建立群组
   static const CREATE_GROUP= "/group/createGroup";
 
@@ -84,7 +84,36 @@ class Api{
 
 
 
+///*************** 会员基础接口 ***************
+  ///修改密码
+  static const EDIT_PASS = "/my/editPass";
 
+  ///修改密码
+  static const LOGOUT = "/my/logout";
+
+  ///退出系统
+  static const GET_INFO = "/my/getInfo";
+
+  ///修改昵称
+  static const EDIT_NICK = "/my/editNick";
+
+  ///修改头像
+  static const EDIT_PORTRAIT = "/my/editPortrait";
+
+  ///修改微聊号
+  static const EDIT_CHATNO = "/my/editChatNo";
+
+  ///修改性别
+  static const EDIT_GENDER = "/my/editGender";
+
+  ///修改个性签名
+  static const EDIT_INTRO = "/my/editIntro";
+
+  ///修改省市
+  static const EDIT_CITY = "/my/editCity";
+
+  ///刷新
+  static const REFRESH = "/my/refresh";
 
 ///*********************WebScoket协议接口***********************
 ///
