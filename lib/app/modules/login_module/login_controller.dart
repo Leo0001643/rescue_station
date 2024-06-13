@@ -5,12 +5,8 @@ import 'package:rescue_station/app/routes/app_pages.dart';
 class LoginController extends GetxController{
   var phoneController = TextEditingController();
   var passwordController = TextEditingController();
-  var isPasswordLogin = true.obs;
-
-
-  void toggleLoginMethod() {
-    isPasswordLogin.value = !isPasswordLogin.value;
-  }
+  var phoneNumber = ''.obs;
+  var password = ''.obs;
 
   void login() {
     final phone = phoneController.text;
@@ -19,6 +15,11 @@ class LoginController extends GetxController{
 
     Get.snackbar('Login', 'Login successful for $phone');
   }
+
+/*  void login() {
+    print('登录手机号: $phoneNumber, 密码: $password');
+    Get.toNamed('/home');
+  }*/
 
   void forgotPassword() {
     Get.snackbar('Forgot Password', 'Password recovery process started.');
