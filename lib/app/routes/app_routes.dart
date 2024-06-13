@@ -17,4 +17,10 @@ abstract class Routes {
   static const ADD_FRIEND = '/add_friend'; // AddFriend page
   static const LOGIN = '/login'; // login page
   static const REGISTER = '/register'; // register page
+  static const CHAT_BY_FRIEND = '/chat_by_friend'; // friend chat page
+  static const CHAT_BY_GROUP = '/chat_by_group'; // group chat page
+
+
+
+
 }

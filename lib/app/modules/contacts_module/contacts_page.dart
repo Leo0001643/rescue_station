@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:getwidget/getwidget.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
+import 'package:rescue_station/app/theme/app_colors.dart';
+import 'package:rescue_station/app/theme/app_text_theme.dart';
+import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../utils/Icon.dart';
 import '../../utils/AppLayout.dart';
 import '../../theme/app_colors_theme.dart';
@@ -12,36 +19,23 @@ class ContactsPage extends GetView<ContactsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('通讯录',style: TextStyle(fontSize: AppLayout.fontSize(20), color: Colors.white),),
-        backgroundColor: AppStyles.primaryColor,
-        actions: [
-          IconButton(
-            icon: const Icon(IconFont.CONTACTS_ADD, color: Colors.white),
-            onPressed: () {
-              // Handle add contact action
-            },
-          ),
-        ],
+      appBar: WidgetUtils.buildSearchAppBar(context, "通讯录",
+        InkWell(
+          onTap: (){},
+          child: const Icon(IconFont.CONTACTS_ADD, color: Colors.white),
+        ),
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                hintText: '搜索',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-              ),
-              onChanged: (value) => controller.filterContacts(value),
-            ),
-          ),
           Expanded(
-            child: Obx(() => ListView.builder(
+            child: Obx(() => ListView.separated(
               itemCount: controller.filteredContacts.length,
+              separatorBuilder: (context, index) {
+                return Padding(
+                    padding: EdgeInsets.only(left: AppLayout.width(80)),
+                    child: Divider(height: AppLayout.heigth(0),color: AppStyles.lightGreyWile)
+                );
+              },
               itemBuilder: (context, index) {
                 final contact = controller.filteredContacts[index];
                 return Dismissible(
@@ -58,8 +52,11 @@ class ContactsPage extends GetView<ContactsController> {
                     child: Icon(Icons.delete, color: Colors.white),
                   ),
                   child: ListTile(
-                    leading: CircleAvatar(
+                    leading: GFAvatar(
                       backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+                      radius: 25.r,
+                      shape: GFAvatarShape.standard,
+                      borderRadius: BorderRadius.circular(5.r),
                     ),
                     title: Text(contact),
                     onTap: () {
@@ -72,35 +69,11 @@ class ContactsPage extends GetView<ContactsController> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '首页',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: '消息',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.contacts),
-            label: '通讯录',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.share),
-            label: '邀请',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '我的',
-          ),
-        ],
-        currentIndex: 2,
-        selectedItemColor: Colors.purple,
-        onTap: (index) {
-          // Handle bottom navigation tap
-        },
-      ),
     );
   }
+
+
+
+
+
 }

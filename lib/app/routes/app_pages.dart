@@ -1,3 +1,4 @@
+
 import '../../app/modules/register_module/register_page.dart';
 import '../../app/modules/register_module/register_bindings.dart';
 import '../../app/modules/login_module/login_page.dart';
@@ -89,6 +90,11 @@ abstract class AppPages {
       name: Routes.LOGIN,
       page: () => LoginPage(),
       binding: LoginBinding(),
+    ),
+    GetPage(
+      name: Routes.REGISTER,
+      page: () => RegisterPage(),
+      binding: RegisterBinding(),
     ),
     GetPage(
       name: Routes.REGISTER,

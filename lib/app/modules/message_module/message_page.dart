@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:gap/gap.dart';
+import 'package:getwidget/getwidget.dart';
+import 'package:rescue_station/app/utils/dialog_utils.dart';
+import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../routes/app_pages.dart';
 import '../../theme/app_text_theme.dart';
 import '../../theme/app_colors_theme.dart';
@@ -16,7 +20,12 @@ class MessagePage extends GetView<MessageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: _appBar(context),
+        appBar: WidgetUtils.buildSearchAppBar(context,"消息",
+          InkWell(
+            onTap: ()=> showPopWindow(context),
+            child: const Icon(IconFont.ADD,color: Colors.white),
+          ),
+        ),
         body: EasyRefresh.builder(
           header: const MaterialHeader(
             clamping: true,
@@ -40,83 +49,6 @@ class MessagePage extends GetView<MessageController> {
     );
   }
 
-  PreferredSizeWidget _appBar(BuildContext context){
-    return AppBar(
-        toolbarHeight: AppLayout.heigth(120),
-        backgroundColor: const Color.fromRGBO(112, 50, 255, 1),
-        title: SizedBox(
-          child:Column(
-            children: [
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: Center(
-                        child: Padding(
-                            padding: EdgeInsets.only(left: AppLayout.width(50)),
-                            child: Text("消息", style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(20),fontWeight: FontWeight.w500))
-                        ))),
-                    IconButton(
-                      onPressed: (){
-                        showMenu(
-                            context: context,
-                            color: AppStyles.lightGrey,
-                            position: RelativeRect.fromLTRB(AppLayout.width(600), AppLayout.heigth(108), 0, 0),
-                            items:<PopupMenuEntry> [
-                              PopupMenuItem(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-                                      const Icon(IconFont.MESSAGE, color: Colors.white),
-                                      Gap(AppLayout.width(6)),
-                                      Text("发起群聊", style: AppTextTheme.headLineStyle0.copyWith(color: Colors.white))
-                                    ],
-                                ),
-                                onTap: ()=> Get.toNamed(Routes.CREATE_GROUP),
-                              ),
-                              const PopupMenuDivider(),
-                              PopupMenuItem(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    const Icon(IconFont.ADD, color: Colors.white),
-                                    Gap(AppLayout.width(6)),
-                                    Text("添加朋友", style: AppTextTheme.headLineStyle0.copyWith(color: Colors.white))
-                                  ],
-                                ),
-                                onTap: ()=> Get.toNamed(Routes.ADD_FRIEND),
-                              ),
-                            ]
-                        );
-                      },
-                      icon: const Icon(IconFont.ADD,color: Colors.white)),
-                  ]
-              ),
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxHeight: AppLayout.heigth(42),
-                    maxWidth: double.infinity
-                ),
-                child: TextField(
-                  textAlign: TextAlign.start,
-                  // keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(AppLayout.heigth(0)),
-                    prefixIcon: const Icon(Icons.search,),
-                    hintText: '搜索',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                ),
-              )
-            ],
-          ),
-        )
-    );
-  }
 
   Widget _message(ScrollPhysics physics){
     return Column(
@@ -156,27 +88,21 @@ class MessagePage extends GetView<MessageController> {
                   ],
                 ),
                 child: ListTile(
-                  leading: Stack(
-                    children: [
-                      // CircleAvatar(
-                      //   backgroundImage: AssetImage(controller.messages[index].avatar),
-                      // ),
-                      Container(
-                        clipBehavior: Clip.hardEdge,
-                        width: AppLayout.width(48),height: AppLayout.width(48),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(AppLayout.width(5))),
-                        child: Image.asset(controller.messages[index].avatar, fit: BoxFit.cover),
+                  onTap: (){
+                    Get.toNamed(Routes.CHAT_BY_FRIEND);
+                  },
+                  leading: GFAvatar(
+                    backgroundImage: AssetImage(controller.messages[index].avatar,),
+                    shape: GFAvatarShape.standard,
+                    borderRadius: BorderRadius.circular(5.r),
+                    radius: 25.r,
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: GFBadge(
+                        size: 20.r,
+                        shape: GFBadgeShape.circle,
                       ),
-                      Positioned(
-                        left: AppLayout.heigth(38),
-                        top: AppLayout.heigth(0),
-                        right: AppLayout.heigth(0),
-                        child: CircleAvatar(
-                          radius: AppLayout.heigth(5),
-                          backgroundColor: Colors.red,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                   title: Text(controller.messages[index].name,style: AppTextTheme.headLineStyle1,),
                   subtitle: Text(controller.messages[index].preview, style: AppTextTheme.headLineStyle0,),
@@ -193,7 +119,42 @@ class MessagePage extends GetView<MessageController> {
     );
   }
 
-  void doNothing(BuildContext context) {}
+  void doNothing(BuildContext context) {
+
+  }
+
+  void showPopWindow(BuildContext context) {
+    DialogUtils.showPopMenu(context,
+        [
+          PopupMenuItem(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Icon(IconFont.MESSAGE, color: Colors.white),
+                Gap(AppLayout.width(6)),
+                Text("发起群聊", style: AppTextTheme.headLineStyle0.copyWith(color: Colors.white))
+              ],
+            ),
+            onTap: ()=> Get.toNamed(Routes.CREATE_GROUP),
+          ),
+          const PopupMenuDivider(),
+          PopupMenuItem(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Icon(IconFont.ADD, color: Colors.white),
+                Gap(AppLayout.width(6)),
+                Text("添加朋友", style: AppTextTheme.headLineStyle0.copyWith(color: Colors.white))
+              ],
+            ),
+            onTap: ()=> Get.toNamed(Routes.ADD_FRIEND),
+          ),
+        ]);
+  }
+
+
+
+
 }
 
 
