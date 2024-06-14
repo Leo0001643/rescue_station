@@ -38,8 +38,13 @@ dependencies:
   flutter_chat_ui: ^1.6.14
   flutter_chat_types: ^3.6.2
   bubble: ^1.2.1
+  #组件扩展
   getwidget: ^4.0.0
-
+  #文件选择
+  file_picker: ^8.0.5
+  #表情包
+  emoji_picker_flutter: ^2.2.0
+  flutter_keyboard_visibility: ^6.0.0
 
 dependency_overrides:
   meta: ^1.10.0 # 替换为你需要的meta库的版本号

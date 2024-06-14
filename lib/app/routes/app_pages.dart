@@ -1,3 +1,5 @@
+import 'package:rescue_station/app/modules/chat_by_friend/chat_by_friend_binding.dart';
+import 'package:rescue_station/app/modules/chat_by_friend/chat_by_friend_page.dart';
 
 import '../../app/modules/register_module/register_page.dart';
 import '../../app/modules/register_module/register_bindings.dart';
@@ -101,5 +103,11 @@ abstract class AppPages {
       page: () => RegisterPage(),
       binding: RegisterBinding(),
     ),
+    GetPage(
+      name: Routes.CHAT_BY_FRIEND,
+      page: () => ChatByFriendPage(),
+      binding: ChatByFriendBinding(),
+    ),
+
   ];
 }

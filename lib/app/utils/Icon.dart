@@ -10,3 +10,10 @@ class IconFont{
  static const IconData MINE = IconData(0xe7bd, fontFamily: "rescue", matchTextDirection: true);
  static const IconData ADD = IconData(0xe644, fontFamily: "rescue", matchTextDirection: true);
 }
+
+class ImageFont{
+
+  static const select_img = "assets/images/icon/ic_select_img.png";
+  static const select_file = "assets/images/icon/ic_select_file.png";
+
+}
