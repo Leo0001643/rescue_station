@@ -1,7 +1,7 @@
+import '../../app/modules/register_module/register_page.dart';
 import 'package:rescue_station/app/modules/chat_by_friend/chat_by_friend_binding.dart';
 import 'package:rescue_station/app/modules/chat_by_friend/chat_by_friend_page.dart';
 
-import '../../app/modules/register_module/register_page.dart';
 import '../../app/modules/register_module/register_bindings.dart';
 import '../../app/modules/login_module/login_page.dart';
 import '../../app/modules/login_module/login_bindings.dart';

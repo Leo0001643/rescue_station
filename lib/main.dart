@@ -6,11 +6,18 @@ import 'app/utils/navigator_observer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-void main() {
-  //配置透明的状态栏
+import 'app/utils/shared_preferences_util.dart';
+
+void main() async{
+  ///配置透明的状态栏
   SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  ///路由追踪
   final CustomNavigatorObserver navigatorObserver = CustomNavigatorObserver();
+  ///初始化本地缓存
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferencesUtil.init();
+
   ///初始化国际日期格式
   initializeDateFormatting().then((_){
     runApp(
