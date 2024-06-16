@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors_theme.dart';
 import '../tabs_module/tabs_pages.dart';
 import '../tabs_module/tabs_controller.dart';
@@ -32,7 +33,7 @@ class LoginPage extends GetView<LoginController> {
         elevation: 0,
         actions: [
           TextButton(
-            onPressed: ()=>Get.toNamed('/register'),
+            onPressed: ()=>Get.toNamed(Routes.REGISTER),
             child: Text('注册',style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(16), fontWeight: FontWeight.w900)),
           ),
         ],
