@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:rescue_station/app/constant/constant.dart';
+import 'package:rescue_station/app/utils/logger.dart';
+import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 
 class DioUtil {
   static final DioUtil _instance = DioUtil._internal();
@@ -15,7 +19,7 @@ class DioUtil {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'version': Constant.VERSION,
-        'Authorization': ''
+        'Authorization': SharedPreferencesUtil.getString("token",defaultValue: ''),
       },
     );
     dio = Dio(options);
@@ -24,9 +28,11 @@ class DioUtil {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
         // Do something before request is sent
+        loggerArray(["发起请求","${options.baseUrl}${options.path}","${options.method}\n","${options.headers}\n",options.data ?? options.queryParameters]);
         return handler.next(options); //continue
       },
       onResponse: (response, handler) {
+        loggerArray(["返回响应",response.requestOptions.path,response.statusCode, "${jsonEncode(response.requestOptions.data)}\n",jsonEncode(response.data)]);
         // Do something with response data
         return handler.next(response); // continue
       },

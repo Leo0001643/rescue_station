@@ -19,7 +19,7 @@ class WidgetUtils {
   }
 
 
-  static AppBar buildSearchAppBar(BuildContext context,String title,Widget rightIcon){
+  static AppBar buildSearchAppBar(BuildContext context,String title,Widget rightIcon,{Function(String text)? onChange}){
     return AppBar(
       toolbarHeight: AppLayout.heigth(120),
       backgroundColor: color_703,
@@ -51,6 +51,7 @@ class WidgetUtils {
                   child: TextField(
                     // keyboardType: TextInputType.number,
                     style: TextStyle(fontSize: 16.sp),
+                    onChanged: onChange,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 10.h),
                       isCollapsed: true,
