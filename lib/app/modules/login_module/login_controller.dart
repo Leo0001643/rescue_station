@@ -36,11 +36,6 @@ class LoginController extends GetxController{
     }
   }
 
-/*  void login() {
-    print('登录手机号: $phoneNumber, 密码: $password');
-    Get.toNamed('/home');
-  }*/
-
   void forgotPassword() {
     Get.snackbar('Forgot Password', 'Password recovery process started.');
   }
