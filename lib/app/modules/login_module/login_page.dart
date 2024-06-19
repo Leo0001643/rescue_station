@@ -11,6 +11,7 @@ import 'package:rescue_station/app/utils/AppLayout.dart';
 
 
 class LoginPage extends GetView<LoginController> {
+  final _formKey = GlobalKey<FormState>();
   LoginPage({super.key}) {
     Get.put(LoginController());
   }
@@ -54,74 +55,107 @@ class LoginPage extends GetView<LoginController> {
             Gap(AppLayout.heigth(20)),
             Text('登录',style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(26), fontWeight: FontWeight.w900)),
             Gap(AppLayout.heigth(40)),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(32), vertical: AppLayout.width(12)),
-              child: TextField(
-                controller: controller.phoneController,
-                keyboardType: TextInputType.number,
-                style: const TextStyle(color: Colors.white),
-                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.person, size: AppLayout.heigth(36), color: Colors.white),
-                  prefixText: '+86 ',
-                  prefixStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: Colors.white),
-                  hintText: '请输入手机号/账号',
-                  hintStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: AppStyles.lightGreyWile),
-                  filled: true,
-                  fillColor: Colors.white24,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppLayout.heigth(12)),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-
-              ),
-            ),
-            Gap(AppLayout.heigth(20)),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(32), vertical: AppLayout.width(8)),
-              child: TextField(
-                controller: controller.passwordController,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.lock, size: AppLayout.heigth(36), color: Colors.white),
-                  hintText: '请输入密码',
-                  hintStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: AppStyles.lightGreyWile),
-                  filled: true,
-                  fillColor: Colors.white24,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppLayout.heigth(12)),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                style: const TextStyle(color: Colors.white),
-                obscureText: true,
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: EdgeInsets.only(right:  AppLayout.width(32)),
-                child: TextButton(
-                  onPressed: () {
-                    // 忘记密码逻辑
-                  },
-                  child: Text('忘记密码?',style: TextStyle(fontSize: AppLayout.fontSize(16), color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-            Gap(AppLayout.heigth(20)),
-            ElevatedButton(
-              onPressed: () => controller.login(),
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(AppLayout.width(366), AppLayout.heigth(60)),
-                backgroundColor: const Color.fromRGBO(100, 42, 248, 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppLayout.heigth(12)),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(100), vertical: AppLayout.width(18)),
-              ),
-              child: Text('登录', style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(18), fontWeight: FontWeight.w900)),
+            Form(
+                key:   _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(32), vertical: AppLayout.width(12)),
+                      child: TextFormField(
+                        controller: controller.phoneController,
+                        // keyboardType: TextInputType.phone,
+                        style: const TextStyle(color: Colors.white),
+                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[\dA-Za-z]{4,11}$'))],
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.person, size: AppLayout.heigth(36), color: Colors.white),
+                          // prefixText: '+86 ',
+                          prefixStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: Colors.white),
+                          hintText: '请输入手机号/账号',
+                          hintStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: AppStyles.lightGreyWile),
+                          filled: true,
+                          fillColor: Colors.white24,
+                          errorStyle: TextStyle(fontSize: AppLayout.fontSize(16), fontWeight: FontWeight.w600, color: Colors.blue),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppLayout.heigth(12)),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '请输入账号!';
+                          }
+                          final phoneRegex = RegExp(r'^[A-Za-z\d]{4,11}$');
+                          if (!phoneRegex.hasMatch(value)) {
+                            return '请输入有效账号!';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    Gap(AppLayout.heigth(20)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(32), vertical: AppLayout.width(8)),
+                      child: TextFormField(
+                        controller: controller.passwordController,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.lock, size: AppLayout.heigth(36), color: Colors.white),
+                          hintText: '请输入密码',
+                          hintStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: AppStyles.lightGreyWile),
+                          filled: true,
+                          fillColor: Colors.white24,
+                          errorStyle: TextStyle(fontSize: AppLayout.fontSize(16), fontWeight: FontWeight.w600, color: Colors.blue),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppLayout.heigth(12)),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        style: const TextStyle(color: Colors.white),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '请填写正确的密码!';
+                          }
+                          final passwordRegex = RegExp(r'^[A-Za-z\d]{6,12}$');
+                          if (!passwordRegex.hasMatch(value)) {
+                            return '密码至少6~12个字母或数字!';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: EdgeInsets.only(right:  AppLayout.width(32)),
+                        child: TextButton(
+                          onPressed: () {
+                            // 忘记密码逻辑
+                          },
+                          child: Text('忘记密码?',style: TextStyle(fontSize: AppLayout.fontSize(16), color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Gap(AppLayout.heigth(20)),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size(AppLayout.width(366), AppLayout.heigth(60)),
+                        backgroundColor: const Color.fromRGBO(100, 42, 248, 1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppLayout.heigth(12)),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(100), vertical: AppLayout.width(18)),
+                      ),
+                      child: Text('登录', style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(18), fontWeight: FontWeight.w900)),
+                      onPressed: (){
+                        if (_formKey.currentState!.validate()) {
+                          controller.login();
+                        }
+                      },
+                    )
+                  ],
+                )
             ),
           ],
         ),

@@ -85,7 +85,7 @@ class RegisterPage extends GetView<RegisterController> {
                         borderRadius: BorderRadius.circular(AppLayout.heigth(12)),
                         borderSide: BorderSide.none,
                       ),
-                      errorStyle: const TextStyle(fontSize: 14),
+                      errorStyle: TextStyle(fontSize: AppLayout.fontSize(14), color: Colors.redAccent),
                     ),
                     style: const TextStyle(color: Colors.white),
                     validator: (value) {
