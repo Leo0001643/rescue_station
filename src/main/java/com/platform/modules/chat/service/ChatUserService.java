@@ -58,7 +58,7 @@ public interface ChatUserService extends BaseService<ChatUser> {
     /**
      * 执行登录/返回token
      */
-    Dict doLogin(AuthenticationToken authenticationToken);
+    MyVo09 doLogin(AuthenticationToken authenticationToken);
 
     /**
      * 退出登录

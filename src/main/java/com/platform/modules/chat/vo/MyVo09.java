@@ -49,6 +49,12 @@ public class MyVo09 {
      */
     private String city;
 
+    /**
+     * token
+     * @return
+     */
+    private String token;
+
     public String getGenderLabel() {
         if (gender == null) {
             return null;

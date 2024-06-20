@@ -152,8 +152,7 @@ public class ChatUserServiceImpl extends BaseServiceImpl<ChatUser> implements Ch
     public MyVo09 getInfo() {
         // 当前用户
         ChatUser cu = findById(ShiroUtils.getUserId());
-        return BeanUtil.toBean(cu, MyVo09.class)
-                .setPhone(DesensitizedUtil.mobilePhone(cu.getPhone()));
+        return BeanUtil.toBean(cu, MyVo09.class).setPhone(DesensitizedUtil.mobilePhone(cu.getPhone()));
     }
 
     @Override
@@ -176,7 +175,7 @@ public class ChatUserServiceImpl extends BaseServiceImpl<ChatUser> implements Ch
 
     @Transactional
     @Override
-    public Dict doLogin(AuthenticationToken authenticationToken) {
+    public MyVo09 doLogin(AuthenticationToken authenticationToken) {
         String msg = null;
         try {
             ShiroUtils.getSubject().login(authenticationToken);
@@ -192,17 +191,15 @@ public class ChatUserServiceImpl extends BaseServiceImpl<ChatUser> implements Ch
             throw new BaseException(msg);
         }
         Long userId = ShiroUtils.getUserId();
-        tokenService.deleteToken(this.getById(userId).getToken());
+        ChatUser chatUserDb = this.getById(userId);
+        tokenService.deleteToken(chatUserDb.getToken());
         // 生成新TOKEN
         String token = tokenService.generateToken();
         String version = ServletUtils.getRequest().getHeader(HeadConstant.VERSION);
-        ChatUser chatUser = new ChatUser()
-                .setUserId(userId)
-                .setToken(token)
-                .setVersion(version);
+        ChatUser chatUser = new ChatUser().setUserId(userId).setToken(token).setVersion(version);
         // 更新token
         this.updateById(chatUser);
-        return Dict.create().set("token", token);
+        return BeanUtil.toBean(chatUserDb, MyVo09.class).setToken(token);
     }
 
     @Override

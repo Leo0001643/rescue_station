@@ -1,6 +1,5 @@
 package com.platform.modules.auth.controller;
 
-import cn.hutool.core.lang.Dict;
 import com.platform.common.aspectj.IgnoreAuth;
 import com.platform.common.aspectj.SubmitRepeat;
 import com.platform.common.exception.BaseException;
@@ -16,6 +15,7 @@ import com.platform.modules.auth.vo.AuthVo03;
 import com.platform.modules.auth.vo.AuthVo04;
 import com.platform.modules.chat.domain.ChatUser;
 import com.platform.modules.chat.service.ChatUserService;
+import com.platform.modules.chat.vo.MyVo09;
 import com.platform.modules.sms.enums.SmsTypeEnum;
 import com.platform.modules.sms.service.SmsService;
 import com.platform.modules.sms.vo.SmsVo;
@@ -35,10 +35,8 @@ import javax.annotation.Resource;
 @Slf4j
 @RequestMapping("/auth")
 public class AuthController extends BaseController {
-
     @Resource
     private ChatUserService chatUserService;
-
     @Resource
     private SmsService smsService;
 
@@ -90,8 +88,8 @@ public class AuthController extends BaseController {
     public AjaxResult login(@Validated @RequestBody AuthVo02 authVo) {
         // 执行登录
         ShiroLoginAuth loginAuth = new ShiroLoginAuth(authVo.getPhone(), authVo.getPassword());
-        Dict dict = chatUserService.doLogin(loginAuth);
-        return AjaxResult.success(dict);
+        MyVo09 myVo = chatUserService.doLogin(loginAuth);
+        return AjaxResult.success(myVo);
     }
 
     /**
@@ -105,8 +103,8 @@ public class AuthController extends BaseController {
         smsService.verifySms(authVo.getPhone(), authVo.getCode(), SmsTypeEnum.LOGIN);
         // 执行登录
         ShiroLoginPhone loginPhone = new ShiroLoginPhone(authVo.getPhone());
-        Dict dict = chatUserService.doLogin(loginPhone);
-        return AjaxResult.success(dict);
+        MyVo09 myVo = chatUserService.doLogin(loginPhone);
+        return AjaxResult.success(myVo);
     }
 
     /**

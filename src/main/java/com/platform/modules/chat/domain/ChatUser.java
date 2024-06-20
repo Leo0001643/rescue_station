@@ -3,7 +3,6 @@ package com.platform.modules.chat.domain;
 import com.baomidou.mybatisplus.annotation.*;
 import com.platform.common.constant.AppConstants;
 import com.platform.common.enums.GenderEnum;
-import com.platform.common.enums.YesOrNoEnum;
 import com.platform.common.web.domain.BaseEntity;
 import com.platform.modules.push.vo.PushParamVo;
 import lombok.Data;
@@ -69,6 +68,10 @@ public class ChatUser extends BaseEntity {
      * 密码
      */
     private String password;
+    /**
+     * 邮箱
+     */
+    private String email;
     /**
      * 盐
      */

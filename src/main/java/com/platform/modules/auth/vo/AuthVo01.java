@@ -33,4 +33,9 @@ public class AuthVo01 {
     @NotBlank(message = "验证码不能为空")
     private String code;
 
+    /**
+     * 邮箱
+     */
+    private String email;
+
 }
