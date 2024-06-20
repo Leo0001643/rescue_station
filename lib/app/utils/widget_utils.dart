@@ -15,6 +15,7 @@ class WidgetUtils {
     return AppBar(
       title: Text(title,style: TextStyle(fontSize: 16.sp,color: color_333),),
       centerTitle: true,
+      backgroundColor: Colors.white,
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:rescue_station/app/db/db_helper.dart';
 import 'app/routes/app_pages.dart';
 import 'app/utils/navigator_observer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +18,7 @@ void main() async{
   ///初始化本地缓存
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferencesUtil.init();
-
+  await DbHelper().init();
   ///初始化国际日期格式
   initializeDateFormatting().then((_){
     runApp(

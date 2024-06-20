@@ -25,4 +25,5 @@ samples, guidance on mobile development, and a full API reference.
  ### UI地址
     https://www.figma.com/design/aic95SqjbH11hTeojJ7iYz/%E6%89%B6%E8%B4%AB%E9%A1%B9%E7%9B%AE?node-id=0-1&t=NBPz7J0SJ5K7qE21-1
 
-
+ ###数据库表变更 
+    flutter packages pub run build_runner build

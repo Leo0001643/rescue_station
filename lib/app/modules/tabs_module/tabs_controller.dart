@@ -1,8 +1,13 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/modules/customer_service_module/customer_service_controller.dart';
 import 'package:rescue_station/app/modules/mine_module/mine_controller.dart';
 import 'package:rescue_station/app/modules/tabs_module/tabs_pages.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
+import 'package:rescue_station/app/utils/logger.dart';
+import 'package:rescue_station/app/utils/shared_preferences_util.dart';
+import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../contacts_module/contacts_controller.dart';
 import '../home_module/home_controller.dart';
 import '../login_module/login_page.dart';
@@ -48,6 +53,12 @@ class TabsController extends GetxController {
     Get.put(ContactsController());
     Get.put(CustomerServiceController());
     Get.put(MineController());
+    ///如果已经登录了，有token
+    if(ObjectUtil.isNotEmpty(SharedPreferencesUtil.getString("token"))){
+      SocketUtils().connect(SharedPreferencesUtil.getString("token").em(),callback: (){
+        logger("连接成功");
+      });
+    }
   }
 
   void setCurrentIndex(int index) {

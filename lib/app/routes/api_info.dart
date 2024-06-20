@@ -34,6 +34,9 @@ class Api{
   ///给好友发送消息
   static const CHAT_SEND_MESSAGE = '/chat/sendMsg';
 
+  ///好友详情
+  static const FRIEND_INFO = '/friend/info/';
+
 
 
   ///*************** 群类消息接口 ***************

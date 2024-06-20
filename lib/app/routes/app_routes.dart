@@ -19,8 +19,21 @@ abstract class Routes {
   static const REGISTER = '/register'; // register page
   static const CHAT_BY_FRIEND = '/chat_by_friend'; // friend chat page
   static const CHAT_BY_GROUP = '/chat_by_group'; // group chat page
-
+  static const FRIEND_DETAIL = '/friend_detail'; // friend detail page
 
 
 
 }
+
+
+
+
+///普通事件
+EventBus eventBus=EventBus();
+///可用于黏性事件
+EventBus behaviorBus = EventBus.customController(BehaviorSubject());
+
+
+
+
+
