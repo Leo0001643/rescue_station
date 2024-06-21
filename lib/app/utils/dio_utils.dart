@@ -19,7 +19,6 @@ class DioUtil {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'version': Constant.VERSION,
-        'Authorization': SharedPreferencesUtil.getString("token",defaultValue: ''),
       },
     );
     dio = Dio(options);
@@ -27,6 +26,7 @@ class DioUtil {
     // Add interceptors if needed
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
+        options.headers['Authorization'] = SharedPreferencesUtil.getString("token",defaultValue: '');
         // Do something before request is sent
         loggerArray(["发起请求","${options.baseUrl}${options.path}","${options.method}\n","${options.headers}\n",options.data ?? options.queryParameters]);
         return handler.next(options); //continue

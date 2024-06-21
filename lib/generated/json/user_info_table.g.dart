@@ -65,6 +65,14 @@ UserInfoTable $UserInfoTableFromJson(Map<String, dynamic> json) {
   if (sourceLabel != null) {
     userInfoTable.sourceLabel = sourceLabel;
   }
+  final String? phone = jsonConvert.convert<String>(json['phone']);
+  if (phone != null) {
+    userInfoTable.phone = phone;
+  }
+  final String? token = jsonConvert.convert<String>(json['token']);
+  if (token != null) {
+    userInfoTable.token = token;
+  }
   return userInfoTable;
 }
 
@@ -85,6 +93,8 @@ Map<String, dynamic> $UserInfoTableToJson(UserInfoTable entity) {
   data['source'] = entity.source;
   data['genderLabel'] = entity.genderLabel;
   data['sourceLabel'] = entity.sourceLabel;
+  data['phone'] = entity.phone;
+  data['token'] = entity.token;
   return data;
 }
 
@@ -105,6 +115,8 @@ extension UserInfoTableExtension on UserInfoTable {
     String? source,
     String? genderLabel,
     String? sourceLabel,
+    String? phone,
+    String? token,
   }) {
     return UserInfoTable()
       ..userId = userId ?? this.userId
@@ -121,6 +133,8 @@ extension UserInfoTableExtension on UserInfoTable {
       ..black = black ?? this.black
       ..source = source ?? this.source
       ..genderLabel = genderLabel ?? this.genderLabel
-      ..sourceLabel = sourceLabel ?? this.sourceLabel;
+      ..sourceLabel = sourceLabel ?? this.sourceLabel
+      ..phone = phone ?? this.phone
+      ..token = token ?? this.token;
   }
 }

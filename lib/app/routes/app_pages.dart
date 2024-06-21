@@ -1,6 +1,13 @@
+import 'package:event_bus/event_bus.dart';
+import 'package:rescue_station/app/modules/friend_detail/friend_detail_binding.dart';
+import 'package:rescue_station/app/modules/friend_detail/friend_detail_page.dart';
+import 'package:rxdart/rxdart.dart';
+
 import '../../app/modules/register_module/register_page.dart';
 import 'package:rescue_station/app/modules/chat_by_friend/chat_by_friend_binding.dart';
 import 'package:rescue_station/app/modules/chat_by_friend/chat_by_friend_page.dart';
+import 'package:rescue_station/app/modules/chat_by_group/chat_by_group_binding.dart';
+import 'package:rescue_station/app/modules/chat_by_group/chat_by_group_page.dart';
 
 import '../../app/modules/register_module/register_bindings.dart';
 import '../../app/modules/login_module/login_page.dart';
@@ -108,6 +115,15 @@ abstract class AppPages {
       page: () => ChatByFriendPage(),
       binding: ChatByFriendBinding(),
     ),
-
+    GetPage(
+      name: Routes.CHAT_BY_GROUP,
+      page: () => ChatByGroupPage(),
+      binding: ChatByGroupBinding(),
+    ),
+    GetPage(
+      name: Routes.FRIEND_DETAIL,
+      page: () => FriendDetailPage(),
+      binding: FriendDetailBinding(),
+    ),
   ];
 }

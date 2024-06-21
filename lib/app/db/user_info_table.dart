@@ -52,6 +52,13 @@ class UserInfoTable extends HiveObject{
 	@HiveField(14)
 	String? sourceLabel;
 
+	@HiveField(15)
+	String? phone;
+
+	@HiveField(16)
+	String? token;
+
+
 	UserInfoTable({this.userId});
 
 	factory UserInfoTable.fromJson(Map<String, dynamic> json) => $UserInfoTableFromJson(json);

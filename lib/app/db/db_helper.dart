@@ -1,5 +1,7 @@
 
 import 'package:hive_flutter/adapters.dart';
+import 'package:rescue_station/app/db/message_box_table.dart';
+import 'package:rescue_station/app/db/user_info_table.dart';
 
 class DbHelper {
   DbHelper._internal();
@@ -15,9 +17,18 @@ class DbHelper {
 
   Future<void> init() async {
     await Hive.initFlutter();
-    // Hive.registerAdapter(adapter);
+    Hive.registerAdapter(MessageBoxTableAdapter());
+    Hive.registerAdapter(UserInfoTableAdapter());
   }
 
+  Future<Box> getUserBox(){
+    return Hive.openBox("userBox");
+  }
+
+
+  Future<Box> getMessageBox(){
+    return Hive.openBox("messageBox");
+  }
 
 
 }
