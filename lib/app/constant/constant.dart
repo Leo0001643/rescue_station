@@ -5,4 +5,8 @@ class Constant{
   ///系统版本号
   static const String VERSION = "1.0.1";
 
+
+
+
+
 }

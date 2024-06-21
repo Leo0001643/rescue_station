@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'app/routes/app_pages.dart';
@@ -34,7 +35,8 @@ void main() async{
                   theme: ThemeData(primarySwatch: Colors.grey),
                   initialRoute: Routes.TABS,
                   defaultTransition:Transition.noTransition,//页面切换取消动画
-                  getPages: AppPages.pages
+                  getPages: AppPages.pages,
+                  builder: EasyLoading.init(),
               );
             })
     );

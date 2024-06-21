@@ -1,5 +1,6 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/domains/register_entity.dart';
 import '../../routes/api_info.dart';
@@ -20,21 +21,21 @@ class RegisterController extends GetxController {
       final confirmPassword = confirmPasswordController.text;
       final nickName = nickNameController.text;
       final email = emailController.text;
-
-      if (password != confirmPassword) {
-        Get.snackbar('Register', '两次输入密码不一致！');
-      }
+      if (password != confirmPassword) {Get.snackbar('Register', '两次输入密码不一致！');}
       var data = {"phone": phone, "password": password, "confirmPassword": confirmPassword, "email": email, "nickName": nickName};
+      await EasyLoading.show(status: '提交注册中...',maskType: EasyLoadingMaskType.black,);
       var response = await DioUtil().post(Api.MEMBER_REGISTER, data: data);
+      await Future.delayed(const Duration(seconds: 2));
+      await EasyLoading.dismiss();
       RegisterEntity entity = RegisterEntity.fromRawJson(response.toString());
       if (ObjectUtil.isNotEmpty(entity) && entity.code == 200) {
-        Get.snackbar('提交注册成功!', "请前往登录");
+        EasyLoading.showSuccess('请前往登录...');
         Get.toNamed(Routes.LOGIN);
       } else {
-        Get.snackbar('注册提醒', entity.msg.toString());
+        EasyLoading.showError(entity.msg.toString());
       }
     } catch (e) {
-      Get.snackbar('注册提醒', "系统异常！");
+      EasyLoading.showError("提交注册异常！");
     }
   }
 }

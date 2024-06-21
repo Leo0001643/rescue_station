@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors_theme.dart';
-import '../tabs_module/tabs_pages.dart';
-import '../tabs_module/tabs_controller.dart';
-import 'login_controller.dart';
 import 'package:rescue_station/app/utils/AppLayout.dart';
+import '../tabs_module/tabs_controller.dart';
+import '../tabs_module/tabs_pages.dart';
+import 'login_controller.dart';
 
 
 class LoginPage extends GetView<LoginController> {
@@ -20,6 +21,7 @@ class LoginPage extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -56,7 +58,7 @@ class LoginPage extends GetView<LoginController> {
             Text('登录',style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(26), fontWeight: FontWeight.w900)),
             Gap(AppLayout.heigth(40)),
             Form(
-                key:   _formKey,
+                key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -66,11 +68,11 @@ class LoginPage extends GetView<LoginController> {
                         controller: controller.phoneController,
                         // keyboardType: TextInputType.phone,
                         style: const TextStyle(color: Colors.white),
-                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[\dA-Za-z]{4,11}$'))],
+                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9]')),],
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.person, size: AppLayout.heigth(36), color: Colors.white),
                           // prefixText: '+86 ',
-                          prefixStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: Colors.white),
+                          // prefixStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: Colors.white),
                           hintText: '请输入手机号/账号',
                           hintStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: AppStyles.lightGreyWile),
                           filled: true,
@@ -148,7 +150,7 @@ class LoginPage extends GetView<LoginController> {
                         padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(100), vertical: AppLayout.width(18)),
                       ),
                       child: Text('登录', style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(18), fontWeight: FontWeight.w900)),
-                      onPressed: (){
+                      onPressed: () async{
                         if (_formKey.currentState!.validate()) {
                           controller.login();
                         }
