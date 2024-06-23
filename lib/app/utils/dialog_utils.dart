@@ -17,8 +17,6 @@ class DialogUtils{
     );
   }
 
-
-
   ///消息提示
   static Future<bool?> showAlertDialog(BuildContext context,String title) {
     return showDialog<bool>(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -53,11 +55,18 @@ class TabsController extends GetxController {
     Get.put(ContactsController());
     Get.put(CustomerServiceController());
     Get.put(MineController());
+
     ///如果已经登录了，有token
-    if(ObjectUtil.isNotEmpty(SharedPreferencesUtil.getString("token"))){
-      SocketUtils().connect(SharedPreferencesUtil.getString("token").em(),callback: (){
-        logger("连接成功");
-      });
+    String? loacalData = SharedPreferencesUtil.getString("userInfo");
+    if(ObjectUtil.isNotEmpty(loacalData)){
+      Map<String, dynamic> userInfo = jsonDecode(loacalData!);
+      if(ObjectUtil.isNotEmpty(userInfo)){
+        String token = userInfo["token"];
+        isLogin.value = (ObjectUtil.isNotEmpty(token) ? true : false);
+        SocketUtils().connect(token.em(),callback: (){
+          logger("连接成功");
+        });
+      }
     }
   }
 

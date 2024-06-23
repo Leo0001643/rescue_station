@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import '../../utils/AppLayout.dart';
@@ -53,11 +54,12 @@ class RegisterPage extends GetView<RegisterController> {
                       filled: true,
                       fillColor: Colors.white12,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                        borderRadius: BorderRadius.circular(AppLayout.heigth(12)),
                         borderSide: BorderSide.none,
                       ),
                       errorStyle: TextStyle(fontSize: AppLayout.fontSize(14), color: Colors.redAccent),
                     ),
+                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),],
                     style: const TextStyle(color: Colors.white),
                     keyboardType: TextInputType.phone,
                     validator: (value) {

@@ -23,7 +23,7 @@ class TabsPage extends GetView<TabsController> {
               currentIndex: controller.currentIndex.value,
               type:BottomNavigationBarType.fixed,
               onTap: (index) {
-                if ((index == 3 || index == 4) && !controller.isLogin.value) {
+                if ((index == 1 || index == 2 || index == 4) && !controller.isLogin.value) {
                   controller.navigateToLogin();
                 } else {
                   controller.setCurrentIndex(index);
