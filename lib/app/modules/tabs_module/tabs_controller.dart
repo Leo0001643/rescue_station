@@ -30,7 +30,7 @@ class TabsController extends GetxController {
     const MessagePage(),
     const ContactsPage(),
     const CustomerServicePage(),
-    const MinePage()
+    MinePage()
   ];
 
 

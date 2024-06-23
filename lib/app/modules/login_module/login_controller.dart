@@ -42,7 +42,7 @@ class LoginController extends GetxController{
       }
     } catch (e) {
       // Get.snackbar('登录提醒', "系统异常！");
-      EasyLoading.showSuccess("登录异常！");
+      EasyLoading.showError("登录异常！");
     }
   }
 

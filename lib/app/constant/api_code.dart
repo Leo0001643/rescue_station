@@ -6,8 +6,6 @@ enum ApiCode{
   ///认证失败
   AUTHENTICATION_FAILED(401);
 
-
-
   final int code;
   const ApiCode(this.code);
 }
