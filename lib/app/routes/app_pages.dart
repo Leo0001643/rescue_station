@@ -3,6 +3,9 @@ import 'package:rescue_station/app/modules/friend_detail/friend_detail_binding.d
 import 'package:rescue_station/app/modules/friend_detail/friend_detail_page.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'package:event_bus/event_bus.dart';
+import 'package:rxdart/rxdart.dart';
+
 import '../../app/modules/register_module/register_page.dart';
 import 'package:rescue_station/app/modules/chat_by_friend/chat_by_friend_binding.dart';
 import 'package:rescue_station/app/modules/chat_by_friend/chat_by_friend_page.dart';

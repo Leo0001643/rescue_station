@@ -29,9 +29,9 @@ abstract class Routes {
 
 
 ///普通事件
-// EventBus eventBus=EventBus();
+EventBus eventBus=EventBus();
 ///可用于黏性事件
-// EventBus behaviorBus = EventBus.customController(BehaviorSubject());
+EventBus behaviorBus = EventBus.customController(BehaviorSubject());
 
 
 
