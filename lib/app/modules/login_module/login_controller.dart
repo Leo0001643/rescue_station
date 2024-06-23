@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,16 +26,12 @@ class LoginController extends GetxController{
       final password = passwordController.text;
       await EasyLoading.show(status: '登录中...',maskType: EasyLoadingMaskType.black,);
       var response = await DioUtil().post(Api.MEMBER_LOGIN, data: {"phone":phone, "password": password});
-      var entity = LoginEntity.fromRawJson(response.toString());
-      if(ObjectUtil.isNotEmpty(response)) {
+      LoginEntity entity = LoginEntity.fromRawJson(response.toString());
+      if(ObjectUtil.isNotEmpty(response) && entity.code == ApiCode.SUCCESS.code) {
         if(ObjectUtil.isNotEmpty(entity.data)){
           (await DbHelper().getUserBox()).add(entity.data);
         }
-        await SharedPreferencesUtil.setString('token', entity.data!.token!);
-        Get.snackbar('登录提醒', '登录成功！');
-      LoginEntity entity = LoginEntity.fromRawJson(response.toString());
-      if(ObjectUtil.isNotEmpty(response) && entity.code == ApiCode.SUCCESS.code) {
-        await SharedPreferencesUtil.setString('userInfo', entity.data!.toRawJson());
+        await SharedPreferencesUtil.setString('userInfo', jsonEncode(entity.data!.toJson()));
         await Future.delayed(const Duration(seconds: 2));
         await EasyLoading.dismiss();
         EasyLoading.showSuccess('登录成功!');
@@ -41,8 +39,6 @@ class LoginController extends GetxController{
         Get.off(() => const TabsPage());
       }else{
         EasyLoading.showError(entity.msg.toString());
-      } else {
-        Get.snackbar('登录提醒', entity.msg.toString());
       }
     } catch (e) {
       // Get.snackbar('登录提醒', "系统异常！");
