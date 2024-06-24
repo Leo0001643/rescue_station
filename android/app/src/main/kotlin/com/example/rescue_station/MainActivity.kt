@@ -1,4 +1,4 @@
-package com.rs.app.rescue_station
+package com.example.rescue_station
 
 import io.flutter.embedding.android.FlutterActivity
 
