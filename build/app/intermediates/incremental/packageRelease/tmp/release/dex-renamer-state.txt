@@ -1,0 +1,4 @@
+#Sun Jun 23 14:59:06 PST 2024
+base.0=/Users/leo/Documents/workspan/flutter-project/rescue_station/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

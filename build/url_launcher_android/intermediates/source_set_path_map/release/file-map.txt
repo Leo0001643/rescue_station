@@ -1,0 +1,14 @@
+io.flutter.plugins.urllauncher.url_launcher_android-core-1.10.1-0 /Users/leo/.gradle/caches/transforms-3/0e4ac26212a127594e56c60103d111c7/transformed/core-1.10.1/res
+io.flutter.plugins.urllauncher.url_launcher_android-jetified-annotation-experimental-1.3.0-1 /Users/leo/.gradle/caches/transforms-3/4ddd317722c251887126cc20b4fbfbe1/transformed/jetified-annotation-experimental-1.3.0/res
+io.flutter.plugins.urllauncher.url_launcher_android-jetified-window-java-1.0.0-beta04-2 /Users/leo/.gradle/caches/transforms-3/51f2918890fffa8ac42351fd708db86a/transformed/jetified-window-java-1.0.0-beta04/res
+io.flutter.plugins.urllauncher.url_launcher_android-lifecycle-runtime-2.3.1-3 /Users/leo/.gradle/caches/transforms-3/529553c6581bd5a5e8a6195349962928/transformed/lifecycle-runtime-2.3.1/res
+io.flutter.plugins.urllauncher.url_launcher_android-jetified-window-1.0.0-beta04-4 /Users/leo/.gradle/caches/transforms-3/5a3ba33da1e4eacc760d15398561baf7/transformed/jetified-window-1.0.0-beta04/res
+io.flutter.plugins.urllauncher.url_launcher_android-browser-1.5.0-5 /Users/leo/.gradle/caches/transforms-3/b669bba55f5d4538a68ff5a1368c7512/transformed/browser-1.5.0/res
+io.flutter.plugins.urllauncher.url_launcher_android-main-6 /Users/leo/.pub-cache/hosted/pub.dev/url_launcher_android-6.3.3/android/src/main/res
+io.flutter.plugins.urllauncher.url_launcher_android-release-7 /Users/leo/.pub-cache/hosted/pub.dev/url_launcher_android-6.3.3/android/src/release/res
+io.flutter.plugins.urllauncher.url_launcher_android-pngs-8 /Users/leo/Documents/workspan/flutter-project/rescue_station/build/url_launcher_android/generated/res/pngs/release
+io.flutter.plugins.urllauncher.url_launcher_android-resValues-9 /Users/leo/Documents/workspan/flutter-project/rescue_station/build/url_launcher_android/generated/res/resValues/release
+io.flutter.plugins.urllauncher.url_launcher_android-rs-10 /Users/leo/Documents/workspan/flutter-project/rescue_station/build/url_launcher_android/generated/res/rs/release
+io.flutter.plugins.urllauncher.url_launcher_android-mergeReleaseResources-11 /Users/leo/Documents/workspan/flutter-project/rescue_station/build/url_launcher_android/intermediates/incremental/release/mergeReleaseResources/merged.dir
+io.flutter.plugins.urllauncher.url_launcher_android-mergeReleaseResources-12 /Users/leo/Documents/workspan/flutter-project/rescue_station/build/url_launcher_android/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+io.flutter.plugins.urllauncher.url_launcher_android-merged_res-13 /Users/leo/Documents/workspan/flutter-project/rescue_station/build/url_launcher_android/intermediates/merged_res/release
