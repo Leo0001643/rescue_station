@@ -39,7 +39,7 @@ class ChatByFriendLogic extends GetxController {
       msgType = "TEXT";
     }
     var params = {"userId": msg.author.id,"msgType":msgType,"content": content};
-    DioUtil().post(Api.CHAT_SEND_MSG,data: params).then((result){
+    DioUtil().post(Api.CHAT_SEND_MESSAGE,data: params).then((result){
       if(result.data["code"] == 200){
         state.messages.insert(0, msg);
       } else {

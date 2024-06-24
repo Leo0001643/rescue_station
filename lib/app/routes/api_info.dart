@@ -85,10 +85,6 @@ class Api{
   ///解散群组
   static const REMOVE_GROUP = "/group/removeGroup/{groupId}";
 
-  ///*************** 聊天消息接口 ***************
-  static const CHAT_SEND_MSG = "/chat/sendMsg";
-
-
 ///*************** 会员基础接口 ***************
   ///修改密码
   static const EDIT_PASS = "/my/editPass";
