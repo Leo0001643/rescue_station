@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:gap/gap.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:rescue_station/app/domains/message.dart';
 import 'package:rescue_station/app/utils/dialog_utils.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../routes/app_pages.dart';
@@ -21,107 +24,27 @@ class MessagePage extends GetView<MessageController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: WidgetUtils.buildSearchAppBar(context,"消息",
-          InkWell(
-            onTap: ()=> showPopWindow(context),
-            child: const Icon(IconFont.ADD,color: Colors.white),
+          const InkWell(
+            // onTap: ()=> showPopWindow(context),
+            child: Icon(IconFont.ADD,color: Colors.white),
           ),
         ),
-        body: EasyRefresh.builder(
-          header: const MaterialHeader(
-            clamping: true,
-          ),
-          onRefresh: () async {
-            print("上拉刷新。。。。。。");
-          },
-          onLoad: () async {
-            print("下拉刷新。。。。。。");
-          },
-          childBuilder: (context, physics) {
-            return NestedScrollView(
-              physics: physics,
-              body: _message(physics),
-              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                return const [/*SliverAppBar(title: Text("导航测试"),)*/];
-              },
+        body: ListView.separated(
+          itemCount: controller.messages.length,
+          separatorBuilder: (context, index) {
+            return Padding(
+                padding: EdgeInsets.only(left: AppLayout.width(80)),
+                child: Divider(height: AppLayout.heigth(0),color: AppStyles.lightGreyWile)
             );
           },
-        )
-    );
-  }
-
-
-  Widget _message(ScrollPhysics physics){
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: ListView.separated(
-            physics: physics,
-            itemCount: controller.messages.length,
-            separatorBuilder: (context, index) {
-              return Padding(
-                  padding: EdgeInsets.only(left: AppLayout.width(80)),
-                  child: Divider(height: AppLayout.heigth(0),color: AppStyles.lightGreyWile)
-              );
-            },
-            itemBuilder: (context, index) {
-              return Slidable(
-                key: ValueKey(index),
-                endActionPane: ActionPane(
-                  motion: const ScrollMotion(),
-                  dismissible: DismissiblePane(onDismissed: () {}),
-                  children: [
-                    SlidableAction(
-                      onPressed: doNothing,
-                      backgroundColor: const Color(0xFFFE4A49),
-                      foregroundColor: Colors.white,
-                      icon: Icons.delete,
-                      label: '删除',
-                    ),
-                    SlidableAction(
-                      onPressed: doNothing,
-                      backgroundColor: Colors.lightGreen,
-                      foregroundColor: Colors.white,
-                      icon: Icons.share,
-                      label: '置顶',
-                    ),
-                  ],
-                ),
-                child: ListTile(
-                  onTap: (){
-                    Get.toNamed(Routes.CHAT_BY_FRIEND);
-                  },
-                  leading: GFAvatar(
-                    backgroundImage: AssetImage(controller.messages[index].avatar,),
-                    shape: GFAvatarShape.standard,
-                    borderRadius: BorderRadius.circular(5.r),
-                    radius: 25.r,
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: GFBadge(
-                        size: 20.r,
-                        shape: GFBadgeShape.circle,
-                      ),
-                    ),
-                  ),
-                  title: Text(controller.messages[index].name,style: AppTextTheme.headLineStyle1,),
-                  subtitle: Text(controller.messages[index].preview, style: AppTextTheme.headLineStyle0,),
-                  trailing: Transform.translate(
-                      offset: Offset(AppLayout.width(18),0),
-                      child : Text(controller.messages[index].timestamp, style: AppTextTheme.headLineStyle0)
-                  ),
-                ),
-              );
-            },
-          ),
+          itemBuilder: (context, index) {
+            var item = controller.messages[index];
+            return buildMessageBox(item);
+          },
         ),
-      ],
     );
   }
 
-  void doNothing(BuildContext context) {
-
-  }
 
   void showPopWindow(BuildContext context) {
     DialogUtils.showPopMenu(context,
@@ -152,7 +75,55 @@ class MessagePage extends GetView<MessageController> {
         ]);
   }
 
-
+  Widget buildMessageBox(item) {
+    return Slidable(
+      key: ValueKey(Random().nextInt(100000)),
+      endActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        // dismissible: DismissiblePane(onDismissed: () {}),
+        children: [
+          SlidableAction(
+            onPressed: (context){},
+            backgroundColor: const Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: '删除',
+          ),
+          SlidableAction(
+            onPressed: (context){},
+            backgroundColor: Colors.lightGreen,
+            foregroundColor: Colors.white,
+            icon: Icons.share,
+            label: '置顶',
+          ),
+        ],
+      ),
+      child: ListTile(
+        onTap: (){
+          // Get.toNamed(Routes.CHAT_BY_FRIEND);
+        },
+        leading: GFAvatar(
+          backgroundImage: AssetImage(item.avatar,),
+          shape: GFAvatarShape.standard,
+          borderRadius: BorderRadius.circular(5.r),
+          radius: 25.r,
+          child: Align(
+            alignment: Alignment.topRight,
+            child: GFBadge(
+              size: 20.r,
+              shape: GFBadgeShape.circle,
+            ),
+          ),
+        ),
+        title: Text(item.name,style: AppTextTheme.headLineStyle1,),
+        subtitle: Text(item.preview, style: AppTextTheme.headLineStyle0,),
+        trailing: Transform.translate(
+            offset: Offset(AppLayout.width(18),0),
+            child : Text(item.timestamp, style: AppTextTheme.headLineStyle0)
+        ),
+      ),
+    );
+  }
 
 
 }

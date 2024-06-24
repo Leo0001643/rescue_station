@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/modules/customer_service_module/customer_service_controller.dart';
 import 'package:rescue_station/app/modules/mine_module/mine_controller.dart';
 import 'package:rescue_station/app/modules/tabs_module/tabs_pages.dart';
@@ -57,17 +58,14 @@ class TabsController extends GetxController {
     Get.put(MineController());
 
     ///如果已经登录了，有token
-    String? loacalData = SharedPreferencesUtil.getString("userInfo");
-    if(ObjectUtil.isNotEmpty(loacalData)){
-      Map<String, dynamic> userInfo = jsonDecode(loacalData!);
-      if(ObjectUtil.isNotEmpty(userInfo)){
-        String token = userInfo["token"];
-        isLogin.value = (ObjectUtil.isNotEmpty(token) ? true : false);
-        SocketUtils().connect(token.em(),callback: (){
+    DbHelper().getUser().then((user){
+      isLogin.value = (ObjectUtil.isNotEmpty(user?.token) ? true : false);
+      if(ObjectUtil.isNotEmpty(user?.token)){
+        SocketUtils().connect(user!.token.em(),callback: (){
           logger("连接成功");
         });
       }
-    }
+    });
   }
 
   void setCurrentIndex(int index) {

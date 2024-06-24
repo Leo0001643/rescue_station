@@ -25,10 +25,19 @@ class DbHelper {
     return Hive.openBox("userBox");
   }
 
-
   Future<Box> getMessageBox(){
     return Hive.openBox("messageBox");
   }
+
+
+  ///获取当前登录用户
+  Future<UserInfoTable?> getUser() async {
+    var box = await getUserBox();
+    if(box.isEmpty) return null;
+    return box.getAt(box.length - 1);
+  }
+
+
 
 
 }

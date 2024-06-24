@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart' show debugPrint;
 import 'package:rescue_station/app/db/user_info_table.dart';
 import 'package:rescue_station/app/socket/isolate_msg_entity.dart';
+import 'package:rescue_station/app/socket/socket_message_entity.dart';
 
 JsonConvert jsonConvert = JsonConvert();
 
@@ -151,6 +152,14 @@ class JsonConvert {
       return data.map<IsolateMsgEntity>((Map<String, dynamic> e) =>
           IsolateMsgEntity.fromJson(e)).toList() as M;
     }
+    if (<SocketMessageEntity>[] is M) {
+      return data.map<SocketMessageEntity>((Map<String, dynamic> e) =>
+          SocketMessageEntity.fromJson(e)).toList() as M;
+    }
+    if (<SocketMsgContent>[] is M) {
+      return data.map<SocketMsgContent>((Map<String, dynamic> e) =>
+          SocketMsgContent.fromJson(e)).toList() as M;
+    }
 
     debugPrint("$M not found");
 
@@ -174,6 +183,8 @@ class JsonConvertClassCollection {
   Map<String, JsonConvertFunction> convertFuncMap = {
     (UserInfoTable).toString(): UserInfoTable.fromJson,
     (IsolateMsgEntity).toString(): IsolateMsgEntity.fromJson,
+    (SocketMessageEntity).toString(): SocketMessageEntity.fromJson,
+    (SocketMsgContent).toString(): SocketMsgContent.fromJson,
   };
 
   bool containsKey(String type) {

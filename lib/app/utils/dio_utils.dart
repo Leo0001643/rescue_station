@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:rescue_station/app/constant/constant.dart';
+import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 
@@ -25,8 +26,8 @@ class DioUtil {
 
     // Add interceptors if needed
     dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        options.headers['Authorization'] = SharedPreferencesUtil.getString("token",defaultValue: '');
+      onRequest: (options, handler) async {
+        options.headers['Authorization'] = (await DbHelper().getUser())?.token ?? "";
         // Do something before request is sent
         loggerArray(["发起请求","${options.baseUrl}${options.path}","${options.method}\n","${options.headers}\n",options.data ?? options.queryParameters]);
         return handler.next(options); //continue

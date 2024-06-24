@@ -1,5 +1,6 @@
 
 import 'package:bubble/bubble.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/src/user.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
@@ -7,9 +8,13 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:rescue_station/app/db/db_helper.dart';
+import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/modules/chat_by_friend/bottom_chat_controller.dart';
 import 'package:rescue_station/app/modules/chat_by_friend/bottom_chat_widget.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
+import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
@@ -27,11 +32,18 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
   final chatCtl = Get.find<BottomChatController>();
   final state = Get.find<ChatByFriendLogic>().state;
 
+  @override
+  void initState() {
+    ChatEvent event = Get.arguments;
+    chatCtl.user = event.user;
+    chatCtl.friend = event.friend;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WidgetUtils.buildAppBar("上官婉儿"),
+      appBar: WidgetUtils.buildAppBar(chatCtl.user.nickName.em()),
       body: KeyboardVisibilityProvider(
         controller: chatCtl.keyboardVisibilityController,
         child: Obx(() {
@@ -48,10 +60,10 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
             messages: state.messages.value,
             onSendPressed: (text){},
             // onMessageTap: (context, message) => logic.addMessage(),
-            user: chatCtl.user,
+            user: types.User(id: chatCtl.user.userId.em(),imageUrl: chatCtl.user.portrait.em()),
             showUserAvatars: true,
             bubbleBuilder: buildBubble,
-            avatarBuilder: buildAvatar,
+            avatarBuilder: (user)=>buildAvatar(user.imageUrl.em()),
             emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
             customBottomWidget: BottomChatWidget((msg)=> logic.sendMessage(msg)),
             onBackgroundTap: (){
@@ -73,7 +85,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
   }
 
   Widget buildBubble(child, {required message,required nextMessageInGroup}) {
-    if(message.author.id == chatCtl.user.id){
+    if(message.author.id == chatCtl.user.userId){
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -91,7 +103,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
             ),
           ),
           SizedBox(width: 10.w,),
-          buildAvatar(chatCtl.user),
+          buildAvatar(chatCtl.user.portrait.em()),
         ],
       );
     } else {
@@ -108,17 +120,17 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
     }
   }
 
-  Widget buildAvatar(User author) {
+  Widget buildAvatar(String image) {
     return GFAvatar(
       radius: 30.r,
       shape: GFAvatarShape.standard,
       borderRadius: BorderRadius.circular(5.r),
-      backgroundImage: NetworkImage(author.imageUrl.em()),
+      backgroundImage: NetworkImage(image),
     );
   }
 
   Widget buildTextMessage(types.TextMessage message, {required int messageWidth, required bool showName}) {
-    if(message.author.id == chatCtl.user.id){
+    if(message.author.id == chatCtl.user.userId){
       return Container(
         margin: EdgeInsets.all(12.r),
         child: TextMessageText(bodyTextStyle: TextStyle(fontSize: 16.sp,color: Colors.black), text: message.text),

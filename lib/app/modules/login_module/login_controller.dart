@@ -30,8 +30,8 @@ class LoginController extends GetxController{
       if(ObjectUtil.isNotEmpty(response) && entity.code == ApiCode.SUCCESS.code) {
         if(ObjectUtil.isNotEmpty(entity.data)){
           (await DbHelper().getUserBox()).add(entity.data);
+          await SharedPreferencesUtil.setString('userInfo', jsonEncode(entity.data!.toJson()));
         }
-        await SharedPreferencesUtil.setString('userInfo', jsonEncode(entity.data!.toJson()));
         await Future.delayed(const Duration(seconds: 2));
         await EasyLoading.dismiss();
         EasyLoading.showSuccess('登录成功!');

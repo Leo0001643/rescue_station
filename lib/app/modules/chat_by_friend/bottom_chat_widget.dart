@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/modules/chat_by_friend/bottom_chat_controller.dart';
 import 'package:rescue_station/app/modules/chat_by_friend/bottom_emoji_widget.dart';
 import 'package:rescue_station/app/modules/chat_by_friend/bottom_more_widget.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
@@ -29,13 +30,6 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
         chatCtl.moreVisible.value = false;
         chatCtl.emojiVisible.value = false;
       }
-    });
-    ///延时添加消息
-    Future.delayed(Duration(seconds: 1),(){
-      widget.onSendChatListener(chatCtl.buildFriendText("嗯嗯"));
-    });
-    Future.delayed(Duration(seconds: 2),(){
-      widget.onSendChatListener(chatCtl.buildUserText("红红火火恍恍惚惚哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"));
     });
     super.initState();
   }
@@ -72,7 +66,7 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
                     onSubmitted: (text){
                       ///防止自动隐藏虚拟键盘
                       chatCtl.inputFocusNode.requestFocus();
-                      if(ObjectUtil.isNotEmpty(text)){ widget.onSendChatListener(chatCtl.buildUserText(text)); }
+                      if(ObjectUtil.isNotEmpty(text)){ widget.onSendChatListener(SocketUtils().buildUserText(text,chatCtl.user)); }
                       chatCtl.textController.clear();
                     },
                     style: TextStyle(fontSize: 16.sp,color: Colors.black,fontWeight: FontWeight.w600),
@@ -124,7 +118,7 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
                   offstage: !chatCtl.emojiVisible.value,
                   child: WidgetUtils.buildElevatedButton("发送", 60.w, 40.h, bg: color_703,onPressed: (){
                     if(ObjectUtil.isNotEmpty(chatCtl.textController.text)){
-                      widget.onSendChatListener(chatCtl.buildUserText(chatCtl.textController.text));
+                      widget.onSendChatListener(SocketUtils().buildUserText(chatCtl.textController.text,chatCtl.user));
                     }
                     chatCtl.textController.clear();
                   }),

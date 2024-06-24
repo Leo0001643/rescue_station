@@ -34,7 +34,7 @@ class MinePage extends GetView<MineController> {
                   backgroundImage: controller.profileImagePath.value.isEmpty
                       ? NetworkImage('https://example.com/profile.jpg')  // Replace with actual image URL
                       : FileImage(File(controller.profileImagePath.value)) as ImageProvider,
-                  child: Align(
+                  child: const Align(
                     alignment: Alignment.bottomRight,
                     child: Icon(
                       Icons.edit,

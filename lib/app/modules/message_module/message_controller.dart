@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
+import 'package:rescue_station/app/event/friend_delete_event.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import '../../domains/Message.dart';
 
 
@@ -102,5 +106,21 @@ class MessageController extends GetxController{
     Message('文征明', '哈哈~', '2024-06-05 21:30', 'assets/images/icon/avatar11.png'),
     Message('徐祯卿', '呵呵~', '2024-06-05 21:30', 'assets/images/icon/avatar12.png'),
   ].obs;
+  StreamSubscription? friendDelSub;
+
+  @override
+  void onInit() {
+    super.onInit();
+    friendDelSub = eventBus.on<FriendDeleteEvent>().listen((event) {
+      ///删除好友，这里也应该删除对应的聊天记录,更新聊天列表
+    });
+  }
+
+  @override
+  void onClose() {
+    friendDelSub?.cancel();
+    super.onClose();
+  }
+
 
 }
