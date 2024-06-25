@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart' show debugPrint;
 import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/modules/new_friend/friend_apply_entity.dart';
 import 'package:rescue_station/app/socket/isolate_msg_entity.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/socket/socket_notice_entity.dart';
@@ -154,6 +155,10 @@ class JsonConvert {
       return data.map<UserInfoTable>((Map<String, dynamic> e) =>
           UserInfoTable.fromJson(e)).toList() as M;
     }
+    if (<FriendApplyEntity>[] is M) {
+      return data.map<FriendApplyEntity>((Map<String, dynamic> e) =>
+          FriendApplyEntity.fromJson(e)).toList() as M;
+    }
     if (<IsolateMsgEntity>[] is M) {
       return data.map<IsolateMsgEntity>((Map<String, dynamic> e) =>
           IsolateMsgEntity.fromJson(e)).toList() as M;
@@ -212,6 +217,7 @@ class JsonConvertClassCollection {
   Map<String, JsonConvertFunction> convertFuncMap = {
     (MessageBoxTable).toString(): MessageBoxTable.fromJson,
     (UserInfoTable).toString(): UserInfoTable.fromJson,
+    (FriendApplyEntity).toString(): FriendApplyEntity.fromJson,
     (IsolateMsgEntity).toString(): IsolateMsgEntity.fromJson,
     (SocketMessageEntity).toString(): SocketMessageEntity.fromJson,
     (SocketMsgContent).toString(): SocketMsgContent.fromJson,

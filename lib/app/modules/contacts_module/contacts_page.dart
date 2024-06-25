@@ -41,7 +41,7 @@ class ContactsPage extends GetView<ContactsController> {
                   child: Icon(Icons.add_reaction_outlined,size: 40.r,color: Colors.white,),
                 ),
                 title: Text("新的朋友",style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
-                // onTap: () => Get.toNamed(Routes.FRIEND_DETAIL,arguments: contact),
+                onTap: () => Get.toNamed(Routes.NEW_FRIEND),
               ),
               Container(
                 height: 1.h,

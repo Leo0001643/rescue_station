@@ -1,6 +1,8 @@
 import 'package:event_bus/event_bus.dart';
 import 'package:rescue_station/app/modules/friend_detail/friend_detail_binding.dart';
 import 'package:rescue_station/app/modules/friend_detail/friend_detail_page.dart';
+import 'package:rescue_station/app/modules/new_friend/new_friend_binding.dart';
+import 'package:rescue_station/app/modules/new_friend/new_friend_page.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:event_bus/event_bus.dart';
@@ -127,6 +129,11 @@ abstract class AppPages {
       name: Routes.FRIEND_DETAIL,
       page: () => FriendDetailPage(),
       binding: FriendDetailBinding(),
+    ),
+    GetPage(
+      name: Routes.NEW_FRIEND,
+      page: () => NewFriendPage(),
+      binding: NewFriendBinding(),
     ),
   ];
 }

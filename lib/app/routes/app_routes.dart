@@ -20,6 +20,7 @@ abstract class Routes {
   static const CHAT_BY_FRIEND = '/chat_by_friend'; // friend chat page
   static const CHAT_BY_GROUP = '/chat_by_group'; // group chat page
   static const FRIEND_DETAIL = '/friend_detail'; // friend detail page
+  static const NEW_FRIEND = '/new_friend'; // new friend
 
 
 

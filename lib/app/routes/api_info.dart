@@ -31,11 +31,15 @@ class Api{
   ///忽略好友申请
   static const APPLY_IGNORE = '/apply/ignore';
 
+  ///好友申请列表
+  static const APPLY_LIST = '/apply/list';
+
   ///给好友发送消息
   static const CHAT_SEND_MESSAGE = '/chat/sendMsg';
 
   ///好友详情
   static const FRIEND_INFO = '/friend/info/';
+
 
 
 
@@ -119,3 +123,7 @@ class Api{
 ///*********************WebScoket协议接口***********************
 ///
 }
+
+
+
+
