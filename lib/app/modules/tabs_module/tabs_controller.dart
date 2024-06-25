@@ -49,14 +49,17 @@ class TabsController extends GetxController {
 
   @override
   void onInit() {
-    super.onInit();
     pageController = PageController(initialPage: currentIndex.value);
     Get.put(HomeController());
     Get.put(MessageController());
     Get.put(ContactsController());
     Get.put(CustomerServiceController());
     Get.put(MineController());
+    super.onInit();
+  }
 
+  @override
+  void onReady() {
     ///如果已经登录了，有token
     DbHelper().getUser().then((user){
       isLogin.value = (ObjectUtil.isNotEmpty(user?.token) ? true : false);
@@ -66,6 +69,7 @@ class TabsController extends GetxController {
         });
       }
     });
+    super.onReady();
   }
 
   void setCurrentIndex(int index) {

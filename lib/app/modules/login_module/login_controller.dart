@@ -10,6 +10,7 @@ import 'package:rescue_station/app/constant/api_code.dart';
 import 'package:rescue_station/app/domains/login_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import '../../utils/dio_utils.dart';
 import '../../utils/shared_preferences_util.dart';
 import '../tabs_module/tabs_controller.dart';
@@ -37,7 +38,7 @@ class LoginController extends GetxController{
         EasyLoading.showSuccess('登录成功!');
         Get.find<TabsController>().setCurrentIndex(0);
         Get.off(() => const TabsPage());
-      }else{
+      } else {
         EasyLoading.showError(entity.msg.toString());
       }
     } catch (e) {

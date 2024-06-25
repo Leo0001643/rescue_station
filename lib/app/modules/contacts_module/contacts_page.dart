@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
+import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_text_theme.dart';
 import 'package:rescue_station/app/utils/dialog_utils.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
@@ -26,53 +27,71 @@ class ContactsPage extends GetView<ContactsController> {
         ),
         onChange: (text)=> controller.filterContacts(text)
       ),
-      body: Obx(() => ListView.separated(
-        itemCount: controller.filteredContacts.length,
-        separatorBuilder: (context, index) {
-          return Padding(
-              padding: EdgeInsets.only(left: AppLayout.width(80)),
-              child: Divider(height: AppLayout.heigth(0),color: AppStyles.lightGreyWile)
-          );
-        },
-        itemBuilder: (context, index) {
-          final contact = controller.filteredContacts[index];
-          return ListTile(
-            leading: GFAvatar(
-              backgroundImage: NetworkImage(contact.portrait.em()),
-              radius: 25.r,
-              shape: GFAvatarShape.standard,
-              borderRadius: BorderRadius.circular(5.r),
-            ),
-            title: Text(contact.nickName.em()),
-            onTap: () => Get.toNamed(Routes.FRIEND_DETAIL,arguments: contact),
-          );
-          // return Dismissible(
-          //   key: Key(contact.userId.em()),
-          //   direction: DismissDirection.endToStart,
-          //   onDismissed: (direction) {
-          //     controller.deleteContact(contact);
-          //   },
-          //   background: Container(
-          //     color: Colors.red,
-          //     alignment: Alignment.centerRight,
-          //     padding: EdgeInsets.symmetric(horizontal: 20),
-          //     child: Icon(Icons.delete, color: Colors.white),
-          //   ),
-          //   child: ListTile(
-          //     leading: GFAvatar(
-          //       backgroundImage: NetworkImage(contact.portrait.em()),
-          //       radius: 25.r,
-          //       shape: GFAvatarShape.standard,
-          //       borderRadius: BorderRadius.circular(5.r),
-          //     ),
-          //     title: Text(contact.nickName.em()),
-          //     onTap: () {
-          //       // Handle contact tap
-          //     },
-          //   ),
-          // );
-        },
-      )),
+      body: Obx((){
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              ListTile(
+                leading: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.r),
+                    color: Colors.deepOrangeAccent,
+                  ),
+                  padding: EdgeInsets.all(5.r),
+                  child: Icon(Icons.add_reaction_outlined,size: 40.r,color: Colors.white,),
+                ),
+                title: Text("新的朋友",style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
+                // onTap: () => Get.toNamed(Routes.FRIEND_DETAIL,arguments: contact),
+              ),
+              Container(
+                height: 1.h,
+                width: double.infinity,
+                color: Colors.black12,
+                margin: EdgeInsets.only(left: 80.w,right: 10.w),
+              ),
+              ListTile(
+                leading: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.r),
+                    color: Colors.green,
+                  ),
+                  padding: EdgeInsets.all(5.r),
+                  child: Icon(Icons.group,size: 40.r,color: Colors.white,),
+                ),
+                title: Text("群聊",style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
+                // onTap: () => Get.toNamed(Routes.FRIEND_DETAIL,arguments: contact),
+              ),
+              Container(
+                height: 10.h,
+                width: double.infinity,
+                color: Colors.black12,
+              ),
+              ...controller.filteredContacts.map((contact){
+                return Column(
+                  children: [
+                    ListTile(
+                      leading: GFAvatar(
+                        backgroundImage: NetworkImage(contact.portrait.em()),
+                        radius: 25.r,
+                        shape: GFAvatarShape.standard,
+                        borderRadius: BorderRadius.circular(5.r),
+                      ),
+                      title: Text(contact.nickName.em(),style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
+                      onTap: () => Get.toNamed(Routes.FRIEND_DETAIL,arguments: contact),
+                    ),
+                    Container(
+                      height: 1.h,
+                      width: double.infinity,
+                      color: AppStyles.lightGreyWile,
+                      margin: EdgeInsets.only(left: 80.w,right: 10.w),
+                    ),
+                  ],
+                );
+              })
+            ],
+          ),
+        );
+      }),
     );
   }
 

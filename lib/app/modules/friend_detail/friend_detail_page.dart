@@ -78,8 +78,10 @@ class _FriendDetailPageState extends State<FriendDetailPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: InkWell(///跳转聊天页面
-                      onTap: ()=> DbHelper().getUserBox().then((value) {
-                        Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(value.getAt(0), user));
+                      onTap: ()=> DbHelper().getUser().then((value) {
+                        if(ObjectUtil.isNotEmpty(value)){
+                          Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(value!, user));
+                        }
                       }),
                       child: Container(
                         padding: EdgeInsets.all(10.r),

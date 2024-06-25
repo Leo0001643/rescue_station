@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:common_utils/common_utils.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,9 @@ import 'package:rescue_station/app/db/user_info_table.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/shared_preferences_util.dart';
+import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 
 class ContactsController extends GetxController{
   var contacts = RxList<UserInfoTable>.empty(growable: true);
@@ -17,18 +20,22 @@ class ContactsController extends GetxController{
   StreamSubscription? friendDelSub;
 
   @override
-  void onInit() {
-    super.onInit();
+  void onReady() {
     friendDelSub = eventBus.on<FriendDeleteEvent>().listen((event) {
-      getContactsAll();///联系人被删除，需要刷新通讯录列表
+      ///联系人被删除，需要刷新通讯录列表
+      DbHelper().getUser().then((user){
+        if(ObjectUtil.isNotEmpty(user)){
+          getContactsAll(user!);
+        }
+      });
     });
     ///如果已经登录了，有token
     DbHelper().getUser().then((user){
       if(ObjectUtil.isNotEmpty(user)){
-        getContactsAll();
+        getContactsAll(user!);
       }
     });
-
+    super.onReady();
   }
 
   @override
@@ -55,11 +62,13 @@ class ContactsController extends GetxController{
     // Get.snackbar('删除', '$contact 已删除');
   }
 
-  void getContactsAll(){
+  void getContactsAll(UserInfoTable user){
     DioUtil().post(Api.FRIEND_LIST,data: {"params":""}).then((result){
       if(result.data["code"] == 200){
-        contacts.value = JsonUtil.getObjList(JsonUtil.encodeObj(result.data["data"]), (map)=> UserInfoTable.fromJson(map as Map<String,dynamic>)) ?? [];
-        filteredContacts.value = JsonUtil.getObjList(JsonUtil.encodeObj(result.data["data"]), (map)=> UserInfoTable.fromJson(map as Map<String,dynamic>)) ?? [];
+        var data = JsonConvert.fromJsonAsT<List<UserInfoTable>>(result.data["data"]) ?? [];
+        contacts.value = data.where((v)=> v.userId != user.userId).toList(growable: true);
+        List<UserInfoTable> data1 = JsonConvert.fromJsonAsT<List<UserInfoTable>>(result.data["data"]) ?? [];
+        filteredContacts.value = data1.where((v)=> v.userId != user.userId).toList(growable: true);
       } else {
         Get.snackbar('联系人提醒', "系统异常！");
       }

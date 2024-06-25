@@ -1,8 +1,13 @@
 
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
 import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/generated/json/base/json_field.dart';
+import 'package:rescue_station/generated/json/message_box_table.g.dart';
 part 'message_box_table.g.dart';
 
+@JsonSerializable()
 @HiveType(typeId: 0)
 class MessageBoxTable extends HiveObject{
   @HiveField(0)
@@ -37,6 +42,22 @@ class MessageBoxTable extends HiveObject{
 
   @HiveField(10)
   dynamic group;///群聊信息
+
+  @HiveField(11)
+  bool isShow = true;///聊天框是否显示（特指消息页面的聊天框入口）
+
+  MessageBoxTable();
+
+  factory MessageBoxTable.fromJson(Map<String, dynamic> json) => $MessageBoxTableFromJson(json);
+
+  Map<String, dynamic> toJson() => $MessageBoxTableToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
+
+
 
 }
 

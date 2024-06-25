@@ -8,6 +8,7 @@ import 'package:rescue_station/app/db/user_info_table.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/isolate_msg_entity.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
+import 'package:rescue_station/app/socket/socket_notice_entity.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
@@ -88,11 +89,16 @@ class SocketUtils{
     channel.stream.listen((event) {
       loggerArray(["异步任务收到长连接消息",event]);
       ///{"msgId":"1805140119376756738","pushType":"MSG","msgContent":{"msgType":"TEXT","content":"哈哈哈哈","top":"N","disturb":"N"},"fromInfo":{"nickName":"上官婉儿","portrait":"http://q3z3-im.oss-cn-beijing.aliyuncs.com/61bed1c563de173eb00e8d8c.png","userId":"1800817039510786049","userType":"self"},"createTime":"2024-06-23 23:25:20","groupInfo":{}}
+      ///{"msgId":"1805438066169634817","pushType":"NOTICE","msgContent":{"friendApply":{"count":1},"topicRed":{},"topicReply":{}},"createTime":"2024-06-24 19:09:13","groupInfo":{}}
       if(event is String){
         var dataMap = jsonDecode(event);
         switch(dataMap["pushType"]){
           case "MSG":
             var response = SocketMessageEntity.fromJson(dataMap);
+            sendPort.send(response);
+            break;
+          case "NOTICE":
+            var response = SocketNoticeEntity.fromJson(dataMap);
             sendPort.send(response);
             break;
         }
