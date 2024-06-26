@@ -1,4 +1,6 @@
 import 'package:event_bus/event_bus.dart';
+import 'package:rescue_station/app/modules/add_friend_module/apply_friend/apply_friend_binding.dart';
+import 'package:rescue_station/app/modules/add_friend_module/apply_friend/apply_friend_page.dart';
 import 'package:rescue_station/app/modules/friend_detail/friend_detail_binding.dart';
 import 'package:rescue_station/app/modules/friend_detail/friend_detail_page.dart';
 import 'package:rescue_station/app/modules/new_friend/new_friend_binding.dart';
@@ -47,39 +49,40 @@ abstract class AppPages {
   static final pages = [
     GetPage(
       name: Routes.TABS,
-      page: () => const TabsPage(),
+      page: () => TabsPage(),
       binding: TabsBinding(),
+      bindings: [HomeBinding(),MessageBinding(),ContactsBinding(),CustomerServiceBinding(),MineBinding()]
     ),
-    GetPage(
-      name: Routes.HOME,
-      page: () => HomePage(),
-      binding: HomeBinding(),
-    ),
+    // GetPage(
+    //   name: Routes.HOME,
+    //   page: () => HomePage(),
+    //   binding: HomeBinding(),
+    // ),
     GetPage(
       name: Routes.NOTICE,
       page: () => NoticePage(),
       binding: NoticeBinding(),
     ),
-    GetPage(
-      name: Routes.MINE,
-      page: () => MinePage(),
-      binding: MineBinding(),
-    ),
-    GetPage(
-      name: Routes.MESSAGE,
-      page: () => MessagePage(),
-      binding: MessageBinding(),
-    ),
-    GetPage(
-      name: Routes.CUSTOMER_SERVICE,
-      page: () => CustomerServicePage(),
-      binding: CustomerServiceBinding(),
-    ),
-    GetPage(
-      name: Routes.CONTACTS,
-      page: () => ContactsPage(),
-      binding: ContactsBinding(),
-    ),
+    // GetPage(
+    //   name: Routes.MINE,
+    //   page: () => MinePage(),
+    //   binding: MineBinding(),
+    // ),
+    // GetPage(
+    //   name: Routes.MESSAGE,
+    //   page: () => MessagePage(),
+    //   binding: MessageBinding(),
+    // ),
+    // GetPage(
+    //   name: Routes.CUSTOMER_SERVICE,
+    //   page: () => CustomerServicePage(),
+    //   binding: CustomerServiceBinding(),
+    // ),
+    // GetPage(
+    //   name: Routes.CONTACTS,
+    //   page: () => ContactsPage(),
+    //   binding: ContactsBinding(),
+    // ),
     GetPage(
       name: Routes.NOTICE_DETAIL,
       page: () => NoticeDetailPage(),
@@ -134,6 +137,11 @@ abstract class AppPages {
       name: Routes.NEW_FRIEND,
       page: () => NewFriendPage(),
       binding: NewFriendBinding(),
+    ),
+    GetPage(
+      name: Routes.APPLY_FRIEND,
+      page: () => ApplyFriendPage(),
+      binding: ApplyFriendBinding(),
     ),
   ];
 }

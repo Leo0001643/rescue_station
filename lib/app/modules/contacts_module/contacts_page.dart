@@ -14,18 +14,26 @@ import '../../theme/app_colors_theme.dart';
 import 'contacts_controller.dart';
 
 
-class ContactsPage extends GetView<ContactsController> {
+class ContactsPage extends StatefulWidget {
   const ContactsPage({super.key});
+
+  @override
+  State<StatefulWidget> createState() => StateContactsPage();
+
+}
+
+class StateContactsPage extends State<ContactsPage> {
+  final controller = Get.find<ContactsController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: WidgetUtils.buildSearchAppBar(context, "通讯录",
-        InkWell(
-          onTap: ()=> showPopWindow(context),
-          child: const Icon(IconFont.CONTACTS_ADD, color: Colors.white),
-        ),
-        onChange: (text)=> controller.filterContacts(text)
+          InkWell(
+            onTap: ()=> showPopWindow(context),
+            child: const Icon(IconFont.CONTACTS_ADD, color: Colors.white),
+          ),
+          onChange: (text)=> controller.filterContacts(text)
       ),
       body: Obx((){
         return SingleChildScrollView(
@@ -126,5 +134,12 @@ class ContactsPage extends GetView<ContactsController> {
 
 
 
-
 }
+
+
+
+
+
+
+
+

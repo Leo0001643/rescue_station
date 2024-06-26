@@ -2,9 +2,14 @@
 import 'dart:convert';
 import 'dart:isolate';
 import 'dart:math';
+import 'package:common_utils/common_utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:rescue_station/app/db/chat_message_table.dart';
+import 'package:rescue_station/app/db/db_helper.dart';
+import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/event/new_chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/isolate_msg_entity.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
@@ -40,10 +45,10 @@ class SocketUtils{
   ///长连接状态
   bool isConnect = false;
 
-  void connect(String token,{Function? callback}) async {
+  void connect(UserInfoTable user,{Function? callback}) async {
     ReceivePort receivePort = ReceivePort();
     mainSendPort = receivePort.sendPort;
-    isolate = await Isolate.spawn(isolateMain, [mainSendPort!,token]);
+    isolate = await Isolate.spawn(isolateMain, [mainSendPort!,user.token.em()]);
     receivePort.listen((message) {
       loggerArray(["收到来自子Isolate的消息",message]);
       if(message is String){
@@ -55,7 +60,22 @@ class SocketUtils{
             break;
         }
       }else if(message is SocketMessageEntity){
+        message.userId = user.userId.em();
         eventBus.fire(message);
+        eventBus.fire(NewChatEvent());//有新消息，需要刷新列表
+        ///缓存消息到数据库
+        DbHelper().addChatMessageBox(ChatMessageTable.fromJson(message.toJson()));
+        DbHelper().findMessageBox(user.userId.em()).then((v){
+          if(ObjectUtil.isEmpty(v)){
+            DbHelper().addMessageBox(MessageBoxTable(boxId: message.msgId,userId: user.userId.em(),lastMessage: message.msgContent?.toJson(),
+            lastMessageTime: DateUtil.getDateMsByTimeStr(message.createTime.em()),unreadCount: 0,fromInfo: message.fromInfo?.toJson(),));
+          } else {
+            v!.fromInfo = message.fromInfo?.toJson();
+            v.lastMessageTime = DateUtil.getDateMsByTimeStr(message.createTime.em());
+            v.lastMessage = message.msgContent?.toJson();
+            DbHelper().updateMessageBox(v);
+          }
+        });
       }
     });
   }

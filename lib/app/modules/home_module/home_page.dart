@@ -11,9 +11,13 @@ import 'package:get/get.dart';
 import 'home_controller.dart';
 
 
-class HomePage extends GetView<HomeController> {
+class HomePage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => StateHomePage();
+}
 
-  const HomePage({super.key});
+class StateHomePage extends State<HomePage>{
+  final controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,7 @@ class HomePage extends GetView<HomeController> {
             actions: [
               IconButton(onPressed: ()=>Get.toNamed(Routes.NOTICE),
                   icon: Image.asset("assets/images/icon/email.png")),
-              IconButton(onPressed: ()=>Get.toNamed(Routes.MINE),
+              IconButton(onPressed: (){},
                   icon: Image.asset("assets/images/icon/settings.png")),
             ],
           ),
@@ -75,24 +79,24 @@ class HomePage extends GetView<HomeController> {
     return Container(
       height: AppLayout.heigth(30),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppLayout.heigth(4)),
-        gradient: const LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [Color.fromRGBO(251,245,255,.9), Color.fromRGBO(237, 214, 255, .9)],
-        )
+          borderRadius: BorderRadius.circular(AppLayout.heigth(4)),
+          gradient: const LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [Color.fromRGBO(251,245,255,.9), Color.fromRGBO(237, 214, 255, .9)],
+          )
       ),
       child: Row(
         children: [
           Container(
-              height: AppLayout.heigth(28),
-              width: AppLayout.width(28),
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/icon/bell.png")
-                  )
-              ),
+            height: AppLayout.heigth(28),
+            width: AppLayout.width(28),
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/icon/bell.png")
+                )
             ),
+          ),
           Gap(AppLayout.width(5)),
           Expanded(
               child: Obx((){

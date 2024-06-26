@@ -10,6 +10,7 @@ import 'package:rescue_station/generated/json/socket_message_entity.g.dart';
 class SocketMessageEntity {
 	String? msgId;
 	String? pushType;
+	String? userId;
 	SocketMsgContent? msgContent;
 	UserInfoTable? fromInfo;
 	String? createTime;

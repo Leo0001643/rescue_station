@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:rescue_station/app/db/db_helper.dart';
+import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/modules/mine_module/mine_controller.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 
 
 class MinePage extends GetView<MineController> {
@@ -65,8 +68,9 @@ class MinePage extends GetView<MineController> {
               buildPasswordRow('修改密码', passwordController),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  // Handle logout
+                onPressed: () async {
+                  await DbHelper().clearUser();
+                  eventBus.fire(LogoutEvent());
                 },
                 child: Text('退出账号', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(

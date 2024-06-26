@@ -30,19 +30,18 @@ class LoginController extends GetxController{
       LoginEntity entity = LoginEntity.fromRawJson(response.toString());
       if(ObjectUtil.isNotEmpty(response) && entity.code == ApiCode.SUCCESS.code) {
         if(ObjectUtil.isNotEmpty(entity.data)){
-          (await DbHelper().getUserBox()).add(entity.data);
+          await DbHelper().insertUserOrReplace(entity.data!);
           await SharedPreferencesUtil.setString('userInfo', jsonEncode(entity.data!.toJson()));
         }
         await Future.delayed(const Duration(seconds: 2));
         await EasyLoading.dismiss();
         EasyLoading.showSuccess('登录成功!');
-        Get.find<TabsController>().setCurrentIndex(0);
-        Get.off(() => const TabsPage());
+        Get.back(result: true);
       } else {
         EasyLoading.showError(entity.msg.toString());
       }
     } catch (e) {
-      // Get.snackbar('登录提醒', "系统异常！");
+      logger(e);
       EasyLoading.showError("登录异常！");
     }
   }

@@ -1,12 +1,18 @@
 import 'dart:math';
 
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:gap/gap.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:rescue_station/app/db/db_helper.dart';
+import 'package:rescue_station/app/db/message_box_table.dart';
+import 'package:rescue_station/app/db/user_info_table.dart';
 import 'package:rescue_station/app/domains/message.dart';
+import 'package:rescue_station/app/event/chat_event.dart';
+import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/utils/dialog_utils.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../routes/app_pages.dart';
@@ -17,19 +23,28 @@ import '../../utils/Icon.dart';
 import 'message_controller.dart';
 import 'package:get/get.dart';
 
-class MessagePage extends GetView<MessageController> {
+class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
+
+  @override
+  State<StatefulWidget> createState() =>StateMessagePage();
+
+}
+
+class StateMessagePage extends State<MessagePage>{
+  final controller = Get.find<MessageController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: WidgetUtils.buildSearchAppBar(context,"消息",
-          const InkWell(
-            // onTap: ()=> showPopWindow(context),
-            child: Icon(IconFont.ADD,color: Colors.white),
-          ),
+      appBar: WidgetUtils.buildSearchAppBar(context,"消息",
+        const InkWell(
+          // onTap: ()=> showPopWindow(context),
+          child: Icon(IconFont.ADD,color: Colors.white),
         ),
-        body: ListView.separated(
+      ),
+      body: Obx(() {
+        return ListView.separated(
           itemCount: controller.messages.length,
           separatorBuilder: (context, index) {
             return Padding(
@@ -41,7 +56,8 @@ class MessagePage extends GetView<MessageController> {
             var item = controller.messages[index];
             return buildMessageBox(item);
           },
-        ),
+        );
+      }),
     );
   }
 
@@ -75,9 +91,11 @@ class MessagePage extends GetView<MessageController> {
         ]);
   }
 
-  Widget buildMessageBox(item) {
+  Widget buildMessageBox(MessageBoxTable item) {
+    var user = UserInfoTable.fromJson(item.fromInfo!);
+    var msg = SocketMsgContent.fromJson(item.lastMessage!);
     return Slidable(
-      key: ValueKey(Random().nextInt(100000)),
+      key: ValueKey(item.userId.em()),
       endActionPane: ActionPane(
         motion: const DrawerMotion(),
         // dismissible: DismissiblePane(onDismissed: () {}),
@@ -99,27 +117,32 @@ class MessagePage extends GetView<MessageController> {
         ],
       ),
       child: ListTile(
-        onTap: (){
-          // Get.toNamed(Routes.CHAT_BY_FRIEND);
-        },
+        onTap: ()=> DbHelper().getUser().then((value) {
+          if(ObjectUtil.isNotEmpty(value)){
+            Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(value!, user));
+          }
+        }),
         leading: GFAvatar(
-          backgroundImage: AssetImage(item.avatar,),
+          backgroundImage: NetworkImage(user.portrait.em()),
           shape: GFAvatarShape.standard,
           borderRadius: BorderRadius.circular(5.r),
           radius: 25.r,
           child: Align(
             alignment: Alignment.topRight,
-            child: GFBadge(
-              size: 20.r,
-              shape: GFBadgeShape.circle,
+            child: Visibility(
+              visible: (item.unreadCount ?? 0) > 0,
+              child: GFBadge(
+                size: 20.r,
+                shape: GFBadgeShape.circle,
+              ),
             ),
           ),
         ),
-        title: Text(item.name,style: AppTextTheme.headLineStyle1,),
-        subtitle: Text(item.preview, style: AppTextTheme.headLineStyle0,),
+        title: Text(user.nickName.em(),style: AppTextTheme.headLineStyle1,),
+        subtitle: Text(msg.content.em(), style: AppTextTheme.headLineStyle0,),
         trailing: Transform.translate(
             offset: Offset(AppLayout.width(18),0),
-            child : Text(item.timestamp, style: AppTextTheme.headLineStyle0)
+            child : Text(DateUtil.formatDateMs(item.lastMessageTime ?? 0), style: AppTextTheme.headLineStyle0)
         ),
       ),
     );
@@ -127,5 +150,7 @@ class MessagePage extends GetView<MessageController> {
 
 
 }
+
+
 
 

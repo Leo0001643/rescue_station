@@ -2,12 +2,10 @@ import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:hive/hive.dart';
 
-import 'package:rescue_station/app/db/user_info_table.dart';
-
 
 MessageBoxTable $MessageBoxTableFromJson(Map<String, dynamic> json) {
   final MessageBoxTable messageBoxTable = MessageBoxTable();
-  final int? boxId = jsonConvert.convert<int>(json['boxId']);
+  final String? boxId = jsonConvert.convert<String>(json['boxId']);
   if (boxId != null) {
     messageBoxTable.boxId = boxId;
   }
@@ -19,7 +17,9 @@ MessageBoxTable $MessageBoxTableFromJson(Map<String, dynamic> json) {
   if (boxType != null) {
     messageBoxTable.boxType = boxType;
   }
-  final dynamic lastMessage = json['lastMessage'];
+  final Map<String, dynamic>? lastMessage =
+  (json['lastMessage'] as Map<String, dynamic>?)?.map(
+          (k, e) => MapEntry(k, e));
   if (lastMessage != null) {
     messageBoxTable.lastMessage = lastMessage;
   }
@@ -44,14 +44,11 @@ MessageBoxTable $MessageBoxTableFromJson(Map<String, dynamic> json) {
   if (isGroup != null) {
     messageBoxTable.isGroup = isGroup;
   }
-  final UserInfoTable? friend = jsonConvert.convert<UserInfoTable>(
-      json['friend']);
-  if (friend != null) {
-    messageBoxTable.friend = friend;
-  }
-  final dynamic group = json['group'];
-  if (group != null) {
-    messageBoxTable.group = group;
+  final Map<String, dynamic>? fromInfo =
+  (json['fromInfo'] as Map<String, dynamic>?)?.map(
+          (k, e) => MapEntry(k, e));
+  if (fromInfo != null) {
+    messageBoxTable.fromInfo = fromInfo;
   }
   final bool? isShow = jsonConvert.convert<bool>(json['isShow']);
   if (isShow != null) {
@@ -71,25 +68,23 @@ Map<String, dynamic> $MessageBoxTableToJson(MessageBoxTable entity) {
   data['isTop'] = entity.isTop;
   data['isDisturb'] = entity.isDisturb;
   data['isGroup'] = entity.isGroup;
-  data['friend'] = entity.friend?.toJson();
-  data['group'] = entity.group;
+  data['fromInfo'] = entity.fromInfo;
   data['isShow'] = entity.isShow;
   return data;
 }
 
 extension MessageBoxTableExtension on MessageBoxTable {
   MessageBoxTable copyWith({
-    int? boxId,
+    String? boxId,
     String? userId,
     int? boxType,
-    dynamic lastMessage,
+    Map<String, dynamic>? lastMessage,
     int? lastMessageTime,
     int? unreadCount,
     bool? isTop,
     bool? isDisturb,
     bool? isGroup,
-    UserInfoTable? friend,
-    dynamic group,
+    Map<String, dynamic>? fromInfo,
     bool? isShow,
   }) {
     return MessageBoxTable()
@@ -102,8 +97,7 @@ extension MessageBoxTableExtension on MessageBoxTable {
       ..isTop = isTop ?? this.isTop
       ..isDisturb = isDisturb ?? this.isDisturb
       ..isGroup = isGroup ?? this.isGroup
-      ..friend = friend ?? this.friend
-      ..group = group ?? this.group
+      ..fromInfo = fromInfo ?? this.fromInfo
       ..isShow = isShow ?? this.isShow;
   }
 }

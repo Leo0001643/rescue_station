@@ -32,13 +32,15 @@ class UserInfoTableAdapter extends TypeAdapter<UserInfoTable> {
       ..black = fields[11] as String?
       ..source = fields[12] as String?
       ..genderLabel = fields[13] as String?
-      ..sourceLabel = fields[14] as String?;
+      ..sourceLabel = fields[14] as String?
+      ..phone = fields[15] as String?
+      ..token = fields[16] as String?;
   }
 
   @override
   void write(BinaryWriter writer, UserInfoTable obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -68,7 +70,11 @@ class UserInfoTableAdapter extends TypeAdapter<UserInfoTable> {
       ..writeByte(13)
       ..write(obj.genderLabel)
       ..writeByte(14)
-      ..write(obj.sourceLabel);
+      ..write(obj.sourceLabel)
+      ..writeByte(15)
+      ..write(obj.phone)
+      ..writeByte(16)
+      ..write(obj.token);
   }
 
   @override

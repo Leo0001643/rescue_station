@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../utils/AppLayout.dart';
@@ -95,7 +96,8 @@ class AddFriendPage extends GetView<AddFriendController> {
             ),
             Visibility(///是否添加过好友了
               visible: user.isFriend == 'N',
-              child: WidgetUtils.buildElevatedButton('添加好友', 80.w, 35.h,bg: color_703, onPressed: ()=> controller.applyAdd(user)),
+              child: WidgetUtils.buildElevatedButton('添加好友', 80.w, 35.h,bg: color_703,
+                  onPressed: ()=> Get.toNamed(Routes.APPLY_FRIEND,arguments: user)),
             ),
           ],
         ),

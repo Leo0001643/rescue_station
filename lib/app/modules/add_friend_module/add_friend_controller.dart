@@ -28,18 +28,6 @@ class AddFriendController extends GetxController{
     });
   }
 
-  void applyAdd(UserInfoTable user){
-    var params = {"userId":user.userId.em(),"reason":"想加你好友通过一下谢谢！","source":user.source.em()};
-    DioUtil().post(Api.APPLY_ADD,data: params).then((result){
-      if(result.data["code"] == 200){
-        Get.snackbar('添加好友提醒', "申请已发送！");
-      } else {
-        Get.snackbar('添加好友提醒', result.data["msg"]);
-      }
-    }).onError((e,stack){
-      Get.snackbar('添加好友提醒', "系统异常！");
-    });
-  }
 
 
 

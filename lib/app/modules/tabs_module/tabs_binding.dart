@@ -13,25 +13,22 @@ import '../customer_service_module/customer_service_controller.dart';
 class TabsBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(()=>CustomNavigatorObserver()
-    );
-    Get.lazyPut<TabsController>(
-      () => TabsController(),
-    );
-    Get.lazyPut<HomeController>(
-      () => HomeController(),
-    );
-    Get.lazyPut<MessageController>(
-      () => MessageController(),
-    );
-    Get.lazyPut<MineController>(
-      () => MineController(),
-    );
-    Get.lazyPut<CustomerServiceController>(
-      () => CustomerServiceController(),
-    );
-    Get.lazyPut<ContactsController>(
-      () => ContactsController(),
-    );
+    Get.lazyPut(()=>CustomNavigatorObserver());
+    Get.lazyPut<TabsController>(() => TabsController(),);
+    // Get.lazyPut<HomeController>(
+    //   () => HomeController(),
+    // );
+    // Get.lazyPut<MessageController>(
+    //   () => MessageController(),
+    // );
+    // Get.lazyPut<MineController>(
+    //   () => MineController(),
+    // );
+    // Get.lazyPut<CustomerServiceController>(
+    //   () => CustomerServiceController(),
+    // );
+    // Get.lazyPut<ContactsController>(
+    //   () => ContactsController(),
+    // );
   }
 }

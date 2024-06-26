@@ -27,10 +27,7 @@ class LoginPage extends GetView<LoginController> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: (){
-            Get.find<TabsController>().setCurrentIndex(0);
-            Get.off(() => const TabsPage());
-          },
+          onPressed: ()=> Get.back(result: false),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,

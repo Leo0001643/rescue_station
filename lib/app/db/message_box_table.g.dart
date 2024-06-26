@@ -16,18 +16,19 @@ class MessageBoxTableAdapter extends TypeAdapter<MessageBoxTable> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MessageBoxTable()
-      ..boxId = fields[0] as int?
-      ..userId = fields[1] as String?
+    return MessageBoxTable(
+      boxId: fields[0] as String?,
+      userId: fields[1] as String?,
+      lastMessage: (fields[3] as Map?)?.cast<String, dynamic>(),
+      lastMessageTime: fields[4] as int?,
+      unreadCount: fields[5] as int?,
+      fromInfo: (fields[9] as Map?)?.cast<String, dynamic>(),
+    )
       ..boxType = fields[2] == null ? 0 : fields[2] as int
-      ..lastMessage = fields[3] as dynamic
-      ..lastMessageTime = fields[4] as int?
-      ..unreadCount = fields[5] as int?
       ..isTop = fields[6] == null ? false : fields[6] as bool
       ..isDisturb = fields[7] == null ? false : fields[7] as bool
       ..isGroup = fields[8] == null ? false : fields[8] as bool
-      ..friend = fields[9] as UserInfoTable?
-      ..group = fields[10] as dynamic;
+      ..isShow = fields[11] as bool;
   }
 
   @override
@@ -53,9 +54,9 @@ class MessageBoxTableAdapter extends TypeAdapter<MessageBoxTable> {
       ..writeByte(8)
       ..write(obj.isGroup)
       ..writeByte(9)
-      ..write(obj.friend)
-      ..writeByte(10)
-      ..write(obj.group);
+      ..write(obj.fromInfo)
+      ..writeByte(11)
+      ..write(obj.isShow);
   }
 
   @override

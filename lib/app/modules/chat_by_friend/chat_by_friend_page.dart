@@ -41,9 +41,16 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
   }
 
   @override
+  void dispose() {
+    Get.delete<ChatByFriendLogic>();
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WidgetUtils.buildAppBar(chatCtl.user.nickName.em()),
+      appBar: WidgetUtils.buildAppBar(chatCtl.friend.nickName.em()),
       body: KeyboardVisibilityProvider(
         controller: chatCtl.keyboardVisibilityController,
         child: Obx(() {
@@ -78,11 +85,6 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
     );
   }
 
-  @override
-  void dispose() {
-    Get.delete<ChatByFriendLogic>();
-    super.dispose();
-  }
 
   Widget buildBubble(child, {required message,required nextMessageInGroup}) {
     if(message.author.id == chatCtl.user.userId){

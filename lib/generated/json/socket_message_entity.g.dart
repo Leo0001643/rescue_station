@@ -13,6 +13,10 @@ SocketMessageEntity $SocketMessageEntityFromJson(Map<String, dynamic> json) {
   if (pushType != null) {
     socketMessageEntity.pushType = pushType;
   }
+  final String? userId = jsonConvert.convert<String>(json['userId']);
+  if (userId != null) {
+    socketMessageEntity.userId = userId;
+  }
   final SocketMsgContent? msgContent = jsonConvert.convert<SocketMsgContent>(
       json['msgContent']);
   if (msgContent != null) {
@@ -38,6 +42,7 @@ Map<String, dynamic> $SocketMessageEntityToJson(SocketMessageEntity entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['msgId'] = entity.msgId;
   data['pushType'] = entity.pushType;
+  data['userId'] = entity.userId;
   data['msgContent'] = entity.msgContent?.toJson();
   data['fromInfo'] = entity.fromInfo?.toJson();
   data['createTime'] = entity.createTime;
@@ -49,6 +54,7 @@ extension SocketMessageEntityExtension on SocketMessageEntity {
   SocketMessageEntity copyWith({
     String? msgId,
     String? pushType,
+    String? userId,
     SocketMsgContent? msgContent,
     UserInfoTable? fromInfo,
     String? createTime,
@@ -57,6 +63,7 @@ extension SocketMessageEntityExtension on SocketMessageEntity {
     return SocketMessageEntity()
       ..msgId = msgId ?? this.msgId
       ..pushType = pushType ?? this.pushType
+      ..userId = userId ?? this.userId
       ..msgContent = msgContent ?? this.msgContent
       ..fromInfo = fromInfo ?? this.fromInfo
       ..createTime = createTime ?? this.createTime
