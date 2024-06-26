@@ -49,6 +49,17 @@ class NewFriendLogic extends GetxController {
     });
   }
 
-
+  void applyIgnore(FriendApplyEntity entity){
+    DioUtil().post(Api.APPLY_IGNORE,data: {"applyId":entity.applyId.em()}).then((result){
+      if(result.data["code"] == 200){
+        Get.snackbar('提醒', "操作成功！");
+        getApplyList();
+      } else {
+        Get.snackbar('提醒', result.data["msg"]);
+      }
+    }).onError((e,stack){
+      Get.snackbar('联系人提醒', "系统异常！");
+    });
+  }
 
 }
