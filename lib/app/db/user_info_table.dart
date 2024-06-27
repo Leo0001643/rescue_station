@@ -58,6 +58,7 @@ class UserInfoTable extends HiveObject{
 	@HiveField(16)
 	String? token;
 
+	bool select = false;
 
 	UserInfoTable({this.userId});
 

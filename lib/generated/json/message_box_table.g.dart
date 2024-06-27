@@ -9,10 +9,6 @@ MessageBoxTable $MessageBoxTableFromJson(Map<String, dynamic> json) {
   if (boxId != null) {
     messageBoxTable.boxId = boxId;
   }
-  final String? userId = jsonConvert.convert<String>(json['userId']);
-  if (userId != null) {
-    messageBoxTable.userId = userId;
-  }
   final int? boxType = jsonConvert.convert<int>(json['boxType']);
   if (boxType != null) {
     messageBoxTable.boxType = boxType;
@@ -60,7 +56,6 @@ MessageBoxTable $MessageBoxTableFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> $MessageBoxTableToJson(MessageBoxTable entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['boxId'] = entity.boxId;
-  data['userId'] = entity.userId;
   data['boxType'] = entity.boxType;
   data['lastMessage'] = entity.lastMessage;
   data['lastMessageTime'] = entity.lastMessageTime;
@@ -76,7 +71,6 @@ Map<String, dynamic> $MessageBoxTableToJson(MessageBoxTable entity) {
 extension MessageBoxTableExtension on MessageBoxTable {
   MessageBoxTable copyWith({
     String? boxId,
-    String? userId,
     int? boxType,
     Map<String, dynamic>? lastMessage,
     int? lastMessageTime,
@@ -89,7 +83,6 @@ extension MessageBoxTableExtension on MessageBoxTable {
   }) {
     return MessageBoxTable()
       ..boxId = boxId ?? this.boxId
-      ..userId = userId ?? this.userId
       ..boxType = boxType ?? this.boxType
       ..lastMessage = lastMessage ?? this.lastMessage
       ..lastMessageTime = lastMessageTime ?? this.lastMessageTime

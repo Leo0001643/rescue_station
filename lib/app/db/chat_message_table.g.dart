@@ -16,14 +16,15 @@ class ChatMessageTableAdapter extends TypeAdapter<ChatMessageTable> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ChatMessageTable()
-      ..msgId = fields[0] as String?
-      ..pushType = fields[1] as String?
-      ..msgContent = (fields[2] as Map?)?.cast<String, dynamic>()
-      ..fromInfo = fields[3] as UserInfoTable?
-      ..createTime = fields[4] as String?
-      ..groupInfo = (fields[5] as Map?)?.cast<String, dynamic>()
-      ..userId = fields[6] as String?;
+    return ChatMessageTable(
+      msgId: fields[0] as String?,
+      pushType: fields[1] as String?,
+      msgContent: (fields[2] as Map?)?.cast<String, dynamic>(),
+      fromInfo: fields[3] as UserInfoTable?,
+      createTime: fields[4] as String?,
+      groupInfo: (fields[5] as Map?)?.cast<String, dynamic>(),
+      userId: fields[6] as String?,
+    );
   }
 
   @override

@@ -11,11 +11,12 @@ import 'package:rescue_station/app/utils/Icon.dart';
 
 class WidgetUtils {
 
-  static AppBar buildAppBar(String title) {
+  static AppBar buildAppBar(String title,{List<Widget>? actions}) {
     return AppBar(
-      title: Text(title,style: TextStyle(fontSize: 16.sp,color: color_333),),
+      title: Text(title,style: TextStyle(fontSize: 18.sp,color: color_333,fontWeight: FontWeight.w700),),
       centerTitle: true,
       backgroundColor: Colors.white,
+      actions: actions,
     );
   }
 
@@ -24,52 +25,48 @@ class WidgetUtils {
     return AppBar(
       toolbarHeight: AppLayout.heigth(120),
       backgroundColor: color_703,
-      title: Column(
-        children: [
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(child: Center(
-                    child: Padding(
-                        padding: EdgeInsets.only(left: AppLayout.width(50)),
-                        child: Text(title, style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(20),fontWeight: FontWeight.w500))
-                    ))),
-                rightIcon,
-              ]
-          ),
-          SizedBox(height: 15.h,),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            // margin: EdgeInsets.symmetric(horizontal: 10.w),
-            child: Row(
-              children: [
-                SizedBox(width: 8.w,),
-                Icon(Icons.search,),
-                Expanded(
-                  child: TextField(
-                    // keyboardType: TextInputType.number,
-                    style: TextStyle(fontSize: 16.sp),
-                    onChanged: onChange,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 10.h),
-                      isCollapsed: true,
-                      hintText: "搜索",
-                      border: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      focusedErrorBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                    ),
-                  ),
+      centerTitle: true,
+      title: Text(title, style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(20),fontWeight: FontWeight.w500)),
+      actions: [rightIcon,],
+      bottom: PreferredSize(
+          preferredSize: Size(double.infinity, 10.h),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.r),
                 ),
-              ],
-            ),
+                margin: EdgeInsets.symmetric(horizontal: 10.w),
+                child: Row(
+                  children: [
+                    SizedBox(width: 8.w,),
+                    Icon(Icons.search,),
+                    Expanded(
+                      child: TextField(
+                        // keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: 16.sp),
+                        onChanged: onChange,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 10.h),
+                          isCollapsed: true,
+                          hintText: "搜索",
+                          border: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          focusedErrorBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 15.h,),
+            ],
           ),
-        ],
       ),
     );
   }

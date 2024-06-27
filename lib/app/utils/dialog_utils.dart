@@ -12,7 +12,7 @@ class DialogUtils{
     showMenu(
         context: context,
         color: AppStyles.lightGrey,
-        position: RelativeRect.fromLTRB(AppLayout.width(600), AppLayout.heigth(108), 0, 0),
+        position: RelativeRect.fromLTRB(AppLayout.width(600), AppLayout.heigth(90), 0, 0),
         items: items,
     );
   }

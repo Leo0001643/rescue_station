@@ -31,7 +31,10 @@ class StateContactsPage extends State<ContactsPage> {
       appBar: WidgetUtils.buildSearchAppBar(context, "通讯录",
           InkWell(
             onTap: ()=> showPopWindow(context),
-            child: const Icon(IconFont.CONTACTS_ADD, color: Colors.white),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 15.w),
+              child: const Icon(IconFont.CONTACTS_ADD, color: Colors.white),
+            ),
           ),
           onChange: (text)=> controller.filterContacts(text)
       ),
@@ -67,7 +70,7 @@ class StateContactsPage extends State<ContactsPage> {
                   child: Icon(Icons.group,size: 40.r,color: Colors.white,),
                 ),
                 title: Text("群聊",style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
-                // onTap: () => Get.toNamed(Routes.FRIEND_DETAIL,arguments: contact),
+                onTap: () => Get.toNamed(Routes.GROUP_LIST),
               ),
               Container(
                 height: 10.h,
@@ -107,11 +110,12 @@ class StateContactsPage extends State<ContactsPage> {
     DialogUtils.showPopMenu(context,
         [
           PopupMenuItem(
+            height: 35.h,
+            padding: EdgeInsets.zero,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Icon(IconFont.MESSAGE, color: Colors.white),
-                Gap(AppLayout.width(6)),
+                Icon(IconFont.MESSAGE, color: Colors.white,size: AppLayout.fontSize(20),),
                 Text("发起群聊", style: AppTextTheme.headLineStyle0.copyWith(color: Colors.white))
               ],
             ),
@@ -119,11 +123,12 @@ class StateContactsPage extends State<ContactsPage> {
           ),
           const PopupMenuDivider(),
           PopupMenuItem(
+            height: 35.h,
+            padding: EdgeInsets.zero,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Icon(IconFont.ADD, color: Colors.white),
-                Gap(AppLayout.width(6)),
+                Icon(IconFont.ADD, color: Colors.white,size: AppLayout.fontSize(20),),
                 Text("添加朋友", style: AppTextTheme.headLineStyle0.copyWith(color: Colors.white))
               ],
             ),

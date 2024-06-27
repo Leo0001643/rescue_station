@@ -1,5 +1,5 @@
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
-import 'package:rescue_station/app/modules/new_friend/friend_apply_entity.dart';
+import 'package:rescue_station/app/modules/contacts_module/new_friend/friend_apply_entity.dart';
 
 FriendApplyEntity $FriendApplyEntityFromJson(Map<String, dynamic> json) {
   final FriendApplyEntity friendApplyEntity = FriendApplyEntity();

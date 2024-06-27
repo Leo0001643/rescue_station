@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:rescue_station/app/modules/new_friend/friend_apply_entity.dart';
+import 'package:rescue_station/app/modules/contacts_module/new_friend/friend_apply_entity.dart';
 
 class NewFriendState {
   NewFriendState() {

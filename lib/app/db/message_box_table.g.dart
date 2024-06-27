@@ -18,7 +18,6 @@ class MessageBoxTableAdapter extends TypeAdapter<MessageBoxTable> {
     };
     return MessageBoxTable(
       boxId: fields[0] as String?,
-      userId: fields[1] as String?,
       lastMessage: (fields[3] as Map?)?.cast<String, dynamic>(),
       lastMessageTime: fields[4] as int?,
       unreadCount: fields[5] as int?,
@@ -34,11 +33,9 @@ class MessageBoxTableAdapter extends TypeAdapter<MessageBoxTable> {
   @override
   void write(BinaryWriter writer, MessageBoxTable obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.boxId)
-      ..writeByte(1)
-      ..write(obj.userId)
       ..writeByte(2)
       ..write(obj.boxType)
       ..writeByte(3)

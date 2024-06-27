@@ -43,9 +43,11 @@ class FriendDetailLogic extends GetxController {
     var params = {"userId":state.userInfo.value.userId.em()};
     DioUtil().post(Api.DEL_FRIEND,data: params).then((result){
       if(result.data["code"] == 200){
-        eventBus.fire(FriendDeleteEvent(state.userInfo.value.userId.em()));
-        Get.back();
-        Get.snackbar('联系人提醒', "删除成功！");
+        DbHelper().deleteMessageBox(state.userInfo.value.userId!).then((v){
+          eventBus.fire(FriendDeleteEvent(state.userInfo.value.userId.em()));
+          Get.back();
+          Get.snackbar('联系人提醒', "删除成功！");
+        });
       } else {
         Get.snackbar('联系人提醒', result.data["msg"]);
       }

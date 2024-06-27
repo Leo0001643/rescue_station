@@ -23,7 +23,7 @@ class MessageController extends GetxController{
     super.onInit();
     friendDelSub = eventBus.on<FriendDeleteEvent>().listen((event) {
       ///删除好友，这里也应该删除对应的聊天记录,更新聊天列表
-      // getMessageList();
+      getMessageList();
     });
     newChatSub = eventBus.on<NewChatEvent>().listen((event) {
       ///有新消息

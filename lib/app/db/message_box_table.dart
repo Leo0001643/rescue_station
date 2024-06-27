@@ -10,10 +10,10 @@ part 'message_box_table.g.dart';
 @HiveType(typeId: 0)
 class MessageBoxTable extends HiveObject{
   @HiveField(0)
-  String? boxId;
+  String? boxId;///用户的userId  或者是群组的groupId
 
-  @HiveField(1)
-  String? userId;
+  // @HiveField(1)
+  // String? userId;
 
   @HiveField(2,defaultValue: 0)
   int boxType = 0;///0 单聊 1 群聊
@@ -42,7 +42,7 @@ class MessageBoxTable extends HiveObject{
   @HiveField(11)
   bool isShow = true;///聊天框是否显示（特指消息页面的聊天框入口）
 
-  MessageBoxTable({this.boxId,this.userId,this.lastMessage,this.lastMessageTime,this.unreadCount,this.fromInfo,});
+  MessageBoxTable({this.boxId,this.lastMessage,this.lastMessageTime,this.unreadCount,this.fromInfo,});
 
   factory MessageBoxTable.fromJson(Map<String, dynamic> json) => $MessageBoxTableFromJson(json);
 

@@ -73,6 +73,10 @@ UserInfoTable $UserInfoTableFromJson(Map<String, dynamic> json) {
   if (token != null) {
     userInfoTable.token = token;
   }
+  final bool? select = jsonConvert.convert<bool>(json['select']);
+  if (select != null) {
+    userInfoTable.select = select;
+  }
   return userInfoTable;
 }
 
@@ -95,6 +99,7 @@ Map<String, dynamic> $UserInfoTableToJson(UserInfoTable entity) {
   data['sourceLabel'] = entity.sourceLabel;
   data['phone'] = entity.phone;
   data['token'] = entity.token;
+  data['select'] = entity.select;
   return data;
 }
 
@@ -117,6 +122,7 @@ extension UserInfoTableExtension on UserInfoTable {
     String? sourceLabel,
     String? phone,
     String? token,
+    bool? select,
   }) {
     return UserInfoTable()
       ..userId = userId ?? this.userId
@@ -135,6 +141,7 @@ extension UserInfoTableExtension on UserInfoTable {
       ..genderLabel = genderLabel ?? this.genderLabel
       ..sourceLabel = sourceLabel ?? this.sourceLabel
       ..phone = phone ?? this.phone
-      ..token = token ?? this.token;
+      ..token = token ?? this.token
+      ..select = select ?? this.select;
   }
 }

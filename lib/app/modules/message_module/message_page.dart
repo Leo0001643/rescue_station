@@ -14,6 +14,7 @@ import 'package:rescue_station/app/domains/message.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/utils/dialog_utils.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../routes/app_pages.dart';
 import '../../theme/app_text_theme.dart';
@@ -37,12 +38,7 @@ class StateMessagePage extends State<MessagePage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WidgetUtils.buildSearchAppBar(context,"消息",
-        const InkWell(
-          // onTap: ()=> showPopWindow(context),
-          child: Icon(IconFont.ADD,color: Colors.white),
-        ),
-      ),
+      appBar: WidgetUtils.buildSearchAppBar(context,"消息",Container()),
       body: Obx(() {
         return ListView.separated(
           itemCount: controller.messages.length,
@@ -61,41 +57,11 @@ class StateMessagePage extends State<MessagePage>{
     );
   }
 
-
-  void showPopWindow(BuildContext context) {
-    DialogUtils.showPopMenu(context,
-        [
-          PopupMenuItem(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const Icon(IconFont.MESSAGE, color: Colors.white),
-                Gap(AppLayout.width(6)),
-                Text("发起群聊", style: AppTextTheme.headLineStyle0.copyWith(color: Colors.white))
-              ],
-            ),
-            onTap: ()=> Get.toNamed(Routes.CREATE_GROUP),
-          ),
-          const PopupMenuDivider(),
-          PopupMenuItem(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const Icon(IconFont.ADD, color: Colors.white),
-                Gap(AppLayout.width(6)),
-                Text("添加朋友", style: AppTextTheme.headLineStyle0.copyWith(color: Colors.white))
-              ],
-            ),
-            onTap: ()=> Get.toNamed(Routes.ADD_FRIEND),
-          ),
-        ]);
-  }
-
   Widget buildMessageBox(MessageBoxTable item) {
     var user = UserInfoTable.fromJson(item.fromInfo!);
     var msg = SocketMsgContent.fromJson(item.lastMessage!);
     return Slidable(
-      key: ValueKey(item.userId.em()),
+      key: ValueKey(item.boxId.em()),
       endActionPane: ActionPane(
         motion: const DrawerMotion(),
         // dismissible: DismissiblePane(onDismissed: () {}),

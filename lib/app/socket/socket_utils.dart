@@ -67,7 +67,7 @@ class SocketUtils{
         DbHelper().addChatMessageBox(ChatMessageTable.fromJson(message.toJson()));
         DbHelper().findMessageBox(user.userId.em()).then((v){
           if(ObjectUtil.isEmpty(v)){
-            DbHelper().addMessageBox(MessageBoxTable(boxId: message.msgId,userId: user.userId.em(),lastMessage: message.msgContent?.toJson(),
+            DbHelper().addMessageBox(MessageBoxTable(boxId: user.userId.em(),lastMessage: message.msgContent?.toJson(),
             lastMessageTime: DateUtil.getDateMsByTimeStr(message.createTime.em()),unreadCount: 0,fromInfo: message.fromInfo?.toJson(),));
           } else {
             v!.fromInfo = message.fromInfo?.toJson();
@@ -144,19 +144,19 @@ class SocketUtils{
   }
 
 
-  types.Message buildUserText(String text,UserInfoTable user){
+  types.Message buildUserText(String text,UserInfoTable user,{int? createdAt}){
     return types.TextMessage(
       author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
-      createdAt: DateTime.now().millisecondsSinceEpoch,
+      createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
       id: randomString(),
       text: text,
     );
   }
 
-  types.Message buildUserImage(PlatformFile image,UserInfoTable user){
+  types.Message buildUserImage(PlatformFile image,UserInfoTable user,{int? createdAt}){
     return types.ImageMessage(
       author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
-      createdAt: DateTime.now().millisecondsSinceEpoch,
+      createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
       id: randomString(),
       uri: image.path.em(),
       size: image.size,
@@ -164,10 +164,10 @@ class SocketUtils{
     );
   }
 
-  types.Message buildUserFile(PlatformFile image,UserInfoTable user){
+  types.Message buildUserFile(PlatformFile image,UserInfoTable user,{int? createdAt}){
     return types.FileMessage(
       author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
-      createdAt: DateTime.now().millisecondsSinceEpoch,
+      createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
       id: randomString(),
       uri: image.path.em(),
       size: image.size,

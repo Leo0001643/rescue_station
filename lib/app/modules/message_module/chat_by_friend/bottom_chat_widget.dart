@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:rescue_station/app/modules/chat_by_friend/bottom_chat_controller.dart';
-import 'package:rescue_station/app/modules/chat_by_friend/bottom_emoji_widget.dart';
-import 'package:rescue_station/app/modules/chat_by_friend/bottom_more_widget.dart';
 import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
+
+import 'bottom_chat_controller.dart';
+import 'bottom_emoji_widget.dart';
+import 'bottom_more_widget.dart';
 
 class BottomChatWidget extends StatefulWidget {
   final Function(Message msg) onSendChatListener;

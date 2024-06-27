@@ -8,6 +8,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   get: 4.6.6
   #间距组件
   gap: ^3.0.1
@@ -84,3 +86,6 @@ flutter:
     - family: rescue
       fonts:
         - asset: assets/fonts/iconfont.ttf
+flutter_intl:
+  enabled: true
+

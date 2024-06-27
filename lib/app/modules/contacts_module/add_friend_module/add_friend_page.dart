@@ -7,7 +7,7 @@ import 'package:rescue_station/app/db/user_info_table.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
-import '../../utils/AppLayout.dart';
+import '../../../utils/AppLayout.dart';
 import 'add_friend_controller.dart';
 
 class AddFriendPage extends GetView<AddFriendController> {

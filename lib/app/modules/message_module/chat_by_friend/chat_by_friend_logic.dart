@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
-import 'package:rescue_station/app/modules/chat_by_friend/bottom_chat_controller.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
@@ -15,6 +14,7 @@ import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
+import 'bottom_chat_controller.dart';
 import 'chat_by_friend_state.dart';
 
 class ChatByFriendLogic extends GetxController {
@@ -27,7 +27,8 @@ class ChatByFriendLogic extends GetxController {
     queryChatMessage();
     msgReceiveSub = eventBus.on<SocketMessageEntity>().listen((message){
       if(message.fromInfo?.userType != 'self'){
-        state.messages.insert(0, SocketUtils().buildUserText(message.msgContent!.content.em(), message.fromInfo!));
+        state.messages.insert(0, SocketUtils().buildUserText(message.msgContent!.content.em(), message.fromInfo!,
+            createdAt: DateUtil.getDateMsByTimeStr(message.createTime.em())));
       }
     });
     super.onReady();
@@ -78,7 +79,8 @@ class ChatByFriendLogic extends GetxController {
       if(v.isNotEmpty){
         v.forEach((item){
           var msg = SocketMsgContent.fromJson(item.msgContent!);
-          state.messages.insert(0, SocketUtils().buildUserText(msg.content.em(), item.fromInfo!));
+          state.messages.insert(0, SocketUtils().buildUserText(msg.content.em(), item.fromInfo!,createdAt:
+          DateUtil.getDateMsByTimeStr(item.createTime.em())));
         });
       }
     });

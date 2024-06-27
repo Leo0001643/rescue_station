@@ -22,6 +22,7 @@ abstract class Routes {
   static const FRIEND_DETAIL = '/friend_detail'; // friend detail page
   static const NEW_FRIEND = '/new_friend'; // new friend
   static const APPLY_FRIEND = '/apply_friend'; // apply friend
+  static const GROUP_LIST = '/group_list'; // group list
 
 
 }

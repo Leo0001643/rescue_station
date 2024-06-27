@@ -1,23 +1,21 @@
 
+import 'dart:ffi';
+
 import 'package:bubble/bubble.dart';
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_types/src/user.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:rescue_station/app/db/db_helper.dart';
-import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/constant/constant.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
-import 'package:rescue_station/app/modules/chat_by_friend/bottom_chat_controller.dart';
-import 'package:rescue_station/app/modules/chat_by_friend/bottom_chat_widget.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
-import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
+import 'bottom_chat_controller.dart';
+import 'bottom_chat_widget.dart';
 import 'chat_by_friend_logic.dart';
 
 class ChatByFriendPage extends StatefulWidget {
@@ -43,6 +41,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
   @override
   void dispose() {
     Get.delete<ChatByFriendLogic>();
+    Get.delete<BottomChatController>();
     super.dispose();
   }
 
@@ -68,7 +67,9 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
             onSendPressed: (text){},
             // onMessageTap: (context, message) => logic.addMessage(),
             user: types.User(id: chatCtl.user.userId.em(),imageUrl: chatCtl.user.portrait.em()),
-            showUserAvatars: true,
+            showUserAvatars: false,
+            showUserNames: false,
+            dateLocale: Constant.locale.toString(),
             bubbleBuilder: buildBubble,
             avatarBuilder: (user)=>buildAvatar(user.imageUrl.em()),
             emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
@@ -109,15 +110,24 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
         ],
       );
     } else {
-      return Bubble(
-        nip: BubbleNip.leftCenter,
-        nipOffset: -10,
-        alignment: Alignment.bottomLeft,
-        color: Colors.white,
-        elevation: 0,
-        margin: BubbleEdges.only(left: 10.w),
-        padding: const BubbleEdges.all(0),
-        child: child,
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          buildAvatar(chatCtl.user.portrait.em()),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 260.w),
+            child: Bubble(
+              nip: BubbleNip.leftCenter,
+              nipOffset: -10,
+              alignment: Alignment.bottomLeft,
+              color: Colors.white,
+              elevation: 0,
+              margin: BubbleEdges.only(left: 10.w),
+              padding: const BubbleEdges.all(0),
+              child: child,
+            ),
+          ),
+        ],
       );
     }
   }

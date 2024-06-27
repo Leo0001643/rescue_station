@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rescue_station/app/modules/new_friend/friend_apply_entity.dart';
+import 'package:rescue_station/app/modules/contacts_module/new_friend/friend_apply_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';

@@ -1,8 +1,11 @@
 
+import 'package:common_utils/common_utils.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/utils/logger.dart';
+import 'package:rescue_station/app/utils/widget_utils.dart';
 
 class DbHelper {
   DbHelper._internal();
@@ -31,11 +34,14 @@ class DbHelper {
     return (await getUserBox()).putAt(index, user);
   }
 
+  ///这里会保持只有一个用户信息
   Future insertUserOrReplace(UserInfoTable user) async {
     if((await getUserBox()).isEmpty){
       return (await getUserBox()).add(user);
-    }else {
-      return (await getUserBox()).putAt(0, user);
+    } else if(user.isInBox){
+      return putUser(user.key, user);
+    } else {
+      return putUser(0, user);
     }
   }
 
@@ -60,7 +66,7 @@ class DbHelper {
 
   Future<MessageBoxTable?> findMessageBox(String userId) async {
     try{
-      return (await getMessageBox()).values.toList(growable: true).firstWhere((v)=> v.userId == userId);
+      return (await getMessageBox()).values.toList(growable: true).firstWhere((v)=> v.boxId == userId);
     }catch(e){
       return null;
     }
@@ -69,22 +75,42 @@ class DbHelper {
   ///查询消息聊天框
   Future<List<MessageBoxTable>> queryMessageBox(String userId) async {
     try{
-      return (await getMessageBox()).values.toList(growable: true).where((v)=> v.userId == userId && v.isShow).toList(growable: true);
+      return (await getMessageBox()).values.toList(growable: true).where((v)=> v.boxId == userId && v.isShow).toList(growable: true);
     } catch(e) {
       return [];
     }
   }
 
   ///更新消息聊天框
-  Future<MessageBoxTable?> updateMessageBox(MessageBoxTable message) async {
-    var index = (await getMessageBox()).values.toList(growable: true).indexOf(message);
-    (await getMessageBox()).putAt(index, message);
+  Future updateMessageBox(MessageBoxTable message) async {
+    // var index = (await getMessageBox()).values.toList().indexOf(message);
+    if(message.isInBox){
+      return (await getMessageBox()).putAt(message.key, message);
+    }
+    return;
   }
 
-  Future putMessageBox(MessageBoxTable message) async {
-    return (await getMessageBox()).add(message);
+  ///删除消息聊天框
+  Future deleteMessageBox(String userId) async {
+    try{
+      ///删除聊天框
+      var message = await findMessageBox(userId);
+      if(ObjectUtil.isNotEmpty(message) && message!.isInBox){
+        // var index = (await getMessageBox()).values.toList().indexOf(message!);
+        (await getMessageBox()).delete(message.key);
+      }
+      ///需要同步删除历史聊天记录
+      var list = await queryChatMessageBox(userId);
+      for (var chat in list) {
+        // var index = (await getChatMessageBox()).values.toList().indexOf(chat);
+        (await getChatMessageBox()).delete(chat.key);
+      }
+      return true;
+    } catch(e) {
+      logger(e);
+      return false;
+    }
   }
-
 
   Future<Box<ChatMessageTable>> getChatMessageBox(){
     return Hive.openBox<ChatMessageTable>("chatMessageBox");
