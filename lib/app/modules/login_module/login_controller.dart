@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +12,6 @@ import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import '../../utils/dio_utils.dart';
 import '../../utils/shared_preferences_util.dart';
-import '../tabs_module/tabs_controller.dart';
-import '../tabs_module/tabs_pages.dart';
 
 class LoginController extends GetxController{
   var phoneController = TextEditingController(text: "13125554441");

@@ -143,10 +143,6 @@ abstract class AppPages {
       page: () => ApplyFriendPage(),
       binding: ApplyFriendBinding(),
     ),
-    GetPage(
-      name: Routes.GROUP_LIST,
-      page: () => GroupListPage(),
-      binding: GroupListBinding(),
-    ),
+
   ];
 }

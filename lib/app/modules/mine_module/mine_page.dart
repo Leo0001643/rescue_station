@@ -2,87 +2,169 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:rescue_station/app/db/db_helper.dart';
-import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/modules/mine_module/mine_controller.dart';
-import 'package:rescue_station/app/routes/app_pages.dart';
+import '../../theme/app_colors_theme.dart';
 
 
 class MinePage extends GetView<MineController> {
   // const MinePage({super.key});
-
     final MineController userController = Get.put(MineController());
     final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile'),
-      ),
-      body: Obx(() {
-        var user = controller.user.value;
-        return SingleChildScrollView(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  _showImageSourceActionSheet(context, controller);
-                },
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: controller.profileImagePath.value.isEmpty
-                      ? NetworkImage('https://example.com/profile.jpg')  // Replace with actual image URL
-                      : FileImage(File(controller.profileImagePath.value)) as ImageProvider,
-                  child: const Align(
-                    alignment: Alignment.bottomRight,
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
+        body: Obx(() {
+          var user = userController.user.value;
+          return SingleChildScrollView(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    _showImageSourceActionSheet(context, userController);
+                  },
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: userController.profileImagePath.value.isEmpty
+                            ? NetworkImage('https://example.com/profile.jpg')  // Replace with actual image URL
+                            : FileImage(File(userController.profileImagePath.value)) as ImageProvider,
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 16),  // Spacing between avatar and text
+                      Text("${userController.userInfo.value.nickName}" ,style: TextStyle(fontSize: 18),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              SizedBox(height: 10),
-              buildEditableRow('昵称', user.nickname, (value) => controller.updateNickname(value)),
-              buildEditableRow('账号', user.accountNumber, (value) => controller.updateAccountNumber(value)),
-              buildEditableRow('性别', user.gender, (value) => controller.updateGender(value)),
-              buildEditableRow(
-                '生日',
-                DateFormat('yyyy-MM-dd').format(user.birthdate),
-                    (value) async {
-                  DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: user.birthdate,
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  );
-                  if (picked != null) controller.updateBirthdate(picked);
-                },
-              ),
-              buildEditableRow('地址', user.address, (value) => controller.updateAddress(value)),
-              buildEditableRow('手机号', user.phoneNumber, (value) => controller.updatePhoneNumber(value)),
-              buildPasswordRow('修改密码', passwordController),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  await DbHelper().clearUser();
-                  eventBus.fire(LogoutEvent());
-                },
-                child: Text('退出账号', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                SizedBox(height: 20),
+                ListTile(
+                    leading: const Icon(Icons.ac_unit),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("昵称"),
+                        Text("${userController.userInfo.value.nickName}")
+                      ]
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                    onTap: ()=> print("昵称"),
                 ),
-              ),
-            ],
-          ),
-        );
-      }),
-    );
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+
+                ListTile(
+                  leading: const Icon(Icons.ac_unit),
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("微聊号"),
+                        Text("${userController.userInfo.value.chatNo}", overflow: TextOverflow.ellipsis, maxLines: 1, textAlign: TextAlign.right, softWrap: false)
+                      ]
+                  ),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                  onTap: ()=> print("昵称"),
+                ),
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+
+                ListTile(
+                  leading: const Icon(Icons.ac_unit),
+                  title: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("生日"),
+                        Text("1998-01-06")
+                      ]
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  onTap: ()=> print("生日"),
+                ),
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+
+                ListTile(
+                  leading: const Icon(Icons.ac_unit),
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("性别"),
+                        Text("${userController.userInfo.value.genderLabel}")
+                      ]
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  onTap: ()=> print("性别"),
+                ),
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+
+                ListTile(
+                  leading: const Icon(Icons.ac_unit),
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("地址"),
+                        Text("${userController.userInfo.value.provinces} ${userController.userInfo.value.city}")
+                      ]
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  onTap: ()=> print("地址"),
+                ),
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+
+                ListTile(
+                  leading: const Icon(Icons.ac_unit),
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("手机号"),
+                        Text("${userController.userInfo.value.phone}")
+                      ]
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  onTap: ()=> print("手机号"),
+                ),
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+
+                ListTile(
+                  leading: const Icon(Icons.ac_unit),
+                  title: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("修改密码"),
+                      ]
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  onTap: ()=> print("修改密码"),
+                ),
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: (){
+                    controller.logout();
+                  },
+                  child: Text('退出账号', style: TextStyle(color: Colors.white)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple,
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  ),
+                ),
+              ],
+            ),
+          );
+    }));
   }
 
   void _showImageSourceActionSheet(BuildContext context, MineController controller) {

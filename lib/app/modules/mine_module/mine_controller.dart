@@ -1,9 +1,21 @@
+import 'dart:convert';
+
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rescue_station/app/modules/mine_module/user_model.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
+import '../../db/db_helper.dart';
+import '../../db/user_info_table.dart';
+import '../../routes/api_info.dart';
+import '../../utils/dio_utils.dart';
+import '../../utils/shared_preferences_util.dart';
 
 
 class MineController extends GetxController{
+  var userInfo = UserInfoTable().obs;
+
   var user = UserModel(
     nickname: '上官婉儿',
     accountNumber: '18865654445',
@@ -14,6 +26,53 @@ class MineController extends GetxController{
   ).obs;
 
   var profileImagePath = ''.obs;
+
+  @override
+  void onReady() {
+
+  }
+
+  @override
+  void onClose() {
+
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    getUserInfo();
+  }
+
+
+  void getUserInfo() async {
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+      await EasyLoading.dismiss();
+      String? localUserInfo = SharedPreferencesUtil.getString("userInfo");
+      userInfo.value = UserInfoTable.fromJson(json.decode(localUserInfo!));
+      await EasyLoading.dismiss();
+      update();
+    } catch (e) {
+      EasyLoading.showError("获取会员信息！");
+    }
+  }
+
+
+  void logout() async{
+    try {
+      await EasyLoading.show(status: '正在登出...',maskType: EasyLoadingMaskType.black,);
+        await DioUtil().get(Api.LOGOUT);
+        await SharedPreferencesUtil.remove("userInfo");
+        // await DbHelper().clearUser();
+        await Future.delayed(const Duration(seconds: 2));
+        await EasyLoading.dismiss();
+        EasyLoading.showSuccess('登出成功!');
+        Get.toNamed(Routes.LOGIN);
+    } catch (e) {
+      EasyLoading.showError("登出异常！");
+    }
+  }
+
 
   Future<void> pickImage(ImageSource source) async {
     final ImagePicker _picker = ImagePicker();
@@ -64,4 +123,6 @@ class MineController extends GetxController{
   void updatePassword(String newPassword) {
     // Handle password update logic here
   }
+
+
 }

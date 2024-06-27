@@ -23,7 +23,7 @@ abstract class Routes {
   static const NEW_FRIEND = '/new_friend'; // new friend
   static const APPLY_FRIEND = '/apply_friend'; // apply friend
   static const GROUP_LIST = '/group_list'; // group list
-
+  static const NICK_NAME_EDIT = '/nick_name_edit';// NickNameEdit page
 
 }
 
@@ -34,8 +34,5 @@ abstract class Routes {
 EventBus eventBus=EventBus();
 ///可用于黏性事件
 EventBus behaviorBus = EventBus.customController(BehaviorSubject());
-
-
-
 
 

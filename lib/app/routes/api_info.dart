@@ -93,10 +93,10 @@ class Api{
   ///修改密码
   static const EDIT_PASS = "/my/editPass";
 
-  ///修改密码
+  ///退出系统
   static const LOGOUT = "/my/logout";
 
-  ///退出系统
+  ///获取会员信息
   static const GET_INFO = "/my/getInfo";
 
   ///修改昵称
