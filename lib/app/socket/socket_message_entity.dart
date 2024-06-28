@@ -1,4 +1,5 @@
-import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/domains/group_info_entity.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/generated/json/base/json_field.dart';
 import 'dart:convert';
 
@@ -12,9 +13,9 @@ class SocketMessageEntity {
 	String? pushType;
 	String? userId;
 	SocketMsgContent? msgContent;
-	UserInfoTable? fromInfo;
+	UserInfoEntity? fromInfo;
 	String? createTime;
-	dynamic groupInfo;
+	GroupInfoEntity? groupInfo;
 
 	SocketMessageEntity();
 

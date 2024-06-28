@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:common_utils/common_utils.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/event/friend_delete_event.dart';
-import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
@@ -16,6 +18,12 @@ class FriendDetailLogic extends GetxController {
 
   @override
   void onReady() {
+    DbHelper().queryChatMessageAll().then((v){
+      loggerArray(['来听课',v]);
+    });
+    DbHelper().queryMessageAll().then((v){
+      loggerArray(['信息列表',v]);
+    });
     getFriendDetail(Get.arguments);
     super.onReady();
   }
@@ -25,11 +33,11 @@ class FriendDetailLogic extends GetxController {
     super.onClose();
   }
 
-  void getFriendDetail(UserInfoTable user) {
+  void getFriendDetail(UserInfoEntity user) {
 
     DioUtil().get("${Api.FRIEND_INFO}${user.userId.em()}").then((result){
       if(result.data["code"] == 200){
-        state.userInfo.value = UserInfoTable.fromJson(result.data["data"]);
+        state.userInfo.value = UserInfoEntity.fromJson(result.data["data"]);
       } else {
         Get.snackbar('联系人提醒', result.data["msg"]);
       }

@@ -1,12 +1,16 @@
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 import 'package:rescue_station/app/db/chat_message_table.dart';
-import 'package:hive/hive.dart';
+import 'package:rescue_station/app/socket/socket_message_entity.dart';
 
-import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/utils/widget_utils.dart';
 
 
 ChatMessageTable $ChatMessageTableFromJson(Map<String, dynamic> json) {
   final ChatMessageTable chatMessageTable = ChatMessageTable();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    chatMessageTable.id = id;
+  }
   final String? msgId = jsonConvert.convert<String>(json['msgId']);
   if (msgId != null) {
     chatMessageTable.msgId = msgId;
@@ -15,14 +19,11 @@ ChatMessageTable $ChatMessageTableFromJson(Map<String, dynamic> json) {
   if (pushType != null) {
     chatMessageTable.pushType = pushType;
   }
-  final Map<String, dynamic>? msgContent =
-  (json['msgContent'] as Map<String, dynamic>?)?.map(
-          (k, e) => MapEntry(k, e));
+  final String? msgContent = jsonConvert.convert<String>(json['msgContent']);
   if (msgContent != null) {
     chatMessageTable.msgContent = msgContent;
   }
-  final UserInfoTable? fromInfo = jsonConvert.convert<UserInfoTable>(
-      json['fromInfo']);
+  final String? fromInfo = jsonConvert.convert<String>(json['fromInfo']);
   if (fromInfo != null) {
     chatMessageTable.fromInfo = fromInfo;
   }
@@ -30,9 +31,7 @@ ChatMessageTable $ChatMessageTableFromJson(Map<String, dynamic> json) {
   if (createTime != null) {
     chatMessageTable.createTime = createTime;
   }
-  final Map<String, dynamic>? groupInfo =
-  (json['groupInfo'] as Map<String, dynamic>?)?.map(
-          (k, e) => MapEntry(k, e));
+  final String? groupInfo = jsonConvert.convert<String>(json['groupInfo']);
   if (groupInfo != null) {
     chatMessageTable.groupInfo = groupInfo;
   }
@@ -45,10 +44,11 @@ ChatMessageTable $ChatMessageTableFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> $ChatMessageTableToJson(ChatMessageTable entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
   data['msgId'] = entity.msgId;
   data['pushType'] = entity.pushType;
   data['msgContent'] = entity.msgContent;
-  data['fromInfo'] = entity.fromInfo?.toJson();
+  data['fromInfo'] = entity.fromInfo;
   data['createTime'] = entity.createTime;
   data['groupInfo'] = entity.groupInfo;
   data['userId'] = entity.userId;
@@ -57,15 +57,17 @@ Map<String, dynamic> $ChatMessageTableToJson(ChatMessageTable entity) {
 
 extension ChatMessageTableExtension on ChatMessageTable {
   ChatMessageTable copyWith({
+    int? id,
     String? msgId,
     String? pushType,
-    Map<String, dynamic>? msgContent,
-    UserInfoTable? fromInfo,
+    String? msgContent,
+    String? fromInfo,
     String? createTime,
-    Map<String, dynamic>? groupInfo,
+    String? groupInfo,
     String? userId,
   }) {
     return ChatMessageTable()
+      ..id = id ?? this.id
       ..msgId = msgId ?? this.msgId
       ..pushType = pushType ?? this.pushType
       ..msgContent = msgContent ?? this.msgContent

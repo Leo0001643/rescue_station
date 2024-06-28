@@ -1,26 +1,21 @@
-import 'dart:math';
 
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:easy_refresh/easy_refresh.dart';
-import 'package:gap/gap.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
-import 'package:rescue_station/app/db/user_info_table.dart';
-import 'package:rescue_station/app/domains/message.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
-import 'package:rescue_station/app/utils/dialog_utils.dart';
+import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../routes/app_pages.dart';
 import '../../theme/app_text_theme.dart';
 import '../../theme/app_colors_theme.dart';
 import '../../utils/AppLayout.dart';
-import '../../utils/Icon.dart';
 import 'message_controller.dart';
 import 'package:get/get.dart';
 
@@ -58,8 +53,8 @@ class StateMessagePage extends State<MessagePage>{
   }
 
   Widget buildMessageBox(MessageBoxTable item) {
-    var user = UserInfoTable.fromJson(item.fromInfo!);
-    var msg = SocketMsgContent.fromJson(item.lastMessage!);
+    var user = UserInfoEntity.fromJson(item.getFromInfo());
+    var msg = SocketMsgContent.fromJson(item.getLastMessage());
     return Slidable(
       key: ValueKey(item.boxId.em()),
       endActionPane: ActionPane(
@@ -83,11 +78,12 @@ class StateMessagePage extends State<MessagePage>{
         ],
       ),
       child: ListTile(
-        onTap: ()=> DbHelper().getUser().then((value) {
-          if(ObjectUtil.isNotEmpty(value)){
-            Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(value!, user));
+        onTap: () {
+          var my = AppData.getUser();
+          if(ObjectUtil.isNotEmpty(my)){
+            Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(my!, user));
           }
-        }),
+        },
         leading: GFAvatar(
           backgroundImage: NetworkImage(user.portrait.em()),
           shape: GFAvatarShape.standard,

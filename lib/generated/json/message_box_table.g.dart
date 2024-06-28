@@ -1,10 +1,18 @@
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
-import 'package:hive/hive.dart';
+import 'package:rescue_station/app/utils/widget_utils.dart';
 
 
 MessageBoxTable $MessageBoxTableFromJson(Map<String, dynamic> json) {
   final MessageBoxTable messageBoxTable = MessageBoxTable();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    messageBoxTable.id = id;
+  }
+  final String? userId = jsonConvert.convert<String>(json['userId']);
+  if (userId != null) {
+    messageBoxTable.userId = userId;
+  }
   final String? boxId = jsonConvert.convert<String>(json['boxId']);
   if (boxId != null) {
     messageBoxTable.boxId = boxId;
@@ -13,9 +21,7 @@ MessageBoxTable $MessageBoxTableFromJson(Map<String, dynamic> json) {
   if (boxType != null) {
     messageBoxTable.boxType = boxType;
   }
-  final Map<String, dynamic>? lastMessage =
-  (json['lastMessage'] as Map<String, dynamic>?)?.map(
-          (k, e) => MapEntry(k, e));
+  final String? lastMessage = jsonConvert.convert<String>(json['lastMessage']);
   if (lastMessage != null) {
     messageBoxTable.lastMessage = lastMessage;
   }
@@ -28,25 +34,23 @@ MessageBoxTable $MessageBoxTableFromJson(Map<String, dynamic> json) {
   if (unreadCount != null) {
     messageBoxTable.unreadCount = unreadCount;
   }
-  final bool? isTop = jsonConvert.convert<bool>(json['isTop']);
+  final int? isTop = jsonConvert.convert<int>(json['isTop']);
   if (isTop != null) {
     messageBoxTable.isTop = isTop;
   }
-  final bool? isDisturb = jsonConvert.convert<bool>(json['isDisturb']);
+  final int? isDisturb = jsonConvert.convert<int>(json['isDisturb']);
   if (isDisturb != null) {
     messageBoxTable.isDisturb = isDisturb;
   }
-  final bool? isGroup = jsonConvert.convert<bool>(json['isGroup']);
+  final int? isGroup = jsonConvert.convert<int>(json['isGroup']);
   if (isGroup != null) {
     messageBoxTable.isGroup = isGroup;
   }
-  final Map<String, dynamic>? fromInfo =
-  (json['fromInfo'] as Map<String, dynamic>?)?.map(
-          (k, e) => MapEntry(k, e));
+  final String? fromInfo = jsonConvert.convert<String>(json['fromInfo']);
   if (fromInfo != null) {
     messageBoxTable.fromInfo = fromInfo;
   }
-  final bool? isShow = jsonConvert.convert<bool>(json['isShow']);
+  final int? isShow = jsonConvert.convert<int>(json['isShow']);
   if (isShow != null) {
     messageBoxTable.isShow = isShow;
   }
@@ -55,6 +59,8 @@ MessageBoxTable $MessageBoxTableFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> $MessageBoxTableToJson(MessageBoxTable entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
+  data['userId'] = entity.userId;
   data['boxId'] = entity.boxId;
   data['boxType'] = entity.boxType;
   data['lastMessage'] = entity.lastMessage;
@@ -70,18 +76,22 @@ Map<String, dynamic> $MessageBoxTableToJson(MessageBoxTable entity) {
 
 extension MessageBoxTableExtension on MessageBoxTable {
   MessageBoxTable copyWith({
+    int? id,
+    String? userId,
     String? boxId,
     int? boxType,
-    Map<String, dynamic>? lastMessage,
+    String? lastMessage,
     int? lastMessageTime,
     int? unreadCount,
-    bool? isTop,
-    bool? isDisturb,
-    bool? isGroup,
-    Map<String, dynamic>? fromInfo,
-    bool? isShow,
+    int? isTop,
+    int? isDisturb,
+    int? isGroup,
+    String? fromInfo,
+    int? isShow,
   }) {
     return MessageBoxTable()
+      ..id = id ?? this.id
+      ..userId = userId ?? this.userId
       ..boxId = boxId ?? this.boxId
       ..boxType = boxType ?? this.boxType
       ..lastMessage = lastMessage ?? this.lastMessage

@@ -6,6 +6,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors_theme.dart';
+import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
 import '../../../event/chat_event.dart';
@@ -51,11 +52,12 @@ class _GroupListPageState extends State<GroupListPage> {
                         borderRadius: BorderRadius.circular(5.r),
                       ),
                       title: Text(item.name.em(),style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
-                      onTap: () => DbHelper().getUser().then((user){
+                      onTap: () {
+                        var user = AppData.getUser();
                         if(ObjectUtil.isNotEmpty(user)){
                           Get.toNamed(Routes.CHAT_BY_GROUP,arguments: ChatGroupEvent(user!,item));
                         }
-                      }),
+                      },
                     ),
                     Container(
                       height: 1.h,

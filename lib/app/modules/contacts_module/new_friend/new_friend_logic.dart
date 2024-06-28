@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rescue_station/app/event/friend_delete_event.dart';
 import 'package:rescue_station/app/modules/contacts_module/new_friend/friend_apply_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
@@ -39,6 +41,7 @@ class NewFriendLogic extends GetxController {
   void applyAgree(FriendApplyEntity entity){
     DioUtil().post(Api.APPLY_AGREE,data: {"applyId":entity.applyId.em()}).then((result){
       if(result.data["code"] == 200){
+        eventBus.fire(FriendDeleteEvent(entity.userId.em()));
         Get.snackbar('提醒', "操作成功！");
         getApplyList();
       } else {

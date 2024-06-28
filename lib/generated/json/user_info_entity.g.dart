@@ -1,86 +1,84 @@
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
-import 'package:rescue_station/app/db/user_info_table.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 
-
-UserInfoTable $UserInfoTableFromJson(Map<String, dynamic> json) {
-  final UserInfoTable userInfoTable = UserInfoTable();
+UserInfoEntity $UserInfoEntityFromJson(Map<String, dynamic> json) {
+  final UserInfoEntity userInfoEntity = UserInfoEntity();
   final String? userId = jsonConvert.convert<String>(json['userId']);
   if (userId != null) {
-    userInfoTable.userId = userId;
+    userInfoEntity.userId = userId;
   }
   final String? portrait = jsonConvert.convert<String>(json['portrait']);
   if (portrait != null) {
-    userInfoTable.portrait = portrait;
+    userInfoEntity.portrait = portrait;
   }
   final String? chatNo = jsonConvert.convert<String>(json['chatNo']);
   if (chatNo != null) {
-    userInfoTable.chatNo = chatNo;
+    userInfoEntity.chatNo = chatNo;
   }
   final String? nickName = jsonConvert.convert<String>(json['nickName']);
   if (nickName != null) {
-    userInfoTable.nickName = nickName;
+    userInfoEntity.nickName = nickName;
   }
   final String? userType = jsonConvert.convert<String>(json['userType']);
   if (userType != null) {
-    userInfoTable.userType = userType;
+    userInfoEntity.userType = userType;
   }
   final String? gender = jsonConvert.convert<String>(json['gender']);
   if (gender != null) {
-    userInfoTable.gender = gender;
+    userInfoEntity.gender = gender;
   }
   final String? cover = jsonConvert.convert<String>(json['cover']);
   if (cover != null) {
-    userInfoTable.cover = cover;
+    userInfoEntity.cover = cover;
   }
   final String? provinces = jsonConvert.convert<String>(json['provinces']);
   if (provinces != null) {
-    userInfoTable.provinces = provinces;
+    userInfoEntity.provinces = provinces;
   }
   final String? city = jsonConvert.convert<String>(json['city']);
   if (city != null) {
-    userInfoTable.city = city;
+    userInfoEntity.city = city;
   }
   final String? intro = jsonConvert.convert<String>(json['intro']);
   if (intro != null) {
-    userInfoTable.intro = intro;
+    userInfoEntity.intro = intro;
   }
   final String? isFriend = jsonConvert.convert<String>(json['isFriend']);
   if (isFriend != null) {
-    userInfoTable.isFriend = isFriend;
+    userInfoEntity.isFriend = isFriend;
   }
   final String? black = jsonConvert.convert<String>(json['black']);
   if (black != null) {
-    userInfoTable.black = black;
+    userInfoEntity.black = black;
   }
   final String? source = jsonConvert.convert<String>(json['source']);
   if (source != null) {
-    userInfoTable.source = source;
+    userInfoEntity.source = source;
   }
   final String? genderLabel = jsonConvert.convert<String>(json['genderLabel']);
   if (genderLabel != null) {
-    userInfoTable.genderLabel = genderLabel;
+    userInfoEntity.genderLabel = genderLabel;
   }
   final String? sourceLabel = jsonConvert.convert<String>(json['sourceLabel']);
   if (sourceLabel != null) {
-    userInfoTable.sourceLabel = sourceLabel;
+    userInfoEntity.sourceLabel = sourceLabel;
   }
   final String? phone = jsonConvert.convert<String>(json['phone']);
   if (phone != null) {
-    userInfoTable.phone = phone;
+    userInfoEntity.phone = phone;
   }
   final String? token = jsonConvert.convert<String>(json['token']);
   if (token != null) {
-    userInfoTable.token = token;
+    userInfoEntity.token = token;
   }
   final bool? select = jsonConvert.convert<bool>(json['select']);
   if (select != null) {
-    userInfoTable.select = select;
+    userInfoEntity.select = select;
   }
-  return userInfoTable;
+  return userInfoEntity;
 }
 
-Map<String, dynamic> $UserInfoTableToJson(UserInfoTable entity) {
+Map<String, dynamic> $UserInfoEntityToJson(UserInfoEntity entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['userId'] = entity.userId;
   data['portrait'] = entity.portrait;
@@ -103,8 +101,8 @@ Map<String, dynamic> $UserInfoTableToJson(UserInfoTable entity) {
   return data;
 }
 
-extension UserInfoTableExtension on UserInfoTable {
-  UserInfoTable copyWith({
+extension UserInfoEntityExtension on UserInfoEntity {
+  UserInfoEntity copyWith({
     String? userId,
     String? portrait,
     String? chatNo,
@@ -124,7 +122,7 @@ extension UserInfoTableExtension on UserInfoTable {
     String? token,
     bool? select,
   }) {
-    return UserInfoTable()
+    return UserInfoEntity()
       ..userId = userId ?? this.userId
       ..portrait = portrait ?? this.portrait
       ..chatNo = chatNo ?? this.chatNo

@@ -51,6 +51,15 @@ class StateContactsPage extends State<ContactsPage> {
                   padding: EdgeInsets.all(5.r),
                   child: Icon(Icons.add_reaction_outlined,size: 40.r,color: Colors.white,),
                 ),
+                trailing: Obx(() {
+                  return Visibility(
+                    visible: controller.applyCount.value > 0,
+                    child: GFBadge(
+                      text: controller.applyCount.value.toString(),
+                      shape: GFBadgeShape.circle,
+                    ),
+                  );
+                }),
                 title: Text("新的朋友",style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
                 onTap: () => Get.toNamed(Routes.NEW_FRIEND),
               ),

@@ -1,6 +1,8 @@
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
-import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/domains/group_info_entity.dart';
+
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 
 
 SocketMessageEntity $SocketMessageEntityFromJson(Map<String, dynamic> json) {
@@ -22,7 +24,7 @@ SocketMessageEntity $SocketMessageEntityFromJson(Map<String, dynamic> json) {
   if (msgContent != null) {
     socketMessageEntity.msgContent = msgContent;
   }
-  final UserInfoTable? fromInfo = jsonConvert.convert<UserInfoTable>(
+  final UserInfoEntity? fromInfo = jsonConvert.convert<UserInfoEntity>(
       json['fromInfo']);
   if (fromInfo != null) {
     socketMessageEntity.fromInfo = fromInfo;
@@ -31,7 +33,8 @@ SocketMessageEntity $SocketMessageEntityFromJson(Map<String, dynamic> json) {
   if (createTime != null) {
     socketMessageEntity.createTime = createTime;
   }
-  final dynamic groupInfo = json['groupInfo'];
+  final GroupInfoEntity? groupInfo = jsonConvert.convert<GroupInfoEntity>(
+      json['groupInfo']);
   if (groupInfo != null) {
     socketMessageEntity.groupInfo = groupInfo;
   }
@@ -46,7 +49,7 @@ Map<String, dynamic> $SocketMessageEntityToJson(SocketMessageEntity entity) {
   data['msgContent'] = entity.msgContent?.toJson();
   data['fromInfo'] = entity.fromInfo?.toJson();
   data['createTime'] = entity.createTime;
-  data['groupInfo'] = entity.groupInfo;
+  data['groupInfo'] = entity.groupInfo?.toJson();
   return data;
 }
 
@@ -56,9 +59,9 @@ extension SocketMessageEntityExtension on SocketMessageEntity {
     String? pushType,
     String? userId,
     SocketMsgContent? msgContent,
-    UserInfoTable? fromInfo,
+    UserInfoEntity? fromInfo,
     String? createTime,
-    dynamic groupInfo,
+    GroupInfoEntity? groupInfo,
   }) {
     return SocketMessageEntity()
       ..msgId = msgId ?? this.msgId

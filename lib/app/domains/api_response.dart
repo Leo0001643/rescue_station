@@ -1,14 +1,16 @@
+import 'package:rescue_station/generated/json/base/json_convert_content.dart';
+
 class ApiResponse<T> {
   String? msg;
   int? code;
-  dynamic? data;
+  T? data;
 
-  ApiResponse({this.msg, this.code, this.data});
+  ApiResponse();
 
   ApiResponse.fromJson(Map<String, dynamic> json) {
     msg = json['msg'];
     code = json['code'];
-    data = json['data'];
+    data = JsonConvert.fromJsonAsT<T>(json['data']);
   }
 
   Map<String, dynamic> toJson() {

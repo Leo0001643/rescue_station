@@ -28,6 +28,10 @@ abstract class Routes {
 }
 
 
+void showToasty(String? msg){
+  if(ObjectUtil.isEmpty(msg)) return;
+  GFToast.showToast(msg, Get.context!);
+}
 
 
 ///普通事件

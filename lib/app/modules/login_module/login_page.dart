@@ -147,8 +147,9 @@ class LoginPage extends GetView<LoginController> {
                         padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(100), vertical: AppLayout.width(18)),
                       ),
                       child: Text('登录', style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(18), fontWeight: FontWeight.w900)),
-                      onPressed: () async{
+                      onPressed: (){
                         if (_formKey.currentState!.validate()) {
+                          FocusScope.of(context).unfocus();
                           controller.login();
                         }
                       },

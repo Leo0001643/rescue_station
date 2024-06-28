@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
@@ -78,8 +79,8 @@ class ChatByFriendLogic extends GetxController {
     DbHelper().queryChatMessageBox(chatCtl.friend.userId.em()).then((v){
       if(v.isNotEmpty){
         v.forEach((item){
-          var msg = SocketMsgContent.fromJson(item.msgContent!);
-          state.messages.insert(0, SocketUtils().buildUserText(msg.content.em(), item.fromInfo!,createdAt:
+          var msg = SocketMsgContent.fromJson(item.getMsgContent());
+          state.messages.insert(0, SocketUtils().buildUserText(msg.content.em(), UserInfoEntity.fromJson(item.getFromInfo()),createdAt:
           DateUtil.getDateMsByTimeStr(item.createTime.em())));
         });
       }

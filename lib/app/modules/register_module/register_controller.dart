@@ -2,7 +2,7 @@ import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:rescue_station/app/domains/register_entity.dart';
+import 'package:rescue_station/app/domains/api_response.dart';
 import '../../routes/api_info.dart';
 import '../../routes/app_pages.dart';
 import '../../utils/dio_utils.dart';
@@ -27,7 +27,7 @@ class RegisterController extends GetxController {
       var response = await DioUtil().post(Api.MEMBER_REGISTER, data: data);
       await Future.delayed(const Duration(seconds: 2));
       await EasyLoading.dismiss();
-      RegisterEntity entity = RegisterEntity.fromRawJson(response.toString());
+      var entity = ApiResponse.fromJson(response.data);
       if (ObjectUtil.isNotEmpty(entity) && entity.code == 200) {
         EasyLoading.showSuccess('请前往登录...');
         Get.toNamed(Routes.LOGIN);

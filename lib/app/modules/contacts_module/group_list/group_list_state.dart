@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import 'group_info_entity.dart';
+import '../../../domains/group_info_entity.dart';
 
 class GroupListState {
   GroupListState() {

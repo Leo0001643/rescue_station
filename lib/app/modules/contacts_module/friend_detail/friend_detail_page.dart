@@ -8,6 +8,7 @@ import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/AppLayout.dart';
+import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
 import 'friend_detail_logic.dart';
@@ -78,11 +79,12 @@ class _FriendDetailPageState extends State<FriendDetailPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: InkWell(///跳转聊天页面
-                      onTap: ()=> DbHelper().getUser().then((value) {
-                        if(ObjectUtil.isNotEmpty(value)){
-                          Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(value!, user));
+                      onTap: (){
+                        var my = AppData.getUser();
+                        if(ObjectUtil.isNotEmpty(my)){
+                          Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(my!, user));
                         }
-                      }),
+                      },
                       child: Container(
                         padding: EdgeInsets.all(10.r),
                         child: Icon(Icons.chat_outlined,color: color_703,size: 30.r,),

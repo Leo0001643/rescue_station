@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
@@ -66,7 +66,7 @@ class AddFriendPage extends GetView<AddFriendController> {
     );
   }
 
-  Widget buildFriendItem(int index, UserInfoTable user) {
+  Widget buildFriendItem(int index, UserInfoEntity user) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppLayout.heigth(10)),

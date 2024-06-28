@@ -8,7 +8,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
-import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/isolate_msg_entity.dart';
@@ -45,37 +45,29 @@ class SocketUtils{
   ///长连接状态
   bool isConnect = false;
 
-  void connect(UserInfoTable user,{Function? callback}) async {
+  void connect(UserInfoEntity user,{Function? callback}) async {
     ReceivePort receivePort = ReceivePort();
     mainSendPort = receivePort.sendPort;
-    isolate = await Isolate.spawn(isolateMain, [mainSendPort!,user.token.em()]);
-    receivePort.listen((message) {
+    try{
+      isolate = await Isolate.spawn(isolateMain, [mainSendPort!,user.token.em()]);
+    }catch(e){
+      callback?.call(false);
+      logger(e);
+    }
+    receivePort.listen((message) async {
       loggerArray(["收到来自子Isolate的消息",message]);
       if(message is String){
         var msg = IsolateMsgEntity.fromJson(jsonDecode(message));
         switch(msg.key){
           case "connected":
             isConnect = true;
-            callback?.call();
+            callback?.call(true);
             break;
         }
       }else if(message is SocketMessageEntity){
-        message.userId = user.userId.em();
-        eventBus.fire(message);
-        eventBus.fire(NewChatEvent());//有新消息，需要刷新列表
-        ///缓存消息到数据库
-        DbHelper().addChatMessageBox(ChatMessageTable.fromJson(message.toJson()));
-        DbHelper().findMessageBox(user.userId.em()).then((v){
-          if(ObjectUtil.isEmpty(v)){
-            DbHelper().addMessageBox(MessageBoxTable(boxId: user.userId.em(),lastMessage: message.msgContent?.toJson(),
-            lastMessageTime: DateUtil.getDateMsByTimeStr(message.createTime.em()),unreadCount: 0,fromInfo: message.fromInfo?.toJson(),));
-          } else {
-            v!.fromInfo = message.fromInfo?.toJson();
-            v.lastMessageTime = DateUtil.getDateMsByTimeStr(message.createTime.em());
-            v.lastMessage = message.msgContent?.toJson();
-            DbHelper().updateMessageBox(v);
-          }
-        });
+        await messageConvert(user,message);
+      }else if(message is SocketNoticeEntity){
+        eventBus.fire(message);///发送添加好友通知
       }
     });
   }
@@ -144,7 +136,7 @@ class SocketUtils{
   }
 
 
-  types.Message buildUserText(String text,UserInfoTable user,{int? createdAt}){
+  types.Message buildUserText(String text,UserInfoEntity user,{int? createdAt}){
     return types.TextMessage(
       author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
       createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
@@ -153,7 +145,7 @@ class SocketUtils{
     );
   }
 
-  types.Message buildUserImage(PlatformFile image,UserInfoTable user,{int? createdAt}){
+  types.Message buildUserImage(PlatformFile image,UserInfoEntity user,{int? createdAt}){
     return types.ImageMessage(
       author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
       createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
@@ -164,7 +156,7 @@ class SocketUtils{
     );
   }
 
-  types.Message buildUserFile(PlatformFile image,UserInfoTable user,{int? createdAt}){
+  types.Message buildUserFile(PlatformFile image,UserInfoEntity user,{int? createdAt}){
     return types.FileMessage(
       author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
       createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
@@ -180,6 +172,27 @@ class SocketUtils{
     final random = Random.secure();
     final values = List<int>.generate(16, (i) => random.nextInt(255));
     return base64UrlEncode(values);
+  }
+
+  Future<void> messageConvert(UserInfoEntity user,SocketMessageEntity message) async {
+    message.userId = message.fromInfo?.userId.em();
+    ///缓存消息到数据库
+    await DbHelper().addChatMessageBox(ChatMessageTable.fromJson2(message));
+    var boxId = message.fromInfo!.userId.em();
+    var userId = user.userId.em();
+    var v = await DbHelper().findMessageBox(boxId);
+    if(ObjectUtil.isEmpty(v)){
+      ///boxId为聊天好友的id
+      await DbHelper().addMessageBox(MessageBoxTable(userId: userId, boxId: boxId,lastMessage: jsonEncode(message.msgContent?.toJson()),
+        lastMessageTime: DateUtil.getDateMsByTimeStr(message.createTime.em()),unreadCount: 0,fromInfo: jsonEncode(message.fromInfo?.toJson()),));
+    } else {
+      v!.fromInfo = jsonEncode(message.fromInfo?.toJson());
+      v.lastMessageTime = DateUtil.getDateMsByTimeStr(message.createTime.em());
+      v.lastMessage = jsonEncode(message.msgContent?.toJson());
+      await DbHelper().updateMessageBox(v);
+    }
+    eventBus.fire(message);
+    eventBus.fire(NewChatEvent());//有新消息，需要刷新列表
   }
 
 }

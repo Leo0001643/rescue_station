@@ -4,6 +4,7 @@ import 'package:common_utils/common_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:rescue_station/app/constant/constant.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
+import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
@@ -29,7 +30,7 @@ class DioUtil {
     // Add interceptors if needed
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        var token = (await DbHelper().getUser())?.token.em();
+        var token = AppData.getUser()?.token.em();
         if(ObjectUtil.isNotEmpty(token)){
           options.headers['Authorization'] = token;
         }

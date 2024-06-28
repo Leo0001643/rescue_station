@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_colors_theme.dart';
@@ -55,7 +55,7 @@ class _NewFriendPageState extends State<NewFriendPage> {
                       Text("已忽略",style: TextStyle(fontSize: 14.sp,color: Colors.black54),)),
                       onTap: (){
                         if(apply.applyStatus == '1'){
-                          Get.toNamed(Routes.FRIEND_DETAIL,arguments: UserInfoTable(userId: apply.userId));
+                          Get.toNamed(Routes.FRIEND_DETAIL,arguments: UserInfoEntity(userId: apply.userId));
                         }
                       },
                     ),

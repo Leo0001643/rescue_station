@@ -23,6 +23,7 @@ class SocketNoticeEntity {
 	}
 }
 
+///{"msgId":"1806598850434293761","pushType":"NOTICE","msgContent":{"friendApply":{"count":1},"topicRed":{},"topicReply":{}},"createTime":"2024-06-28 00:01:45","groupInfo":{}}
 @JsonSerializable()
 class SocketNoticeMsgContent {
 	SocketNoticeMsgContentFriendApply? friendApply;

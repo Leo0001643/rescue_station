@@ -1,17 +1,18 @@
-import 'dart:convert';
+
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/constant/api_code.dart';
-import 'package:rescue_station/app/domains/login_entity.dart';
+import 'package:rescue_station/app/domains/api_response.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
+import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/utils/logger.dart';
+import '../../utils/app_data.dart';
 import '../../utils/dio_utils.dart';
-import '../../utils/shared_preferences_util.dart';
 
 class LoginController extends GetxController{
   var phoneController = TextEditingController(text: "13125554441");
@@ -24,12 +25,10 @@ class LoginController extends GetxController{
       final password = passwordController.text;
       await EasyLoading.show(status: '登录中...',maskType: EasyLoadingMaskType.black,);
       var response = await DioUtil().post(Api.MEMBER_LOGIN, data: {"phone":phone, "password": password});
-      LoginEntity entity = LoginEntity.fromRawJson(response.toString());
+      var entity = ApiResponse.fromJson(response.data);
       if(ObjectUtil.isNotEmpty(response) && entity.code == ApiCode.SUCCESS.code) {
-        if(ObjectUtil.isNotEmpty(entity.data)){
-          await DbHelper().insertUserOrReplace(entity.data!);
-          await SharedPreferencesUtil.setString('userInfo', jsonEncode(entity.data!.toJson()));
-        }
+        AppData.setUser(UserInfoEntity.fromJson(entity.data!));
+        eventBus.fire(LoginEvent());///发出登录成功通知
         await Future.delayed(const Duration(seconds: 2));
         await EasyLoading.dismiss();
         EasyLoading.showSuccess('登录成功!');
@@ -50,4 +49,8 @@ class LoginController extends GetxController{
   void register() {
     Get.toNamed(Routes.REGISTER);
   }
+
+
+
+
 }

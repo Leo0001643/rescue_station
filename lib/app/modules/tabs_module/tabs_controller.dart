@@ -11,6 +11,7 @@ import 'package:rescue_station/app/modules/mine_module/mine_controller.dart';
 import 'package:rescue_station/app/modules/tabs_module/tabs_pages.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_utils.dart';
+import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
@@ -30,11 +31,13 @@ class TabsController extends GetxController {
   late PageController pageController;
   late List<Widget> pages;
   StreamSubscription? logoutSub;
+  StreamSubscription? loginSub;
 
   @override
   void dispose() {
     pageController.dispose();
     logoutSub?.cancel();
+    loginSub?.cancel();
     super.dispose();
   }
 
@@ -55,6 +58,9 @@ class TabsController extends GetxController {
   void onReady() {
     ifLoginInit();
     logoutSub = eventBus.on<LogoutEvent>().listen((v){
+      ifLoginInit();
+    });
+    loginSub = eventBus.on<LogoutEvent>().listen((v){
       ifLoginInit();
     });
     super.onReady();
@@ -83,18 +89,17 @@ class TabsController extends GetxController {
   }
 
   void ifLoginInit() {
-    DbHelper().getUser().then((user){
-      if(ObjectUtil.isEmpty(user?.token)){
-        isLogin.value = false;
-        SocketUtils().destroy();
-      } else {
-        ///如果已经登录了，有token
-        isLogin.value = true;
-        SocketUtils().connect(user!,callback: (){
-          logger("连接成功");
-        });
-      }
-    });
+    var user = AppData.getUser();
+    if(ObjectUtil.isEmpty(user?.token)){
+      isLogin.value = false;
+      SocketUtils().destroy();
+    } else {
+      ///如果已经登录了，有token
+      SocketUtils().connect(user!,callback: (result){
+        loggerArray(["连接结果",result]);
+        isLogin.value = result;
+      });
+    }
   }
 
 

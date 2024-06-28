@@ -40,7 +40,8 @@ class Api{
   ///好友详情
   static const FRIEND_INFO = '/friend/info/';
 
-
+  ///文件上传
+  static const FILE_UPLOAD = '/file/upload';
 
 
   ///*************** 群类消息接口 ***************

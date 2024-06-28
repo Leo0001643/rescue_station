@@ -2,9 +2,10 @@ import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
-import 'package:rescue_station/app/db/user_info_table.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
+import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
@@ -15,11 +16,12 @@ class ApplyFriendLogic extends GetxController {
 
   @override
   void onReady() {
-    DbHelper().getUser().then((user){
+    var user = AppData.getUser();
+    if(ObjectUtil.isNotEmpty(user)){
       state.user = Get.arguments;
       state.reasonCtl.text = "我是${user?.nickName}";
       state.remarkCtl.text = state.user?.nickName ?? "";
-    });
+    }
     super.onReady();
   }
 
