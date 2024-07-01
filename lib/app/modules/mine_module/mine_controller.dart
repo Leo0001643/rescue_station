@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
@@ -7,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/modules/mine_module/user_model.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
-import '../../db/db_helper.dart';
 import '../../routes/api_info.dart';
 import '../../utils/dio_utils.dart';
 import '../../utils/shared_preferences_util.dart';

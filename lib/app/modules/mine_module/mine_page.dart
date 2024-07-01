@@ -1,54 +1,52 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:rescue_station/app/modules/mine_module/mine_controller.dart';
+import '../mine_module/mine_controller.dart';
 import '../../theme/app_colors_theme.dart';
+import '../../utils/AppLayout.dart';
+import '../../utils/Icon.dart';
 
 
 class MinePage extends GetView<MineController> {
-  // const MinePage({super.key});
-    final MineController userController = Get.put(MineController());
+    final userController = Get.find<MineController>();
     final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Obx(() {
-          var user = userController.user.value;
-          return SingleChildScrollView(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _showImageSourceActionSheet(context, userController);
-                  },
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage: userController.profileImagePath.value.isEmpty
-                            ? NetworkImage('https://example.com/profile.jpg')  // Replace with actual image URL
-                            : FileImage(File(userController.profileImagePath.value)) as ImageProvider,
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 16),  // Spacing between avatar and text
-                      Text("${userController.userInfo.value.nickName}" ,style: TextStyle(fontSize: 18),
-                      ),
-                    ],
+        appBar: AppBar(
+            toolbarHeight: AppLayout.heigth(50),
+            leadingWidth: AppLayout.heigth(200),
+            backgroundColor: Colors.blue,
+            leading: Row(
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      _showImageSourceActionSheet(context, userController);
+                    },
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: userController.profileImagePath.value.isEmpty
+                          ? const NetworkImage('https://pic.rmb.bdstatic.com/bjh/2b67e6c5784ec80eae9c5282c978115c5399.jpeg@h_1280')
+                          : FileImage(File(userController.profileImagePath.value)) as ImageProvider,
+                    ),
                   ),
-                ),
-                SizedBox(height: 20),
+                  Gap(AppLayout.width(8)),
+                  Text("${userController.userInfo.value.nickName}" ,style: TextStyle(fontSize: AppLayout.fontSize(18), color: Colors.white, fontWeight: FontWeight.w600)),
+                ],
+              )
+          ),
+        body: Obx(() {
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 12,),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
                 ListTile(
-                    leading: const Icon(Icons.ac_unit),
+                    leading: Icon(IconFont.NICKE, size: AppLayout.fontSize(28),color: Colors.lightBlue),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -61,9 +59,8 @@ class MinePage extends GetView<MineController> {
                     onTap: ()=> print("昵称"),
                 ),
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
-
                 ListTile(
-                  leading: const Icon(Icons.ac_unit),
+                  leading: Icon(IconFont.WECHAT, size: AppLayout.fontSize(28), color: Colors.green),
                   title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -78,7 +75,7 @@ class MinePage extends GetView<MineController> {
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
 
                 ListTile(
-                  leading: const Icon(Icons.ac_unit),
+                  leading: Icon(IconFont.BIRTHDAY, size: AppLayout.fontSize(28), color: Colors.pinkAccent),
                   title: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -93,7 +90,7 @@ class MinePage extends GetView<MineController> {
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
 
                 ListTile(
-                  leading: const Icon(Icons.ac_unit),
+                  leading: Icon(IconFont.SEX, size: AppLayout.fontSize(28), color: Colors.pink),
                   title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -108,7 +105,7 @@ class MinePage extends GetView<MineController> {
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
 
                 ListTile(
-                  leading: const Icon(Icons.ac_unit),
+                  leading: Icon(IconFont.ADDRESS, size: AppLayout.fontSize(28), color: Colors.blueAccent),
                   title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -123,7 +120,7 @@ class MinePage extends GetView<MineController> {
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
 
                 ListTile(
-                  leading: const Icon(Icons.ac_unit),
+                  leading: Icon(IconFont.PHONE, size: AppLayout.fontSize(28), color: Colors.redAccent),
                   title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -138,7 +135,7 @@ class MinePage extends GetView<MineController> {
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
 
                 ListTile(
-                  leading: const Icon(Icons.ac_unit),
+                  leading: Icon(IconFont.EDITPWD, size: AppLayout.fontSize(28), color: Colors.blueAccent),
                   title: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -150,17 +147,23 @@ class MinePage extends GetView<MineController> {
                   onTap: ()=> print("修改密码"),
                 ),
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: (){
+                Gap(AppLayout.heigth(48)),
+                InkWell(
+                  child: Container(
+                  height: AppLayout.heigth(48),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppStyles.buttonColor,
+                    borderRadius: BorderRadius.circular(8)
+                  ),
+                  child: Center(
+                    child: Text("退出账号", style: TextStyle(fontSize: AppLayout.fontSize(18), fontWeight: FontWeight.w700, color: Colors.white), textAlign: TextAlign.center),
+                  ),
+                  ),
+                  onTap: (){
                     controller.logout();
                   },
-                  child: Text('退出账号', style: TextStyle(color: Colors.white)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  ),
-                ),
+                )
               ],
             ),
           );
@@ -199,18 +202,18 @@ class MinePage extends GetView<MineController> {
 
   Widget buildEditableRow(String label, String value, Function(String) onEdit) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.symmetric(vertical: AppLayout.heigth(8)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(fontSize: 16, color: Colors.grey)),
+          Text(label, style: TextStyle(fontSize: AppLayout.fontSize(16), color: Colors.grey)),
           Expanded(
             child: TextField(
               decoration: InputDecoration(
                 hintText: value,
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 isDense: true,
-                contentPadding: EdgeInsets.all(8.0),
+                contentPadding: EdgeInsets.all(AppLayout.width(8)),
               ),
               onSubmitted: onEdit,
             ),
@@ -222,19 +225,19 @@ class MinePage extends GetView<MineController> {
 
   Widget buildPasswordRow(String label, TextEditingController controller) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.symmetric(vertical: AppLayout.heigth(8)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(fontSize: 16, color: Colors.grey)),
+          Text(label, style: TextStyle(fontSize: AppLayout.fontSize(16), color: Colors.grey)),
           Expanded(
             child: TextField(
               controller: controller,
               decoration: InputDecoration(
                 hintText: 'Enter new password',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 isDense: true,
-                contentPadding: EdgeInsets.all(8.0),
+                contentPadding: EdgeInsets.all(AppLayout.width(8)),
               ),
               obscureText: true,
               onSubmitted: (value) {
