@@ -54,7 +54,7 @@ class MinePage extends GetView<MineController> {
                         Text("${userController.userInfo.value.nickName}")
                       ]
                     ),
-                    trailing: Icon(Icons.arrow_forward_ios),
+                    trailing: const Icon(Icons.arrow_forward_ios),
                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
                     onTap: ()=> print("昵称"),
                 ),
@@ -68,7 +68,7 @@ class MinePage extends GetView<MineController> {
                         Text("${userController.userInfo.value.chatNo}", overflow: TextOverflow.ellipsis, maxLines: 1, textAlign: TextAlign.right, softWrap: false)
                       ]
                   ),
-                  trailing: Icon(Icons.arrow_forward_ios),
+                  trailing: const Icon(Icons.arrow_forward_ios),
                   contentPadding: EdgeInsets.symmetric(horizontal: 0),
                   onTap: ()=> print("昵称"),
                 ),
