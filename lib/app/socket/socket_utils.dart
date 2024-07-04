@@ -14,9 +14,11 @@ import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/isolate_msg_entity.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/socket/socket_notice_entity.dart';
+import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -45,16 +47,16 @@ class SocketUtils{
   ///长连接状态
   bool isConnect = false;
 
-  void connect(UserInfoEntity user,{Function? callback}) async {
+  void connect({Function? callback}) async {
     ReceivePort receivePort = ReceivePort();
     mainSendPort = receivePort.sendPort;
     try{
-      isolate = await Isolate.spawn(isolateMain, [mainSendPort!,user.token.em()]);
+      isolate = await Isolate.spawn(isolateMain, [mainSendPort!,AppData.getUser()?.token.em()]);
     }catch(e){
       callback?.call(false);
       logger(e);
     }
-    receivePort.listen((message) async {
+    receivePort.listen((message){
       loggerArray(["收到来自子Isolate的消息",message]);
       if(message is String){
         var msg = IsolateMsgEntity.fromJson(jsonDecode(message));
@@ -65,7 +67,7 @@ class SocketUtils{
             break;
         }
       }else if(message is SocketMessageEntity){
-        await messageConvert(user,message);
+        messageConvert(message);
       }else if(message is SocketNoticeEntity){
         eventBus.fire(message);///发送添加好友通知
       }
@@ -82,6 +84,7 @@ class SocketUtils{
       // ///立即停止异步任务
       isolate?.kill(priority: Isolate.immediate);
       isolate = null;
+      logger("已关闭长连接");
     });
   }
 
@@ -98,7 +101,7 @@ class SocketUtils{
     channel.ready.then((value) {
       sendPort.send(buildMessage("connected"));
     });
-    channel.stream.listen((event) {
+    channel.stream.interval(const Duration(seconds: 1)).listen((event) {
       loggerArray(["异步任务收到长连接消息",event]);
       ///{"msgId":"1805140119376756738","pushType":"MSG","msgContent":{"msgType":"TEXT","content":"哈哈哈哈","top":"N","disturb":"N"},"fromInfo":{"nickName":"上官婉儿","portrait":"http://q3z3-im.oss-cn-beijing.aliyuncs.com/61bed1c563de173eb00e8d8c.png","userId":"1800817039510786049","userType":"self"},"createTime":"2024-06-23 23:25:20","groupInfo":{}}
       ///{"msgId":"1805438066169634817","pushType":"NOTICE","msgContent":{"friendApply":{"count":1},"topicRed":{},"topicReply":{}},"createTime":"2024-06-24 19:09:13","groupInfo":{}}
@@ -116,6 +119,9 @@ class SocketUtils{
         }
       }
     });
+
+
+
 
     ReceivePort receivePort = ReceivePort();
     sendPort.send(receivePort.sendPort);
@@ -174,12 +180,13 @@ class SocketUtils{
     return base64UrlEncode(values);
   }
 
-  Future<void> messageConvert(UserInfoEntity user,SocketMessageEntity message) async {
+  Future<void> messageConvert(SocketMessageEntity message) async {
+    var user = AppData.getUser();
     message.userId = message.fromInfo?.userId.em();
     ///缓存消息到数据库
     await DbHelper().addChatMessageBox(ChatMessageTable.fromJson2(message));
     var boxId = message.fromInfo!.userId.em();
-    var userId = user.userId.em();
+    var userId = user?.userId.em();
     var v = await DbHelper().findMessageBox(boxId);
     if(ObjectUtil.isEmpty(v)){
       ///boxId为聊天好友的id

@@ -7,8 +7,8 @@ import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 
 class AppData {
 
-  static setUser(UserInfoEntity user){
-    SharedPreferencesUtil.setString("userInfo", jsonEncode(user.toJson()));
+  static Future<bool> setUser(UserInfoEntity user){
+    return SharedPreferencesUtil.setString("userInfo", jsonEncode(user.toJson()));
   }
 
   static UserInfoEntity? getUser(){

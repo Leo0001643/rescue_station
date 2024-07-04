@@ -30,7 +30,7 @@ abstract class Routes {
 
 void showToasty(String? msg){
   if(ObjectUtil.isEmpty(msg)) return;
-  GFToast.showToast(msg, Get.context!);
+  GFToast.showToast(msg, Get.context!, toastPosition: GFToastPosition.BOTTOM);
 }
 
 

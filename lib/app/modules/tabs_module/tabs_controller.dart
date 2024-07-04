@@ -46,10 +46,10 @@ class TabsController extends GetxController {
   void onReady() {
     ifLoginInit();
     logoutSub = eventBus.on<LogoutEvent>().listen((v){
-      ifLoginInit();
+      isLogin.value = false;
     });
-    loginSub = eventBus.on<LogoutEvent>().listen((v){
-      ifLoginInit();
+    loginSub = eventBus.on<LoginEvent>().listen((v){
+      isLogin.value = true;
     });
     super.onReady();
   }
@@ -77,17 +77,11 @@ class TabsController extends GetxController {
   }
 
   void ifLoginInit() {
-    var user = AppData.getUser();
-    if(ObjectUtil.isEmpty(user?.token)){
-      isLogin.value = false;
-      SocketUtils().destroy();
-    } else {
-      ///如果已经登录了，有token
-      SocketUtils().connect(user!,callback: (result){
-        loggerArray(["连接结果",result]);
-        isLogin.value = result;
-      });
-    }
+    ///如果已经登录了，有token
+    SocketUtils().connect(callback: (result){
+      loggerArray(["连接结果",result]);
+      isLogin.value = result;
+    });
   }
 
 

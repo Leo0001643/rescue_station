@@ -1,11 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
+
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
+import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/modules/mine_module/user_model.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
+import 'package:rescue_station/app/utils/app_data.dart';
 import '../../routes/api_info.dart';
 import '../../utils/dio_utils.dart';
 import '../../utils/shared_preferences_util.dart';
@@ -13,6 +19,7 @@ import '../../utils/shared_preferences_util.dart';
 
 class MineController extends GetxController{
   var userInfo = UserInfoEntity().obs;
+  StreamSubscription? loginSub;
 
   var user = UserModel(
     nickname: '上官婉儿',
@@ -27,7 +34,14 @@ class MineController extends GetxController{
 
   @override
   void onReady() {
-
+    var user = AppData.getUser();
+    if(ObjectUtil.isNotEmpty(user)){
+      userInfo.value = user!;
+    }
+    loginSub = eventBus.on<LoginEvent>().listen((event) {
+      ///登录成功
+      userInfo.value = AppData.getUser()!;
+    });
   }
 
   @override
@@ -35,32 +49,14 @@ class MineController extends GetxController{
 
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    getUserInfo();
-  }
-
-
-  void getUserInfo() async {
-    try {
-      await Future.delayed(const Duration(seconds: 2));
-      await EasyLoading.dismiss();
-      String? localUserInfo = SharedPreferencesUtil.getString("userInfo");
-      userInfo.value = UserInfoEntity.fromJson(json.decode(localUserInfo!));
-      await EasyLoading.dismiss();
-      update();
-    } catch (e) {
-      EasyLoading.showError("获取会员信息！");
-    }
-  }
-
 
   void logout() async{
     try {
       await EasyLoading.show(status: '正在登出...',maskType: EasyLoadingMaskType.black,);
         await DioUtil().get(Api.LOGOUT);
-        await SharedPreferencesUtil.remove("userInfo");
+        await AppData.clearUser();
+        SocketUtils().destroy();
+        eventBus.fire(LogoutEvent());
         // await DbHelper().clearUser();
         await Future.delayed(const Duration(seconds: 2));
         await EasyLoading.dismiss();

@@ -10,6 +10,7 @@ import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import '../../utils/app_data.dart';
 import '../../utils/dio_utils.dart';
@@ -27,12 +28,16 @@ class LoginController extends GetxController{
       var response = await DioUtil().post(Api.MEMBER_LOGIN, data: {"phone":phone, "password": password});
       var entity = ApiResponse.fromJson(response.data);
       if(ObjectUtil.isNotEmpty(response) && entity.code == ApiCode.SUCCESS.code) {
-        AppData.setUser(UserInfoEntity.fromJson(entity.data!));
-        eventBus.fire(LoginEvent());///发出登录成功通知
-        await Future.delayed(const Duration(seconds: 2));
-        await EasyLoading.dismiss();
-        EasyLoading.showSuccess('登录成功!');
-        Get.back(result: true);
+        await AppData.setUser(UserInfoEntity.fromJson(entity.data!));
+        SocketUtils().connect(callback: (result) async {
+          if(result){
+            eventBus.fire(LoginEvent());///发出登录成功通知
+            await Future.delayed(const Duration(seconds: 2));
+            await EasyLoading.dismiss();
+            EasyLoading.showSuccess('登录成功!');
+            Get.back(result: true);
+          }
+        });
       } else {
         EasyLoading.showError(entity.msg.toString());
       }

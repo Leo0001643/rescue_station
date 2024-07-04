@@ -76,6 +76,7 @@ class DbHelper {
   // }
 
   Future<int> addMessageBox(MessageBoxTable message) async {
+    loggerArray(["添加新聊天了",message.userId,message.boxId,]);
     return db.insert(messageTable, message.toJson());
     // return (await getMessageBox()).add(message);
   }
@@ -95,12 +96,11 @@ class DbHelper {
   }
 
 
-
   ///查询消息聊天框
   ///查询登录用户的聊天记录
   Future<List<MessageBoxTable>> queryMessageBox(String userId) async {
     try{
-      var list = await db.query(messageTable,where: "userId = ?",whereArgs: [userId]);
+      var list = await db.query(messageTable,where: "userId = ? ORDER BY lastMessageTime DESC",whereArgs: [userId]);
       return list.map((value)=> MessageBoxTable.fromJson(value)).toList(growable: true);
       // return (await getMessageBox()).values.toList(growable: true).where((v)=> v.boxId == userId && v.isShow).toList(growable: true);
     } catch(e) {
@@ -123,6 +123,7 @@ class DbHelper {
   Future<int> updateMessageBox(MessageBoxTable message) async {
     // var index = (await getMessageBox()).values.toList().indexOf(message);
     try{
+      loggerArray(["更新聊天了",message.userId,message.boxId,]);
       return db.update(messageTable, message.toJson(),where: 'id = ?',whereArgs: [message.id]);
     }catch(e){
       logger(e);
