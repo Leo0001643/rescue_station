@@ -40,7 +40,6 @@ class StateTabsPage extends State<TabsPage>{
             BottomNavigationBarItem(icon: Icon(IconFont.HOME), label: "首页"),
             BottomNavigationBarItem(icon: Icon(IconFont.MESSAGE), label: "消息"),
             BottomNavigationBarItem(icon: Icon(IconFont.CONTACTS), label: "通讯录"),
-            BottomNavigationBarItem(icon: Icon(IconFont.CUSTOMER), label: "客服",),
             BottomNavigationBarItem(icon: Icon(IconFont.MINE), label: "我的")
           ]),
     ));

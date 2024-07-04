@@ -1,49 +1,40 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:event_bus/event_bus.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/components/toast/gf_toast.dart';
-import 'package:rescue_station/app/modules/contacts_module/group_list/group_list_binding.dart';
-import 'package:rescue_station/app/modules/contacts_module/group_list/group_list_page.dart';
 import 'package:rescue_station/app/modules/contacts_module/new_friend/new_friend_binding.dart';
 import 'package:rescue_station/app/modules/contacts_module/new_friend/new_friend_page.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../app/modules/register_module/register_page.dart';
-
-import '../../app/modules/register_module/register_bindings.dart';
-import '../../app/modules/login_module/login_page.dart';
-import '../../app/modules/login_module/login_bindings.dart';
-import '../../app/modules/loan_module/loan_page.dart';
-import '../../app/modules/loan_module/loan_bindings.dart';
-import '../../app/modules/notice_detail_module/notice_detail_page.dart';
-import '../../app/modules/notice_detail_module/notice_detail_bindings.dart';
-import '../../app/modules/contacts_module/contacts_page.dart';
 import '../../app/modules/contacts_module/contacts_bindings.dart';
-import '../modules/contacts_module/create_group_module/create_group_bindings.dart';
-import '../modules/contacts_module/create_group_module/create_group_page.dart';
-import '../modules/customer_service_module/customer_service_page.dart';
-import '../../app/modules/customer_service_module/customer_service_bindings.dart';
-import '../../app/modules/message_module/message_page.dart';
-import '../../app/modules/message_module/message_bindings.dart';
-import '../../app/modules/mine_module/mine_page.dart';
-import '../../app/modules/mine_module/mine_bindings.dart';
-import '../../app/modules/notice_module/notice_page.dart';
-import '../../app/modules/notice_module/notice_bindings.dart';
 import '../../app/modules/home_module/home_bindings.dart';
-import '../../app/modules/home_module/home_page.dart';
-import '../../app/modules/tabs_module/tabs_pages.dart';
+import '../../app/modules/loan_module/loan_bindings.dart';
+import '../../app/modules/loan_module/loan_page.dart';
+import '../../app/modules/login_module/login_bindings.dart';
+import '../../app/modules/login_module/login_page.dart';
+import '../../app/modules/message_module/message_bindings.dart';
+import '../../app/modules/mine_module/mine_bindings.dart';
+import '../../app/modules/notice_detail_module/notice_detail_bindings.dart';
+import '../../app/modules/notice_detail_module/notice_detail_page.dart';
+import '../../app/modules/notice_module/notice_bindings.dart';
+import '../../app/modules/notice_module/notice_page.dart';
+import '../../app/modules/register_module/register_bindings.dart';
+import '../../app/modules/register_module/register_page.dart';
 import '../../app/modules/tabs_module/tabs_binding.dart';
-import 'package:get/get.dart';
-
+import '../../app/modules/tabs_module/tabs_pages.dart';
 import '../modules/contacts_module/add_friend_module/add_friend_bindings.dart';
 import '../modules/contacts_module/add_friend_module/add_friend_page.dart';
 import '../modules/contacts_module/add_friend_module/apply_friend/apply_friend_binding.dart';
 import '../modules/contacts_module/add_friend_module/apply_friend/apply_friend_page.dart';
+import '../modules/contacts_module/create_group_module/create_group_bindings.dart';
+import '../modules/contacts_module/create_group_module/create_group_page.dart';
 import '../modules/contacts_module/friend_detail/friend_detail_binding.dart';
 import '../modules/contacts_module/friend_detail/friend_detail_page.dart';
 import '../modules/message_module/chat_by_friend/chat_by_friend_binding.dart';
 import '../modules/message_module/chat_by_friend/chat_by_friend_page.dart';
 import '../modules/message_module/chat_by_group/chat_by_group_binding.dart';
 import '../modules/message_module/chat_by_group/chat_by_group_page.dart';
+
 part './app_routes.dart';
 
 
@@ -53,7 +44,7 @@ abstract class AppPages {
       name: Routes.TABS,
       page: () => TabsPage(),
       binding: TabsBinding(),
-      bindings: [HomeBinding(),MessageBinding(),ContactsBinding(),CustomerServiceBinding(),MineBinding()]
+      bindings: [HomeBinding(),MessageBinding(),ContactsBinding(),MineBinding()]
     ),
     // GetPage(
     //   name: Routes.HOME,
