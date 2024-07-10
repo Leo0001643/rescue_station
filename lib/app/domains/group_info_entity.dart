@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:rescue_station/generated/json/base/json_field.dart';
 import 'package:rescue_station/generated/json/group_info_entity.g.dart';
 import 'dart:convert';
@@ -19,4 +20,7 @@ class GroupInfoEntity {
 	String toString() {
 		return jsonEncode(this);
 	}
+
+	
+	
 }

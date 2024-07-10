@@ -11,11 +11,12 @@ import 'package:rescue_station/app/utils/Icon.dart';
 
 class WidgetUtils {
 
-  static AppBar buildAppBar(String title,{List<Widget>? actions}) {
+  static AppBar buildAppBar(String title,{List<Widget>? actions,Color backgroundColor = Colors.white,Color? textColor}) {
     return AppBar(
-      title: Text(title,style: TextStyle(fontSize: 18.sp,color: color_333,fontWeight: FontWeight.w700),),
+      title: Text(title,style: TextStyle(fontSize: 18.sp,color: textColor ?? color_333,fontWeight: FontWeight.w700),),
+      iconTheme: IconThemeData(color: textColor ?? color_333),
       centerTitle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
       actions: actions,
     );
   }

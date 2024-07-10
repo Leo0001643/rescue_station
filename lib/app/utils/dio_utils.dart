@@ -39,7 +39,11 @@ class DioUtil {
         return handler.next(options); //continue
       },
       onResponse: (response, handler) {
-        loggerArray(["返回响应",response.requestOptions.path,response.statusCode, "${jsonEncode(response.requestOptions.data)}\n",jsonEncode(response.data)]);
+        if(response.requestOptions.data is FormData){
+          loggerArray(["返回响应",response.requestOptions.path,response.statusCode, "${response.requestOptions.data}\n",jsonEncode(response.data)]);
+        } else {
+          loggerArray(["返回响应",response.requestOptions.path,response.statusCode, "${jsonEncode(response.requestOptions.data)}\n",jsonEncode(response.data)]);
+        }
         // Do something with response data
         return handler.next(response); // continue
       },
@@ -70,6 +74,17 @@ class DioUtil {
   }
 
   Future<Response> post(String path, {Map<String, dynamic>? data, Options? options}) async {
+    try {
+      Response response = await dio.post(path, data: data, options: options);
+      return response;
+    } catch (e) {
+      logger(e);
+      throw Exception('Failed to post data');
+    }
+  }
+
+
+  Future<Response> postAny(String path, {dynamic data, Options? options}) async {
     try {
       Response response = await dio.post(path, data: data, options: options);
       return response;

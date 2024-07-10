@@ -8,6 +8,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
+import 'package:rescue_station/app/domains/group_info_entity.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
@@ -18,6 +19,7 @@ import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
+import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -65,9 +67,15 @@ class SocketUtils{
             isConnect = true;
             callback?.call(true);
             break;
+          case "closed":
+            isConnect = false;
+            break;
         }
       }else if(message is SocketMessageEntity){
-        messageConvert(message);
+        DbHelper().messageInsertOrUpdate(false,message).then((v){
+          eventBus.fire(message);
+          eventBus.fire(NewChatEvent());//有新消息，需要刷新列表
+        });
       }else if(message is SocketNoticeEntity){
         eventBus.fire(message);///发送添加好友通知
       }
@@ -105,12 +113,31 @@ class SocketUtils{
       loggerArray(["异步任务收到长连接消息",event]);
       ///{"msgId":"1805140119376756738","pushType":"MSG","msgContent":{"msgType":"TEXT","content":"哈哈哈哈","top":"N","disturb":"N"},"fromInfo":{"nickName":"上官婉儿","portrait":"http://q3z3-im.oss-cn-beijing.aliyuncs.com/61bed1c563de173eb00e8d8c.png","userId":"1800817039510786049","userType":"self"},"createTime":"2024-06-23 23:25:20","groupInfo":{}}
       ///{"msgId":"1805438066169634817","pushType":"NOTICE","msgContent":{"friendApply":{"count":1},"topicRed":{},"topicReply":{}},"createTime":"2024-06-24 19:09:13","groupInfo":{}}
+      ///{"msgId":"1808765416252825601","pushType":"MSG","msgContent":{"msgType":"ALERT","content":"你邀请貂蝉加入了群聊","top":"N","disturb":"N"},"fromInfo":{"nickName":"上官婉儿的群聊-hi1f(2)","portrait":"[\"https://img.alicdn.com/imgextra/i3/87413133/O1CN01mHA9DJ1Z0xlORnKuW_!!87413133.png\"]","userId":"1808765416043110401","userType":"normal"},"createTime":"2024-07-03 23:30:55","groupInfo":{"nickName":"上官婉儿的群聊-hi1f(2)","portrait":"[\"https://img.alicdn.com/imgextra/i3/87413133/O1CN01mHA9DJ1Z0xlORnKuW_!!87413133.png\"]","userId":"1808765416043110401"}}
       if(event is String){
         var dataMap = jsonDecode(event);
         switch(dataMap["pushType"]){
           case "MSG":
-            var response = SocketMessageEntity.fromJson(dataMap);
-            sendPort.send(response);
+            if(ObjectUtil.isEmpty(dataMap["groupInfo"])){
+              var response = SocketMessageEntity.fromJson(dataMap);
+              response.groupInfo = null;
+              sendPort.send(response);
+            } else {
+              var response = SocketMessageEntity();
+              response.msgId = dataMap["msgId"];
+              response.pushType = dataMap["pushType"];
+              response.createTime = dataMap["createTime"];
+              response.msgContent = SocketMsgContent.fromJson(dataMap["msgContent"]);
+              response.fromInfo = UserInfoEntity.fromJson(dataMap["fromInfo"]);
+              var group = GroupInfoEntity();
+              group.name = dataMap["groupInfo"]["nickName"];
+              group.groupId = dataMap["groupInfo"]["userId"];
+              group.portrait = (jsonDecode(dataMap["groupInfo"]["portrait"]) as List).map<String>((e) => e.toString()).toList();
+              if(ObjectUtil.isNotEmpty(group.groupId)){
+                response.groupInfo = group;
+              }
+              sendPort.send(response);
+            }
             break;
           case "NOTICE":
             var response = SocketNoticeEntity.fromJson(dataMap);
@@ -118,9 +145,10 @@ class SocketUtils{
             break;
         }
       }
+    },onDone: (){
+      logger("长连接已关闭");
+      sendPort.send(buildMessage("closed"));
     });
-
-
 
 
     ReceivePort receivePort = ReceivePort();
@@ -180,27 +208,6 @@ class SocketUtils{
     return base64UrlEncode(values);
   }
 
-  Future<void> messageConvert(SocketMessageEntity message) async {
-    var user = AppData.getUser();
-    message.userId = message.fromInfo?.userId.em();
-    ///缓存消息到数据库
-    await DbHelper().addChatMessageBox(ChatMessageTable.fromJson2(message));
-    var boxId = message.fromInfo!.userId.em();
-    var userId = user?.userId.em();
-    var v = await DbHelper().findMessageBox(boxId);
-    if(ObjectUtil.isEmpty(v)){
-      ///boxId为聊天好友的id
-      await DbHelper().addMessageBox(MessageBoxTable(userId: userId, boxId: boxId,lastMessage: jsonEncode(message.msgContent?.toJson()),
-        lastMessageTime: DateUtil.getDateMsByTimeStr(message.createTime.em()),unreadCount: 0,fromInfo: jsonEncode(message.fromInfo?.toJson()),));
-    } else {
-      v!.fromInfo = jsonEncode(message.fromInfo?.toJson());
-      v.lastMessageTime = DateUtil.getDateMsByTimeStr(message.createTime.em());
-      v.lastMessage = jsonEncode(message.msgContent?.toJson());
-      await DbHelper().updateMessageBox(v);
-    }
-    eventBus.fire(message);
-    eventBus.fire(NewChatEvent());//有新消息，需要刷新列表
-  }
 
 }
 

@@ -11,7 +11,7 @@ import 'package:rescue_station/generated/json/socket_message_entity.g.dart';
 class SocketMessageEntity {
 	String? msgId;
 	String? pushType;
-	String? userId;
+	String? boxId;///用于在聊天窗口区分消息来自哪个群组或好友
 	SocketMsgContent? msgContent;
 	UserInfoEntity? fromInfo;
 	String? createTime;
