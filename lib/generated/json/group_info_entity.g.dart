@@ -1,5 +1,7 @@
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 import 'package:rescue_station/app/domains/group_info_entity.dart';
+import 'package:common_utils/common_utils.dart';
+
 
 GroupInfoEntity $GroupInfoEntityFromJson(Map<String, dynamic> json) {
   final GroupInfoEntity groupInfoEntity = GroupInfoEntity();

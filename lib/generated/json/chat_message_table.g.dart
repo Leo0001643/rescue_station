@@ -1,5 +1,7 @@
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 import 'package:rescue_station/app/db/chat_message_table.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
+
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
 
 import 'package:rescue_station/app/utils/widget_utils.dart';
@@ -35,6 +37,10 @@ ChatMessageTable $ChatMessageTableFromJson(Map<String, dynamic> json) {
   if (groupInfo != null) {
     chatMessageTable.groupInfo = groupInfo;
   }
+  final String? boxId = jsonConvert.convert<String>(json['boxId']);
+  if (boxId != null) {
+    chatMessageTable.boxId = boxId;
+  }
   final String? userId = jsonConvert.convert<String>(json['userId']);
   if (userId != null) {
     chatMessageTable.userId = userId;
@@ -51,6 +57,7 @@ Map<String, dynamic> $ChatMessageTableToJson(ChatMessageTable entity) {
   data['fromInfo'] = entity.fromInfo;
   data['createTime'] = entity.createTime;
   data['groupInfo'] = entity.groupInfo;
+  data['boxId'] = entity.boxId;
   data['userId'] = entity.userId;
   return data;
 }
@@ -64,6 +71,7 @@ extension ChatMessageTableExtension on ChatMessageTable {
     String? fromInfo,
     String? createTime,
     String? groupInfo,
+    String? boxId,
     String? userId,
   }) {
     return ChatMessageTable()
@@ -74,6 +82,7 @@ extension ChatMessageTableExtension on ChatMessageTable {
       ..fromInfo = fromInfo ?? this.fromInfo
       ..createTime = createTime ?? this.createTime
       ..groupInfo = groupInfo ?? this.groupInfo
+      ..boxId = boxId ?? this.boxId
       ..userId = userId ?? this.userId;
   }
 }

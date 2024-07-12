@@ -1,7 +1,13 @@
 
+import 'dart:convert';
+
+import 'package:common_utils/common_utils.dart';
 import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
+import 'package:rescue_station/app/socket/socket_message_entity.dart';
+import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/logger.dart';
+import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
@@ -25,55 +31,18 @@ class DbHelper {
     var version = 1;
     db = await openDatabase("rescue.db",version: version,onCreate: (db,ver) async {
       await db.execute('CREATE TABLE $messageTable (id integer primary key autoincrement, userId TEXT, boxId TEXT, boxType INTEGER,'
-          ' lastMessage TEXT, lastMessageTime INTEGER, unreadCount INTEGER, isTop INTEGER, isDisturb INTEGER, isGroup INTEGER, fromInfo TEXT, isShow INTEGER)');
+          ' lastMessage TEXT, lastMessageTime INTEGER, unreadCount INTEGER, isTop INTEGER, isDisturb INTEGER, fromInfo TEXT, isShow INTEGER)');
 
       await db.execute('CREATE TABLE $chatMessageTable (id integer primary key autoincrement, msgId TEXT, pushType TEXT,'
-          ' msgContent TEXT, fromInfo TEXT, createTime TEXT, isTop INTEGER, groupInfo TEXT, userId TEXT)');
+          ' msgContent TEXT, fromInfo TEXT, createTime TEXT, isTop INTEGER, groupInfo TEXT, boxId TEXT, userId TEXT)');
     });
 
-    // await Hive.initFlutter();
-    // Hive.registerAdapter(MessageBoxTableAdapter());
-    // Hive.registerAdapter(UserInfoTableAdapter());
-    // Hive.registerAdapter(ChatMessageTableAdapter());
   }
 
   void close(){
     db.close();
   }
 
-  // Future<Box<UserInfoTable>> getUserBox(){
-  //   return Hive.openBox<UserInfoTable>("userBox");
-  // }
-
-  // Future putUser(int index,UserInfoTable user) async {
-  //   return (await getUserBox()).putAt(index, user);
-  // }
-
-  // ///这里会保持只有一个用户信息
-  // Future insertUserOrReplace(UserInfoTable user) async {
-  //   if((await getUserBox()).isEmpty){
-  //     return (await getUserBox()).add(user);
-  //   } else if(user.isInBox){
-  //     return putUser(user.key, user);
-  //   } else {
-  //     return putUser(0, user);
-  //   }
-  // }
-
-  // ///获取当前登录用户
-  // Future<UserInfoTable?> getUser() async {
-  //   var box = await getUserBox();
-  //   if(box.isEmpty) return null;
-  //   return box.getAt(0);
-  // }
-
-  // Future<int> clearUser() async {
-  //   return (await getUserBox()).clear();
-  // }
-
-  // Future<Box<MessageBoxTable>> getMessageBox(){
-  //   return Hive.openBox<MessageBoxTable>("messageBox");
-  // }
 
   Future<int> addMessageBox(MessageBoxTable message) async {
     loggerArray(["添加新聊天了",message.userId,message.boxId,]);
@@ -81,10 +50,10 @@ class DbHelper {
     // return (await getMessageBox()).add(message);
   }
 
-  ///查询跟好友的聊天记录
-  Future<MessageBoxTable?> findMessageBox(String boxId) async {
+  ///根据当前登录人的userid查询跟好友的聊天记录
+  Future<MessageBoxTable?> findMessageBox(String userId,String boxId) async {
     try{
-      var list = await db.query(messageTable,where: "boxId = ?",whereArgs: [boxId]);
+      var list = await db.query(messageTable,where: "userId = ? and boxId = ?",whereArgs: [userId,boxId]);
       if(list.isEmpty){
         return null;
       }
@@ -132,22 +101,15 @@ class DbHelper {
   }
 
   ///删除消息聊天框
-  Future deleteMessageBox(String userId) async {
+  Future deleteMessageBox(String userId,String delId) async {
     try{
-      ///删除聊天框
-      await db.delete(messageTable,where: 'userId = ?',whereArgs: [userId]);
-      // var message = await findMessageBox(userId);
-      // if(ObjectUtil.isNotEmpty(message) && message!.isInBox){
-      //   // var index = (await getMessageBox()).values.toList().indexOf(message!);
-      //   (await getMessageBox()).delete(message.key);
-      // }
+      var msgBox = await findMessageBox(userId,delId);
+
       ///需要同步删除历史聊天记录
-      await db.delete(chatMessageTable,where: 'userId = ?', whereArgs: [userId]);
-      // var list = await queryChatMessageBox(userId);
-      // for (var chat in list) {
-      //   // var index = (await getChatMessageBox()).values.toList().indexOf(chat);
-      //   (await getChatMessageBox()).delete(chat.key);
-      // }
+      await db.delete(chatMessageTable,where: 'boxId = ?', whereArgs: [msgBox?.boxId]);
+
+      ///删除聊天框
+      await db.delete(messageTable,where: 'userId = ? and boxId = ?',whereArgs: [userId,msgBox?.boxId]);
       return true;
     } catch(e) {
       logger(e);
@@ -155,18 +117,15 @@ class DbHelper {
     }
   }
 
-  // Future<Box<ChatMessageTable>> getChatMessageBox(){
-  //   return Hive.openBox<ChatMessageTable>("chatMessageBox");
-  // }
 
   Future<int> addChatMessageBox(ChatMessageTable message) async {
     return db.insert(chatMessageTable, message.toJson());
   }
 
   ///查询聊天记录
-  Future<List<ChatMessageTable>> queryChatMessageBox(String userId) async {
+  Future<List<ChatMessageTable>> queryChatMessageBox(String userId,String boxId) async {
     try{
-      var list = await db.query(chatMessageTable,where: 'userId = ?',whereArgs: [userId]);
+      var list = await db.query(chatMessageTable,where: 'userId = ? and boxId = ?',whereArgs: [userId,boxId]);
       return list.map((value)=> ChatMessageTable.fromJson(value)).toList(growable: true);
       // return (await getChatMessageBox()).values.toList(growable: true).where((v)=> v.fromInfo?['userId'] == userId).toList(growable: true);
     }catch(e){
@@ -185,10 +144,32 @@ class DbHelper {
     }
   }
 
-
-
-
-
+  ///更新数据库中消息或者插入消息
+  Future<void> messageInsertOrUpdate(bool isSend,SocketMessageEntity message) async {
+    var isFriend = ObjectUtil.isEmpty(message.groupInfo?.groupId);
+    if(!isSend){///如果不是发送者，需要定义boxId
+      message.boxId = isFriend ? message.fromInfo!.userId.em() : message.groupInfo!.groupId.em();
+    }
+    var user = AppData.getUser();
+    ///缓存消息到数据库
+    await DbHelper().addChatMessageBox(ChatMessageTable.fromJson2(user!.userId.em(),
+        message.boxId!,isSend ? AppData.getUser()!:message.fromInfo!,message));
+    var userId = user.userId.em();
+    var v = await DbHelper().findMessageBox(userId.em(),message.boxId!);
+    if(ObjectUtil.isEmpty(v)){
+      ///boxId为聊天好友的id
+      var boxType = isFriend ? 0 : 1;
+      var fromInfo = isFriend ? jsonEncode(message.fromInfo?.toJson()) : jsonEncode(message.groupInfo?.toJson());
+      await DbHelper().addMessageBox(MessageBoxTable(userId: userId, boxId: message.boxId, boxType: boxType, lastMessage: jsonEncode(message.msgContent?.toJson()),
+          lastMessageTime: DateUtil.getDateMsByTimeStr(message.createTime.em()),unreadCount: 0,fromInfo: fromInfo));
+    } else {
+      var fromInfo = v!.isGroup()==false ? jsonEncode(message.fromInfo?.toJson()) : jsonEncode(message.groupInfo?.toJson());
+      v.fromInfo = fromInfo;
+      v.lastMessageTime = DateUtil.getDateMsByTimeStr(message.createTime.em());
+      v.lastMessage = jsonEncode(message.msgContent?.toJson());
+      await DbHelper().updateMessageBox(v);
+    }
+  }
 
 
 

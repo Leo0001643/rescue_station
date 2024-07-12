@@ -42,10 +42,6 @@ MessageBoxTable $MessageBoxTableFromJson(Map<String, dynamic> json) {
   if (isDisturb != null) {
     messageBoxTable.isDisturb = isDisturb;
   }
-  final int? isGroup = jsonConvert.convert<int>(json['isGroup']);
-  if (isGroup != null) {
-    messageBoxTable.isGroup = isGroup;
-  }
   final String? fromInfo = jsonConvert.convert<String>(json['fromInfo']);
   if (fromInfo != null) {
     messageBoxTable.fromInfo = fromInfo;
@@ -68,7 +64,6 @@ Map<String, dynamic> $MessageBoxTableToJson(MessageBoxTable entity) {
   data['unreadCount'] = entity.unreadCount;
   data['isTop'] = entity.isTop;
   data['isDisturb'] = entity.isDisturb;
-  data['isGroup'] = entity.isGroup;
   data['fromInfo'] = entity.fromInfo;
   data['isShow'] = entity.isShow;
   return data;
@@ -85,7 +80,6 @@ extension MessageBoxTableExtension on MessageBoxTable {
     int? unreadCount,
     int? isTop,
     int? isDisturb,
-    int? isGroup,
     String? fromInfo,
     int? isShow,
   }) {
@@ -99,7 +93,6 @@ extension MessageBoxTableExtension on MessageBoxTable {
       ..unreadCount = unreadCount ?? this.unreadCount
       ..isTop = isTop ?? this.isTop
       ..isDisturb = isDisturb ?? this.isDisturb
-      ..isGroup = isGroup ?? this.isGroup
       ..fromInfo = fromInfo ?? this.fromInfo
       ..isShow = isShow ?? this.isShow;
   }

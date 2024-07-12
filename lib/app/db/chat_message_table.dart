@@ -1,3 +1,4 @@
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:rescue_station/generated/json/base/json_field.dart';
@@ -22,16 +23,20 @@ class ChatMessageTable{
 
 	String? groupInfo;
 
-	String? userId;
+	String? boxId;///对应聊天框的boxId
 
-	ChatMessageTable({this.msgId,this.pushType,this.msgContent,this.fromInfo,this.createTime,this.groupInfo,this.userId});
+	String? userId;///用于标识当前消息属于哪个登录用户
+
+	ChatMessageTable({this.msgId,this.pushType,this.msgContent,this.fromInfo,this.createTime,this.groupInfo,this.boxId,this.userId});
 
 	factory ChatMessageTable.fromJson(Map<String, dynamic> json) => $ChatMessageTableFromJson(json);
 
-	factory ChatMessageTable.fromJson2(SocketMessageEntity entity){
+	factory ChatMessageTable.fromJson2(String userId,String boxId,UserInfoEntity fromInfo,SocketMessageEntity entity){
 		var chat = ChatMessageTable.fromJson(entity.toJson());
+		chat.userId = userId;
+		chat.boxId = boxId;
 		chat.msgContent = jsonEncode(entity.msgContent?.toJson());
-		chat.fromInfo = jsonEncode(entity.fromInfo?.toJson());
+		chat.fromInfo = jsonEncode(fromInfo.toJson());
 		chat.groupInfo = jsonEncode(entity.groupInfo?.toJson());
 		return chat;
 	}

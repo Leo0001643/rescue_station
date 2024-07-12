@@ -7,6 +7,7 @@ import 'package:flutter/material.dart' show debugPrint;
 import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:rescue_station/app/domains/group_info_entity.dart';
+import 'package:rescue_station/app/domains/upload_file_entity.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/modules/contacts_module/new_friend/friend_apply_entity.dart';
 import 'package:rescue_station/app/socket/isolate_msg_entity.dart';
@@ -161,6 +162,10 @@ class JsonConvert {
       return data.map<GroupInfoEntity>((Map<String, dynamic> e) =>
           GroupInfoEntity.fromJson(e)).toList() as M;
     }
+    if (<UploadFileEntity>[] is M) {
+      return data.map<UploadFileEntity>((Map<String, dynamic> e) =>
+          UploadFileEntity.fromJson(e)).toList() as M;
+    }
     if (<UserInfoEntity>[] is M) {
       return data.map<UserInfoEntity>((Map<String, dynamic> e) =>
           UserInfoEntity.fromJson(e)).toList() as M;
@@ -228,6 +233,7 @@ class JsonConvertClassCollection {
     (ChatMessageTable).toString(): ChatMessageTable.fromJson,
     (MessageBoxTable).toString(): MessageBoxTable.fromJson,
     (GroupInfoEntity).toString(): GroupInfoEntity.fromJson,
+    (UploadFileEntity).toString(): UploadFileEntity.fromJson,
     (UserInfoEntity).toString(): UserInfoEntity.fromJson,
     (FriendApplyEntity).toString(): FriendApplyEntity.fromJson,
     (IsolateMsgEntity).toString(): IsolateMsgEntity.fromJson,
