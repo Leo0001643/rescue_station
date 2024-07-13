@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:common_utils/common_utils.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as diod;
+import 'package:get/get.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:rescue_station/app/constant/constant.dart';
-import 'package:rescue_station/app/db/db_helper.dart';
+import 'package:rescue_station/app/domains/upload_file_entity.dart';
+import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/logger.dart';
-import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
 class DioUtil {
@@ -17,8 +20,8 @@ class DioUtil {
   DioUtil._internal() {
     BaseOptions options = BaseOptions(
       baseUrl: Constant.BASE_URL, // Replace with your base URL
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
+      connectTimeout: 60 * 1000,
+      receiveTimeout: 30 * 1000,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -39,11 +42,7 @@ class DioUtil {
         return handler.next(options); //continue
       },
       onResponse: (response, handler) {
-        if(response.requestOptions.data is FormData){
-          loggerArray(["返回响应",response.requestOptions.path,response.statusCode, "${response.requestOptions.data}\n",jsonEncode(response.data)]);
-        } else {
-          loggerArray(["返回响应",response.requestOptions.path,response.statusCode, "${jsonEncode(response.requestOptions.data)}\n",jsonEncode(response.data)]);
-        }
+        loggerArray(["返回响应",response.requestOptions.path,response.statusCode, jsonEncode(response.data)]);
         // Do something with response data
         return handler.next(response); // continue
       },
@@ -64,18 +63,18 @@ class DioUtil {
     dio.options.headers.remove(key);
   }
 
-  Future<Response> get(String path, {Map<String, dynamic>? queryParameters, Options? options}) async {
+  Future<diod.Response> get(String path, {Map<String, dynamic>? queryParameters, Options? options}) async {
     try {
-      Response response = await dio.get(path, queryParameters: queryParameters, options: options);
+      diod.Response response = await dio.get(path, queryParameters: queryParameters, options: options);
       return response;
     } catch (e) {
       throw Exception('Failed to load data');
     }
   }
 
-  Future<Response> post(String path, {Map<String, dynamic>? data, Options? options}) async {
+  Future<diod.Response> post(String path, {Map<String, dynamic>? data, Options? options}) async {
     try {
-      Response response = await dio.post(path, data: data, options: options);
+      diod.Response response = await dio.post(path, data: data, options: options);
       return response;
     } catch (e) {
       logger(e);
@@ -84,9 +83,9 @@ class DioUtil {
   }
 
 
-  Future<Response> postAny(String path, {dynamic data, Options? options}) async {
+  Future<diod.Response> postAny(String path, {dynamic data, Options? options}) async {
     try {
-      Response response = await dio.post(path, data: data, options: options);
+      diod.Response response = await dio.post(path, data: data, options: options);
       return response;
     } catch (e) {
       logger(e);
@@ -94,9 +93,9 @@ class DioUtil {
     }
   }
 
-  Future<Response> put(String path, {Map<String, dynamic>? data, Options? options}) async {
+  Future<diod.Response> put(String path, {Map<String, dynamic>? data, Options? options}) async {
     try {
-      Response response = await dio.put(path, data: data, options: options);
+      diod.Response response = await dio.put(path, data: data, options: options);
       return response;
     } catch (e) {
       logger(e);
@@ -104,13 +103,31 @@ class DioUtil {
     }
   }
 
-  Future<Response> delete(String path, {Map<String, dynamic>? data, Options? options}) async {
+  Future<diod.Response> delete(String path, {Map<String, dynamic>? data, Options? options}) async {
     try {
-      Response response = await dio.delete(path, data: data, options: options);
+      diod.Response response = await dio.delete(path, data: data, options: options);
       return response;
     } catch (e) {
       logger(e);
       throw Exception('Failed to delete data');
     }
   }
+
+
+  ///上传文件
+  static Future<String> uploadFile(String path) async {
+    loggerArray(["上传的文件路径",path]);
+    var mufile = await diod.MultipartFile.fromFile(path, filename: path.split("/").last,);
+    var result = await DioUtil().postAny(Api.FILE_UPLOAD,data: diod.FormData.fromMap({"file": mufile}),
+        options: diod.Options(contentType: "multipart/form-data",headers: {}));
+    if(result.data["code"] == 200){
+      return UploadFileEntity.fromJson(result.data["data"]).fullPath.em();
+    } else {
+      Get.snackbar('提醒', result.data["msg"]);
+      return "";
+    }
+  }
+
+
+
 }
