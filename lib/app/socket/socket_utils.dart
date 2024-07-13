@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:math';
 import 'package:common_utils/common_utils.dart';
@@ -21,6 +22,7 @@ import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -105,7 +107,11 @@ class SocketUtils{
     var uri = Uri.parse(url);
     loggerArray(["开始连接",url,]);
     SendPort sendPort = params[0];
-    WebSocketChannel channel = WebSocketChannel.connect(uri);
+    HttpClient client = HttpClient();
+    client.badCertificateCallback = (X509Certificate cr, String host, int port) {
+      return true;
+    };
+    WebSocketChannel channel = IOWebSocketChannel.connect(uri,customClient: client);
     channel.ready.then((value) {
       sendPort.send(buildMessage("connected"));
     });
@@ -150,7 +156,6 @@ class SocketUtils{
       sendPort.send(buildMessage("closed"));
     });
 
-
     ReceivePort receivePort = ReceivePort();
     sendPort.send(receivePort.sendPort);
     receivePort.listen((message) {
@@ -158,7 +163,7 @@ class SocketUtils{
       var msg = IsolateMsgEntity.fromJson(jsonDecode(message));
       switch(msg.key){
         case "close":
-          channel.sink.close(status.goingAway);
+          channel.sink.close(status.normalClosure);
           logger("已关闭长连接");
           break;
       }
@@ -198,6 +203,28 @@ class SocketUtils{
       uri: image.path.em(),
       size: image.size,
       name: image.name,
+    );
+  }
+
+  types.Message buildUserImageUrl(String url,UserInfoEntity user,{int? createdAt}){
+    return types.ImageMessage(
+      author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
+      createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
+      id: randomString(),
+      uri: url,
+      size: 0,
+      name: "",
+    );
+  }
+
+  types.Message buildUserFileUrl(String url,UserInfoEntity user,{int? createdAt}){
+    return types.FileMessage(
+      author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
+      createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
+      id: randomString(),
+      uri: url,
+      size: 0,
+      name: "",
     );
   }
 
