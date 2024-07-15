@@ -150,10 +150,12 @@ class DbHelper {
     if(!isSend){///如果不是发送者，需要定义boxId
       message.boxId = isFriend ? message.fromInfo!.userId.em() : message.groupInfo!.groupId.em();
     }
-    var user = AppData.getUser();
-    ///缓存消息到数据库
-    await DbHelper().addChatMessageBox(ChatMessageTable.fromJson2(user!.userId.em(),
-        message.boxId!,isSend ? AppData.getUser()!:message.fromInfo!,message));
+    var user = AppData.getUser()!;
+    if(message.msgContent != null){
+      ///缓存消息到数据库
+      await DbHelper().addChatMessageBox(ChatMessageTable.fromJson2(user.userId.em(),
+          message.boxId!,isSend ? AppData.getUser()!:message.fromInfo!,message));
+    }
     var userId = user.userId.em();
     var v = await DbHelper().findMessageBox(userId.em(),message.boxId!);
     if(ObjectUtil.isEmpty(v)){

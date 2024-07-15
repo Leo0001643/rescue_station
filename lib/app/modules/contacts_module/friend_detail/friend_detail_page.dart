@@ -79,12 +79,7 @@ class _FriendDetailPageState extends State<FriendDetailPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: InkWell(///跳转聊天页面
-                      onTap: (){
-                        var my = AppData.getUser();
-                        if(ObjectUtil.isNotEmpty(my)){
-                          Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(my!, user));
-                        }
-                      },
+                      onTap: ()=>logic.openChatBox(),
                       child: Container(
                         padding: EdgeInsets.all(10.r),
                         child: Icon(Icons.chat_outlined,color: color_703,size: 30.r,),

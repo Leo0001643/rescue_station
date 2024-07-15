@@ -8,6 +8,7 @@ class UploadFileEntity {
 	String? fileName;
 	String? fullPath;
 	String? fileType;
+	String? fileSize;
 
 	UploadFileEntity();
 

@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/event/friend_delete_event.dart';
@@ -28,8 +29,10 @@ class NewFriendLogic extends GetxController {
   void getApplyList() {
     DioUtil().get(Api.APPLY_LIST,).then((result){
       if(result.data["code"] == 200){
-        var data = JsonConvert.fromJsonAsT<List<FriendApplyEntity>>(result.data['rows']) ?? [];
-        state.data.assignAll(data);
+        if(ObjectUtil.isNotEmpty(result.data['rows'])){
+          var data = JsonConvert.fromJsonAsT<List<FriendApplyEntity>>(result.data['rows']) ?? [];
+          state.data.assignAll(data);
+        }
       } else {
         Get.snackbar('提醒', result.data["msg"]);
       }

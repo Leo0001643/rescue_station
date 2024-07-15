@@ -15,6 +15,10 @@ UploadFileEntity $UploadFileEntityFromJson(Map<String, dynamic> json) {
   if (fileType != null) {
     uploadFileEntity.fileType = fileType;
   }
+  final String? fileSize = jsonConvert.convert<String>(json['fileSize']);
+  if (fileSize != null) {
+    uploadFileEntity.fileSize = fileSize;
+  }
   return uploadFileEntity;
 }
 
@@ -23,6 +27,7 @@ Map<String, dynamic> $UploadFileEntityToJson(UploadFileEntity entity) {
   data['fileName'] = entity.fileName;
   data['fullPath'] = entity.fullPath;
   data['fileType'] = entity.fileType;
+  data['fileSize'] = entity.fileSize;
   return data;
 }
 
@@ -31,10 +36,12 @@ extension UploadFileEntityExtension on UploadFileEntity {
     String? fileName,
     String? fullPath,
     String? fileType,
+    String? fileSize,
   }) {
     return UploadFileEntity()
       ..fileName = fileName ?? this.fileName
       ..fullPath = fullPath ?? this.fullPath
-      ..fileType = fileType ?? this.fileType;
+      ..fileType = fileType ?? this.fileType
+      ..fileSize = fileSize ?? this.fileSize;
   }
 }

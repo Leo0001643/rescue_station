@@ -2,8 +2,7 @@ import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:getwidget/getwidget.dart';
-import 'package:rescue_station/app/db/db_helper.dart';
+import 'package:rescue_station/app/modules/message_module/group_avatar_aidget.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors_theme.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
@@ -45,12 +44,7 @@ class _GroupListPageState extends State<GroupListPage> {
                 return Column(
                   children: [
                     ListTile(
-                      leading: GFAvatar(
-                        backgroundImage: ObjectUtil.isEmpty(item.portrait) ? null : NetworkImage(item.portrait!.first.em()),
-                        radius: 20.r,
-                        shape: GFAvatarShape.standard,
-                        borderRadius: BorderRadius.circular(5.r),
-                      ),
+                      leading: GroupAvatarWidget(item.portrait ?? []),
                       title: Text(item.name.em(),style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
                       onTap: () {
                         var user = AppData.getUser();

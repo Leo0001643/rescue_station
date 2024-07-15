@@ -24,6 +24,7 @@ class ContactsController extends GetxController{
   StreamSubscription? friendDelSub;
   StreamSubscription? friendApplySub;
   StreamSubscription? loginSub;
+  StreamSubscription? logoutSub;
 
   @override
   void onReady() {
@@ -45,6 +46,10 @@ class ContactsController extends GetxController{
         getContactsAll(user!);
       }
     });
+    logoutSub = eventBus.on<LogoutEvent>().listen((v){
+      ///退出登录
+      applyCount.value = 0;
+    });
     ///如果已经登录了，有token
     var user = AppData.getUser();
     if(ObjectUtil.isNotEmpty(user)){
@@ -58,6 +63,7 @@ class ContactsController extends GetxController{
     friendDelSub?.cancel();
     friendApplySub?.cancel();
     loginSub?.cancel();
+    logoutSub?.cancel();
     super.onClose();
   }
 

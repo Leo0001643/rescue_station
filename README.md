@@ -25,8 +25,6 @@ samples, guidance on mobile development, and a full API reference.
  ### UI地址
     https://www.figma.com/design/aic95SqjbH11hTeojJ7iYz/%E6%89%B6%E8%B4%AB%E9%A1%B9%E7%9B%AE?node-id=0-1&t=NBPz7J0SJ5K7qE21-1
 
- ### 数据库表变更 
-    flutter packages pub run build_runner build
 
  ### WS通信
     /**
@@ -83,13 +81,37 @@ samples, guidance on mobile development, and a full API reference.
       TRTC_VIDEO_END("TRTC_VIDEO_END", "实时视频结束"),
 
 
-13135554441 上官婉儿 1800817039510786049
+13125554441 上官婉儿 1800817039510786049
 
-13135554442 貂蝉 1800813200611135490
+13125554442 貂蝉 1800813200611135490
 
-13135554443 西施 1802714171184480258
+15615102001 黄蓉 1809064639280173057
 
-13135554440 西施 1800817077221773314
+15615102000 郭靖 1809063851485024258
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
