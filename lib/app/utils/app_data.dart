@@ -5,6 +5,8 @@ import 'package:common_utils/common_utils.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 
+import '../routes/app_pages.dart';
+
 class AppData {
 
   static Future<bool> setUser(UserInfoEntity user){
@@ -13,7 +15,7 @@ class AppData {
 
   static UserInfoEntity? getUser(){
     var user = SharedPreferencesUtil.getString("userInfo");
-    if(ObjectUtil.isEmpty(user)) return null;
+    if(isEmpty(user)) return null;
     return UserInfoEntity.fromJson(jsonDecode(user!));
   }
 

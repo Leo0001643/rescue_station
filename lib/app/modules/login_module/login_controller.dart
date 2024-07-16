@@ -27,7 +27,7 @@ class LoginController extends GetxController{
       await EasyLoading.show(status: '登录中...',maskType: EasyLoadingMaskType.black,);
       var response = await DioUtil().post(Api.MEMBER_LOGIN, data: {"phone":phone, "password": password});
       var entity = ApiResponse.fromJson(response.data);
-      if(ObjectUtil.isNotEmpty(response) && entity.code == ApiCode.SUCCESS.code) {
+      if(isNotEmpty(response) && entity.code == ApiCode.SUCCESS.code) {
         await AppData.setUser(UserInfoEntity.fromJson(entity.data!));
         SocketUtils().connect(callback: (result) async {
           if(result){

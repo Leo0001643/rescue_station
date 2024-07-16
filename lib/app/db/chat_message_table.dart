@@ -1,4 +1,6 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:rescue_station/generated/json/base/json_field.dart';
@@ -50,11 +52,29 @@ class ChatMessageTable{
 		return jsonEncode(this);
 	}
 
-	Map<String,dynamic> getMsgContent() => jsonDecode(msgContent.em());
+	Map<String,dynamic> getMsgContent(){
+		if(isEmpty(msgContent)){
+			return {};
+		}else {
+			return jsonDecode(msgContent.em());
+		}
+	}
 
-	Map<String,dynamic> getFromInfo() => jsonDecode(fromInfo.em());
+	Map<String,dynamic> getFromInfo() {
+		if(isEmpty(fromInfo)){
+			return {};
+		}else {
+			return jsonDecode(fromInfo.em());
+		}
+	}
 
-	Map<String,dynamic> getGroupInfo() => jsonDecode(groupInfo.em());
+	Map<String,dynamic> getGroupInfo(){
+		if(isEmpty(groupInfo)){
+			return {};
+		}else {
+			return jsonDecode(groupInfo.em());
+		}
+	}
 
 }
 

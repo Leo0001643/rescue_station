@@ -6,15 +6,20 @@ import 'package:rescue_station/app/domains/group_info_entity.dart';
 class ChatEvent{
   UserInfoEntity user;
   UserInfoEntity friend;
-  MessageBoxTable? messageBox;
+  MessageBoxTable messageBox;
 
-  ChatEvent(this.user, this.friend,{this.messageBox});
+  ChatEvent(this.user, this.friend,this.messageBox);
 }
 
 class ChatGroupEvent{
   UserInfoEntity user;
   GroupInfoEntity group;
-  MessageBoxTable? messageBox;
+  MessageBoxTable messageBox;
 
-  ChatGroupEvent(this.user, this.group,{this.messageBox});
+  ChatGroupEvent(this.user, this.group,this.messageBox);
+}
+
+///清空聊天记录的事件
+class ChartHistoryClearEvent{
+
 }

@@ -28,9 +28,9 @@ class RegisterController extends GetxController {
       await Future.delayed(const Duration(seconds: 2));
       await EasyLoading.dismiss();
       var entity = ApiResponse.fromJson(response.data);
-      if (ObjectUtil.isNotEmpty(entity) && entity.code == 200) {
+      if (isNotEmpty(entity) && entity.code == 200) {
         EasyLoading.showSuccess('请前往登录...');
-        Get.toNamed(Routes.LOGIN);
+        Get.back();
       } else {
         EasyLoading.showError(entity.msg.toString());
       }

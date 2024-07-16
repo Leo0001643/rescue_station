@@ -31,7 +31,7 @@ class ContactsController extends GetxController{
     friendDelSub = eventBus.on<FriendDeleteEvent>().listen((event) {
       ///联系人被删除，需要刷新通讯录列表
       var user = AppData.getUser();
-      if(ObjectUtil.isNotEmpty(user)){
+      if(isNotEmpty(user)){
         getContactsAll(user!);
       }
     });
@@ -42,7 +42,7 @@ class ContactsController extends GetxController{
     loginSub = eventBus.on<LoginEvent>().listen((event) {
       ///登录成功
       var user = AppData.getUser();
-      if(ObjectUtil.isNotEmpty(user)){
+      if(isNotEmpty(user)){
         getContactsAll(user!);
       }
     });
@@ -52,7 +52,7 @@ class ContactsController extends GetxController{
     });
     ///如果已经登录了，有token
     var user = AppData.getUser();
-    if(ObjectUtil.isNotEmpty(user)){
+    if(isNotEmpty(user)){
       getContactsAll(user!);
     }
     super.onReady();

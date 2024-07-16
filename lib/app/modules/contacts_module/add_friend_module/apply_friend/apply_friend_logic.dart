@@ -17,7 +17,7 @@ class ApplyFriendLogic extends GetxController {
   @override
   void onReady() {
     var user = AppData.getUser();
-    if(ObjectUtil.isNotEmpty(user)){
+    if(isNotEmpty(user)){
       state.user = Get.arguments;
       state.reasonCtl.text = "我是${user?.nickName}";
       state.remarkCtl.text = state.user?.nickName ?? "";
@@ -32,12 +32,12 @@ class ApplyFriendLogic extends GetxController {
   }
 
   void applyAdd(){
-    if(ObjectUtil.isEmpty(state.user)) return;
-    if(ObjectUtil.isEmpty(state.reasonCtl.text)) {
+    if(isEmpty(state.user)) return;
+    if(isEmpty(state.reasonCtl.text)) {
       Get.snackbar("添加好友提醒", "请输入申请原因！");
       return;
     }
-    if(ObjectUtil.isEmpty(state.remarkCtl.text)) {
+    if(isEmpty(state.remarkCtl.text)) {
       Get.snackbar("添加好友提醒", "请输入好友昵称！");
       return;
     }

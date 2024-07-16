@@ -1,14 +1,10 @@
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/modules/message_module/group_avatar_aidget.dart';
-import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors_theme.dart';
-import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
-import '../../../event/chat_event.dart';
 import 'group_list_logic.dart';
 
 ///群列表
@@ -46,12 +42,7 @@ class _GroupListPageState extends State<GroupListPage> {
                     ListTile(
                       leading: GroupAvatarWidget(item.portrait ?? []),
                       title: Text(item.name.em(),style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
-                      onTap: () {
-                        var user = AppData.getUser();
-                        if(ObjectUtil.isNotEmpty(user)){
-                          Get.toNamed(Routes.CHAT_BY_GROUP,arguments: ChatGroupEvent(user!,item));
-                        }
-                      },
+                      onTap: ()=> logic.openChatBox(item),
                     ),
                     Container(
                       height: 1.h,

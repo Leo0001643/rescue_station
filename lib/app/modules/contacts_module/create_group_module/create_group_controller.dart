@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
@@ -18,7 +19,7 @@ class CreateGroupController extends GetxController{
   void onReady() {
     ///如果已经登录了，有token
     var user = AppData.getUser();
-    if(ObjectUtil.isNotEmpty(user)){
+    if(isNotEmpty(user)){
       getContactsAll(user!);
     }
     super.onReady();

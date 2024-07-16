@@ -1,5 +1,7 @@
 
 import 'dart:convert';
+import 'package:common_utils/common_utils.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:rescue_station/generated/json/base/json_field.dart';
 import 'package:rescue_station/generated/json/message_box_table.g.dart';
@@ -39,9 +41,21 @@ class MessageBoxTable{
     return jsonEncode(this);
   }
 
-  Map<String,dynamic> getLastMessage() => jsonDecode(lastMessage.em());
+  Map<String,dynamic> getLastMessage() {
+    if(isEmpty(lastMessage)){
+      return {};
+    }else {
+      return jsonDecode(lastMessage.em());
+    }
+  }
 
-  Map<String,dynamic> getFromInfo() => jsonDecode(fromInfo.em());
+  Map<String,dynamic> getFromInfo() {
+    if(isEmpty(fromInfo)){
+      return {};
+    }else {
+      return jsonDecode(fromInfo.em());
+    }
+  }
 
 
   bool getIsTop() => isTop == 1;

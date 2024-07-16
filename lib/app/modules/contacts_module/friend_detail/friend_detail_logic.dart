@@ -6,6 +6,7 @@ import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/event/friend_delete_event.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
+import 'package:rescue_station/app/event/new_chat_event.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
@@ -49,7 +50,7 @@ class FriendDetailLogic extends GetxController {
   }
 
   void delFriend(){
-    if(ObjectUtil.isEmpty(state.userInfo.value.userId)) return;
+    if(isEmpty(state.userInfo.value.userId)) return;
     var params = {"userId":state.userInfo.value.userId.em()};
     DioUtil().post(Api.DEL_FRIEND,data: params).then((result){
       if(result.data["code"] == 200){
@@ -68,17 +69,21 @@ class FriendDetailLogic extends GetxController {
 
   void openChatBox() async {
     var my = AppData.getUser();
-    if(ObjectUtil.isNotEmpty(my)){
+    if(isNotEmpty(my)){
       var box = await DbHelper().findMessageBox(my!.userId.em(), state.userInfo.value.userId.em());
       if(box!=null){
-        Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(my!, state.userInfo.value,messageBox: box));
+        Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(my, state.userInfo.value,box));
       } else {
         var socketMsg = SocketMessageEntity();
-        socketMsg.fromInfo = my;
+        socketMsg.fromInfo = state.userInfo.value;
         socketMsg.pushType = "MSG";
         socketMsg.boxId = state.userInfo.value.userId.em();
         socketMsg.createTime = DateUtil.getNowDateStr();
         DbHelper().messageInsertOrUpdate(true, socketMsg);
+        ///先存储再发消息通知
+        box = await DbHelper().findMessageBox(my.userId.em(), state.userInfo.value.userId.em());
+        eventBus.fire(NewChatEvent());//有新消息，需要刷新列表
+        Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(my, state.userInfo.value,box!));
       }
     }
   }

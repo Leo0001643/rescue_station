@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:common_utils/common_utils.dart';
 import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/logger.dart';
@@ -69,7 +70,7 @@ class DbHelper {
   ///查询登录用户的聊天记录
   Future<List<MessageBoxTable>> queryMessageBox(String userId) async {
     try{
-      var list = await db.query(messageTable,where: "userId = ? ORDER BY lastMessageTime DESC",whereArgs: [userId]);
+      var list = await db.query(messageTable,where: "userId = ? ORDER BY isTop DESC, lastMessageTime DESC",whereArgs: [userId]);
       return list.map((value)=> MessageBoxTable.fromJson(value)).toList(growable: true);
       // return (await getMessageBox()).values.toList(growable: true).where((v)=> v.boxId == userId && v.isShow).toList(growable: true);
     } catch(e) {
@@ -101,15 +102,32 @@ class DbHelper {
   }
 
   ///删除消息聊天框
-  Future deleteMessageBox(String userId,String delId) async {
+  Future deleteMessageBox(String userId,String boxId) async {
     try{
-      var msgBox = await findMessageBox(userId,delId);
+      var msgBox = await findMessageBox(userId,boxId);
 
       ///需要同步删除历史聊天记录
       await db.delete(chatMessageTable,where: 'boxId = ?', whereArgs: [msgBox?.boxId]);
 
       ///删除聊天框
       await db.delete(messageTable,where: 'userId = ? and boxId = ?',whereArgs: [userId,msgBox?.boxId]);
+      return true;
+    } catch(e) {
+      logger(e);
+      return false;
+    }
+  }
+
+  ///删除历史消息
+  Future deleteHistoryMessage(String userId,String boxId) async {
+    try{
+      var msgBox = await findMessageBox(userId,boxId);
+
+      ///需要同步删除历史聊天记录
+      await db.delete(chatMessageTable,where: 'boxId = ?', whereArgs: [msgBox!.boxId]);
+      ///删除最后一条消息，更新聊天框表缓存
+      msgBox.lastMessage = null;
+      await updateMessageBox(msgBox);
       return true;
     } catch(e) {
       logger(e);
@@ -146,7 +164,7 @@ class DbHelper {
 
   ///更新数据库中消息或者插入消息
   Future<void> messageInsertOrUpdate(bool isSend,SocketMessageEntity message) async {
-    var isFriend = ObjectUtil.isEmpty(message.groupInfo?.groupId);
+    var isFriend = isEmpty(message.groupInfo?.groupId);
     if(!isSend){///如果不是发送者，需要定义boxId
       message.boxId = isFriend ? message.fromInfo!.userId.em() : message.groupInfo!.groupId.em();
     }
@@ -158,7 +176,7 @@ class DbHelper {
     }
     var userId = user.userId.em();
     var v = await DbHelper().findMessageBox(userId.em(),message.boxId!);
-    if(ObjectUtil.isEmpty(v)){
+    if(isEmpty(v)){
       ///boxId为聊天好友的id
       var boxType = isFriend ? 0 : 1;
       var fromInfo = isFriend ? jsonEncode(message.fromInfo?.toJson()) : jsonEncode(message.groupInfo?.toJson());

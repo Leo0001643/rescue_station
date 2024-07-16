@@ -24,5 +24,8 @@ class ImageFont{
 
   static const select_img = "assets/images/icon/ic_select_img.png";
   static const select_file = "assets/images/icon/ic_select_file.png";
+  static const open_camera = "assets/images/icon/ic_open_camera.png";
+  static const select_collect = "assets/images/icon/ic_select_collect.png";
+  static const detail_add = "assets/images/icon/ic_detail_add.png";
 
 }

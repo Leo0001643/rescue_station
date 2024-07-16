@@ -100,7 +100,7 @@ class StateHomePage extends State<HomePage>{
           Gap(AppLayout.width(5)),
           Expanded(
               child: Obx((){
-                if(ObjectUtil.isEmpty(controller.data.value)) {
+                if(isEmpty(controller.data.value)) {
                   return Container();
                 }
                 return Marquee(

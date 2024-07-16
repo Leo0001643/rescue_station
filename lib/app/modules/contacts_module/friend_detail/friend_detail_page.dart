@@ -41,7 +41,7 @@ class _FriendDetailPageState extends State<FriendDetailPage> {
       backgroundColor: Colors.white,
       body: Obx(() {
         var user = state.userInfo.value;
-        if(ObjectUtil.isEmpty(user.userId)) return Container();
+        if(isEmpty(user.userId)) return Container();
         return Column(
           children: [
             Container(

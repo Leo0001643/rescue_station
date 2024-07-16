@@ -24,6 +24,8 @@ abstract class Routes {
   static const APPLY_FRIEND = '/apply_friend'; // apply friend
   static const GROUP_LIST = '/group_list'; // group list
   static const NICK_NAME_EDIT = '/nick_name_edit';// NickNameEdit page
+  static const CHAT_FRIEND_DETAIL = '/chat_friend_detail';// chat friend detail
+  static const CHAT_GROUP_DETAIL = '/chat_group_detail';// chat group detail
 
 }
 
@@ -39,4 +41,14 @@ EventBus eventBus=EventBus();
 ///可用于黏性事件
 EventBus behaviorBus = EventBus.customController(BehaviorSubject());
 
+/// Checks if string is URL.
+bool isURL(String s) => GetUtils.hasMatch(s, r'((https?|ftp|file):\/\/)[\w\-_]+(\.[\w\-_]+)+([\w\.,@?^=%&amp;:~\+#-]*[\w\@?^=%&amp;~\+#-])?');
 
+
+bool isEmpty(Object? any){
+  return ObjectUtil.isEmpty(any) || any == 'null';
+}
+
+bool isNotEmpty(Object? any){
+  return ObjectUtil.isNotEmpty(any) && any != 'null';
+}

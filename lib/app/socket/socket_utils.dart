@@ -124,7 +124,7 @@ class SocketUtils{
         var dataMap = jsonDecode(event);
         switch(dataMap["pushType"]){
           case "MSG":
-            if(ObjectUtil.isEmpty(dataMap["groupInfo"])){
+            if(isEmpty(dataMap["groupInfo"])){
               var response = SocketMessageEntity.fromJson(dataMap);
               response.groupInfo = null;
               sendPort.send(response);
@@ -139,7 +139,7 @@ class SocketUtils{
               group.name = dataMap["groupInfo"]["nickName"];
               group.groupId = dataMap["groupInfo"]["userId"];
               group.portrait = (jsonDecode(dataMap["groupInfo"]["portrait"]) as List).map<String>((e) => e.toString()).toList();
-              if(ObjectUtil.isNotEmpty(group.groupId)){
+              if(isNotEmpty(group.groupId)){
                 response.groupInfo = group;
               }
               sendPort.send(response);

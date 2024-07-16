@@ -1,13 +1,17 @@
 
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
-import 'package:rescue_station/app/theme/app_colors_theme.dart';
-import 'package:rescue_station/app/theme/app_text_theme.dart';
 import 'package:rescue_station/app/utils/AppLayout.dart';
 import 'package:rescue_station/app/utils/Icon.dart';
+
+import 'logger.dart';
 
 class WidgetUtils {
 
@@ -102,7 +106,48 @@ class WidgetUtils {
     );
   }
 
+  static ImageProvider buildImageProvider(String image, {String defImage = ImageFont.select_img}) {
+    loggerArray(["加载的图片地址",image,isURL(image)]);
+    if (image.isEmpty || (!isURL(image) && !image.contains("assets"))) {
+      return AssetImage(defImage);
+    }
+    try {
+      return image.startsWith("file://") ? FileImage(File(image.trim())) : (
+          isURL(image)
+              ? NetworkImage(image.trim(),)
+              : AssetImage(image) as ImageProvider
+      );
+    } catch (e) {
+      return AssetImage(defImage);
+    }
+  }
 
+  static buildImage(String image, double width, double height,
+      {String defImage = ImageFont.select_img, BoxFit? fit,bool placeholder=false}) {
+    loggerArray(["加载图片了",image,isURL(image)]);
+    if (image.isEmpty) {
+      return Image.asset(defImage, width: width, height: height, fit: fit,);
+    }
+    try {
+      return isURL(image)
+          ? CachedNetworkImage(imageUrl: image.trim(),fit: fit,width: width,height: height,
+        errorWidget: (context,url,error){
+          loggerArray(["异常了", url, error]);
+          return Image.asset(defImage,width: width, height: height, fit: fit,);
+        },
+        placeholder: (context,url){
+          return placeholder ? Image.asset(defImage,width: width, height: height, fit: fit,) : SizedBox(width: width,height: height,);
+        },
+        errorListener: (stack){
+            loggerArray(["加载图片错误",stack]);
+        },
+      )
+          :Image.asset(image,width: width, height: height, fit: fit,);
+    } catch (e) {
+      loggerArray(["异常了", image, e]);
+      return Image.asset(defImage, width: width, height: height, fit: fit,);
+    }
+  }
 
 
 
@@ -112,7 +157,7 @@ class WidgetUtils {
 extension StringExtension on String? {
   ///防止字段为空报错
   String em({String aft = ""}){
-    return ObjectUtil.isEmpty(this) ? aft : this!;
+    return isEmpty(this) ? aft : this!;
   }
 
 }

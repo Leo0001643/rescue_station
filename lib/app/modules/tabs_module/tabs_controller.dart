@@ -39,6 +39,7 @@ class TabsController extends GetxController {
       ContactsPage(),
       MinePage()
     ];
+
     super.onInit();
   }
 

@@ -29,7 +29,7 @@ class NewFriendLogic extends GetxController {
   void getApplyList() {
     DioUtil().get(Api.APPLY_LIST,).then((result){
       if(result.data["code"] == 200){
-        if(ObjectUtil.isNotEmpty(result.data['rows'])){
+        if(isNotEmpty(result.data['rows'])){
           var data = JsonConvert.fromJsonAsT<List<FriendApplyEntity>>(result.data['rows']) ?? [];
           state.data.assignAll(data);
         }

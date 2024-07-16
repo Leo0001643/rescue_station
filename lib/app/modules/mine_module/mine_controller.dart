@@ -35,7 +35,7 @@ class MineController extends GetxController{
   @override
   void onReady() {
     var user = AppData.getUser();
-    if(ObjectUtil.isNotEmpty(user)){
+    if(isNotEmpty(user)){
       userInfo.value = user!;
     }
     loginSub = eventBus.on<LoginEvent>().listen((event) {
