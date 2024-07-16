@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
@@ -81,7 +82,7 @@ class StateMessagePage extends State<MessagePage>{
         onTap: () {
           var my = AppData.getUser();
           if(ObjectUtil.isNotEmpty(my)){
-            Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(my!, user));
+            Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(my!, user,MessageBoxTable()));
           }
         },
         leading: GFAvatar(
