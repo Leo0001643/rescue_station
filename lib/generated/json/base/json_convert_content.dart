@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart' show debugPrint;
 import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
+import 'package:rescue_station/app/domains/group_detail_entity.dart';
 import 'package:rescue_station/app/domains/group_info_entity.dart';
 import 'package:rescue_station/app/domains/upload_file_entity.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
@@ -158,6 +159,22 @@ class JsonConvert {
       return data.map<MessageBoxTable>((Map<String, dynamic> e) =>
           MessageBoxTable.fromJson(e)).toList() as M;
     }
+    if (<GroupDetailEntity>[] is M) {
+      return data.map<GroupDetailEntity>((Map<String, dynamic> e) =>
+          GroupDetailEntity.fromJson(e)).toList() as M;
+    }
+    if (<GroupDetailUser>[] is M) {
+      return data.map<GroupDetailUser>((Map<String, dynamic> e) =>
+          GroupDetailUser.fromJson(e)).toList() as M;
+    }
+    if (<GroupDetailGroup>[] is M) {
+      return data.map<GroupDetailGroup>((Map<String, dynamic> e) =>
+          GroupDetailGroup.fromJson(e)).toList() as M;
+    }
+    if (<GroupDetailSet>[] is M) {
+      return data.map<GroupDetailSet>((Map<String, dynamic> e) =>
+          GroupDetailSet.fromJson(e)).toList() as M;
+    }
     if (<GroupInfoEntity>[] is M) {
       return data.map<GroupInfoEntity>((Map<String, dynamic> e) =>
           GroupInfoEntity.fromJson(e)).toList() as M;
@@ -232,6 +249,10 @@ class JsonConvertClassCollection {
   Map<String, JsonConvertFunction> convertFuncMap = {
     (ChatMessageTable).toString(): ChatMessageTable.fromJson,
     (MessageBoxTable).toString(): MessageBoxTable.fromJson,
+    (GroupDetailEntity).toString(): GroupDetailEntity.fromJson,
+    (GroupDetailUser).toString(): GroupDetailUser.fromJson,
+    (GroupDetailGroup).toString(): GroupDetailGroup.fromJson,
+    (GroupDetailSet).toString(): GroupDetailSet.fromJson,
     (GroupInfoEntity).toString(): GroupInfoEntity.fromJson,
     (UploadFileEntity).toString(): UploadFileEntity.fromJson,
     (UserInfoEntity).toString(): UserInfoEntity.fromJson,

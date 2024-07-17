@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/domains/upload_file_entity.dart';
+import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
@@ -26,6 +27,7 @@ import 'chat_by_friend_state.dart';
 class ChatByFriendLogic extends GetxController {
   final ChatByFriendState state = ChatByFriendState();
   StreamSubscription? msgReceiveSub;
+  StreamSubscription? msgClearSub;
   final chatCtl = Get.find<BottomChatController>();
 
   @override
@@ -37,12 +39,17 @@ class ChatByFriendLogic extends GetxController {
             createdAt: DateUtil.getDateMsByTimeStr(message.createTime.em())));
       }
     });
+    msgClearSub = eventBus.on<ChartHistoryClearEvent>().listen((event){
+      ///刷新消息列表
+      queryChatMessage();
+    });
     super.onReady();
   }
 
   @override
   void onClose() {
     msgReceiveSub?.cancel();
+    msgClearSub?.cancel();
     super.onClose();
   }
 
@@ -50,15 +57,18 @@ class ChatByFriendLogic extends GetxController {
     loggerArray(["socket状态",SocketUtils().isConnect]);
     var content = "";
     var msgType = "";
+    UploadFileEntity? uploadFile;
     EasyLoading.show();
     if(msg is types.TextMessage){
       content = msg.text;
       msgType = MessageTypeEnum.TEXT.name;
     }else if(msg is types.ImageMessage){
-      content = await DioUtil.uploadFile(msg.uri.em());
+      uploadFile = await DioUtil.uploadFile(msg.uri.em());
+      content = uploadFile?.fullPath ?? '';
       msgType = MessageTypeEnum.IMAGE.name;
     }else if(msg is types.FileMessage){
-      content = await DioUtil.uploadFile(msg.uri.em());
+      uploadFile = await DioUtil.uploadFile(msg.uri.em());
+      content = uploadFile?.fullPath ?? '';
       msgType = MessageTypeEnum.FILE.name;
     }
     if(content.isEmpty) {
@@ -84,7 +94,7 @@ class ChatByFriendLogic extends GetxController {
         var msgContent = SocketMsgContent();
         msgContent.disturb = 'N';
         msgContent.top = 'N';
-        msgContent.content = content;
+        msgContent.content = uploadFile==null ? content : JsonUtil.encodeObj(uploadFile.toJson());
         msgContent.msgType = msgType;
         socketMsg.msgContent = msgContent;
         ///缓存消息到数据库
@@ -102,6 +112,7 @@ class ChatByFriendLogic extends GetxController {
 
 
   void queryChatMessage() {
+    state.messages.clear();
     DbHelper().queryChatMessageBox(AppData.getUser()!.userId.em(),chatCtl.friend.userId.em()).then((v){
       if(v.isNotEmpty){
         v.forEach((item){

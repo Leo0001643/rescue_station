@@ -40,6 +40,10 @@ class Api{
   ///好友详情
   static const FRIEND_INFO = '/friend/info/';
 
+  ///好友置顶
+  static const CHAT_FRIEND_TOP = '/friend/top';
+
+
   ///文件上传
   static const FILE_UPLOAD = '/file/upload';
 
@@ -49,7 +53,7 @@ class Api{
   static const CREATE_GROUP= "/group/createGroup";
 
   ///获取群详情
-  static const GET_GROUP_INFO= "/getInfo/{groupId}";
+  static const GET_GROUP_INFO= "/group/getInfo/";
 
   ///邀请进群
   static const INVITATION_GROUP= "/group/invitationGroup";

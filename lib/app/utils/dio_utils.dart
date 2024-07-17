@@ -12,6 +12,8 @@ import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
+import '../routes/app_pages.dart';
+
 class DioUtil {
   static final DioUtil _instance = DioUtil._internal();
   factory DioUtil() => _instance;
@@ -34,7 +36,7 @@ class DioUtil {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         var token = AppData.getUser()?.token.em();
-        if(ObjectUtil.isNotEmpty(token)){
+        if(isNotEmpty(token)){
           options.headers['Authorization'] = token;
         }
         // Do something before request is sent
@@ -115,16 +117,16 @@ class DioUtil {
 
 
   ///上传文件
-  static Future<String> uploadFile(String path) async {
+  static Future<UploadFileEntity?> uploadFile(String path) async {
     loggerArray(["上传的文件路径",path]);
     var mufile = await diod.MultipartFile.fromFile(path, filename: path.split("/").last,);
     var result = await DioUtil().postAny(Api.FILE_UPLOAD,data: diod.FormData.fromMap({"file": mufile}),
         options: diod.Options(contentType: "multipart/form-data",headers: {}));
     if(result.data["code"] == 200){
-      return UploadFileEntity.fromJson(result.data["data"]).fullPath.em();
+      return UploadFileEntity.fromJson(result.data["data"]);
     } else {
       Get.snackbar('提醒', result.data["msg"]);
-      return "";
+      return null;
     }
   }
 

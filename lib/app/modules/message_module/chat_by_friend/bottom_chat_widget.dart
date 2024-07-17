@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
@@ -67,7 +68,7 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
                     onSubmitted: (text){
                       ///防止自动隐藏虚拟键盘
                       chatCtl.inputFocusNode.requestFocus();
-                      if(ObjectUtil.isNotEmpty(text)){ widget.onSendChatListener(SocketUtils().buildUserText(text,chatCtl.user)); }
+                      if(isNotEmpty(text)){ widget.onSendChatListener(SocketUtils().buildUserText(text,chatCtl.user)); }
                       chatCtl.textController.clear();
                     },
                     style: TextStyle(fontSize: 16.sp,color: Colors.black,fontWeight: FontWeight.w600),
@@ -118,7 +119,7 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
                 return Offstage(
                   offstage: !chatCtl.emojiVisible.value,
                   child: WidgetUtils.buildElevatedButton("发送", 60.w, 40.h, bg: color_703,onPressed: (){
-                    if(ObjectUtil.isNotEmpty(chatCtl.textController.text)){
+                    if(isNotEmpty(chatCtl.textController.text)){
                       widget.onSendChatListener(SocketUtils().buildUserText(chatCtl.textController.text,chatCtl.user));
                     }
                     chatCtl.textController.clear();

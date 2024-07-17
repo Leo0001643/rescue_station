@@ -35,6 +35,7 @@ class StateBottomMoreWidget extends State<BottomMoreWidget> {
                   print("选择的图片${result?.names.toString()}");
                   if(result?.count == 1){ widget.onSendChatListener(SocketUtils().buildUserImage(result!.files[0],chatCtl.user)); }
                 });
+                chatCtl.moreVisible.value = false;
               },
               icon: Image.asset(ImageFont.select_img,width: 60.r, height: 60.r,),
           ),
@@ -45,6 +46,7 @@ class StateBottomMoreWidget extends State<BottomMoreWidget> {
                 print("选择的文件${result?.names.toString()}");
                 if(result?.count == 1){ widget.onSendChatListener(SocketUtils().buildUserFile(result!.files[0],chatCtl.user)); }
               });
+              chatCtl.moreVisible.value = false;
             },
             icon: Image.asset(ImageFont.select_file,width: 60.r, height: 60.r,),
           ),

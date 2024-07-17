@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -30,6 +31,7 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
   @override
   void initState() {
     ChatGroupEvent event = Get.arguments;
+    state.chatEvent = event;
     chatCtl.group = event.group;
     chatCtl.user = event.user;
     super.initState();
@@ -46,7 +48,13 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WidgetUtils.buildAppBar(chatCtl.group.name.em()),
+      appBar: WidgetUtils.buildAppBar(chatCtl.group.name.em(),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.more_vert_outlined,size: 30.r,),
+              onPressed: ()=> Get.toNamed(Routes.CHAT_GROUP_DETAIL,arguments: state.chatEvent),
+            ),
+          ]),
       backgroundColor: Colors.white,
       body: KeyboardVisibilityProvider(
         controller: chatCtl.keyboardVisibilityController,

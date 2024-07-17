@@ -1,15 +1,15 @@
 
-import 'dart:ffi';
-
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_chat_ui/src/conditional/conditional.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/constant/constant.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -33,6 +33,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
   @override
   void initState() {
     ChatEvent event = Get.arguments;
+    state.chatEvent = event;
     chatCtl.user = event.user;
     chatCtl.friend = event.friend;
     super.initState();
@@ -49,7 +50,13 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WidgetUtils.buildAppBar(chatCtl.friend.nickName.em()),
+      appBar: WidgetUtils.buildAppBar(chatCtl.friend.nickName.em(),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.more_vert_outlined,size: 30.r,),
+          onPressed: ()=> Get.toNamed(Routes.CHAT_FRIEND_DETAIL,arguments: state.chatEvent),
+        ),
+      ]),
       body: KeyboardVisibilityProvider(
         controller: chatCtl.keyboardVisibilityController,
         child: Obx(() {
@@ -64,6 +71,9 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
             ),
             l10n: const ChatL10nZhCN(),
             messages: state.messages.value,
+            // imageMessageBuilder: buildImageMessage,
+            // textMessageBuilder: buildTextMessage,
+            // imageProviderBuilder: buildImageProvider,
             onSendPressed: (text){},
             // onMessageTap: (context, message) => logic.addMessage(),
             user: types.User(id: chatCtl.user.userId.em(),imageUrl: chatCtl.user.portrait.em()),
@@ -79,7 +89,6 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
               chatCtl.moreVisible.value = false;
               chatCtl.emojiVisible.value = false;
             },
-            // textMessageBuilder: buildTextMessage,
           );
         }),
       ),
@@ -94,7 +103,8 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
         children: [
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 260.w),
-            child: Bubble(
+            child: message is types.ImageMessage ? child :
+            Bubble(
               nip: BubbleNip.rightCenter,
               nipOffset: -10,
               alignment: Alignment.bottomRight,
@@ -116,7 +126,8 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
           buildAvatar(chatCtl.user.portrait.em()),
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 260.w),
-            child: Bubble(
+            child: message is types.ImageMessage ? child :
+            Bubble(
               nip: BubbleNip.leftCenter,
               nipOffset: -10,
               alignment: Alignment.bottomLeft,
@@ -154,6 +165,18 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
       );
     }
   }
+
+  ImageProvider<Object> buildImageProvider({required Conditional conditional, required Map<String, String>? imageHeaders, required String uri}) {
+    // loggerArray(["走这里吗第三方水电费",uri,imageHeaders,conditional]);
+    return WidgetUtils.buildImageProvider(uri);
+  }
+
+
+  Widget buildImageMessage(types.ImageMessage p1, {required int messageWidth}) {
+    return Container();
+  }
+
+
 
 
 
