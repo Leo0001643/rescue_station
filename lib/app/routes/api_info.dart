@@ -89,7 +89,7 @@ class Api{
   static const EDIT_KEEP_GROUP = "/group/editKeepGroup";
 
   ///退出群组
-  static const LOGOUT_GROUP = "/group/logoutGroup/{groupId}";
+  static const LOGOUT_GROUP = "/group/logoutGroup/";
 
   ///解散群组
   static const REMOVE_GROUP = "/group/removeGroup/{groupId}";

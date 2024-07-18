@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 import 'package:getwidget/getwidget.dart';
 
+import '../../routes/app_pages.dart';
+
 class GroupAvatarWidget extends StatefulWidget{
   final List<String> portrait;
   const GroupAvatarWidget(this.portrait,{Key? key}) : super(key: key);
@@ -38,7 +40,7 @@ class StateGroupAvatarWidget extends State<GroupAvatarWidget>{
         borderRadius: BorderRadius.circular(5.r),
       ),
       alignment: Alignment.center,
-      child: ObjectUtil.isEmpty(list) ? null:
+      child: isEmpty(list) ? null:
       list.length == 1 ? GFAvatar(
         radius: 20.r,
         shape: GFAvatarShape.standard,

@@ -10,6 +10,7 @@ import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:rescue_station/app/domains/group_info_entity.dart';
+import 'package:rescue_station/app/domains/upload_file_entity.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
@@ -206,25 +207,38 @@ class SocketUtils{
     );
   }
 
-  types.Message buildUserImageUrl(String url,UserInfoEntity user,{int? createdAt}){
+  types.Message buildUserImageUrl(String content,UserInfoEntity user,{int? createdAt}){
+    UploadFileEntity uploadFile;
+    if(isURL(content)){
+      uploadFile = UploadFileEntity(fullPath: content);
+    } else {
+      uploadFile = UploadFileEntity.fromJson(jsonDecode(content));
+    }
+
     return types.ImageMessage(
       author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
       createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
       id: randomString(),
-      uri: url,
-      size: 0,
-      name: "",
+      uri: uploadFile.fullPath.em(),
+      size: parseSize(uploadFile.fileSize.em()),
+      name: uploadFile.fileName.em(),
     );
   }
 
-  types.Message buildUserFileUrl(String url,UserInfoEntity user,{int? createdAt}){
+  types.Message buildUserFileUrl(String content,UserInfoEntity user,{int? createdAt}){
+    UploadFileEntity uploadFile;
+    if(isURL(content)){
+      uploadFile = UploadFileEntity(fullPath: content);
+    } else {
+      uploadFile = UploadFileEntity.fromJson(jsonDecode(content));
+    }
     return types.FileMessage(
       author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
       createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
       id: randomString(),
-      uri: url,
-      size: 0,
-      name: "",
+      uri: uploadFile.fullPath.em(),
+      size: parseSize(uploadFile.fileSize.em()),
+      name: uploadFile.fileName.em(),
     );
   }
 
@@ -233,6 +247,40 @@ class SocketUtils{
     final random = Random.secure();
     final values = List<int>.generate(16, (i) => random.nextInt(255));
     return base64UrlEncode(values);
+  }
+
+  ///将KMGTPB转换为字节
+  int parseSize(String sizeStr) {
+    final regex = RegExp(r'(\d+(\.\d+)?)\s*([KMGTP]B)?', caseSensitive: false);
+    final match = regex.firstMatch(sizeStr);
+
+    if (match == null) {
+      logger('Invalid size format: $sizeStr');
+      return 0;
+    }
+
+    double size = double.parse(match.group(1)!);
+    String unit = match.group(3) ?? 'B';
+
+    return convertToBytes(size, unit);
+  }
+
+  int convertToBytes(double size, String unit) {
+    switch (unit.toUpperCase()) {
+      case 'B':
+        return size.toInt();
+      case 'KB':
+        return (size * 1024).toInt();
+      case 'MB':
+        return (size * 1024 * 1024).toInt();
+      case 'GB':
+        return (size * 1024 * 1024 * 1024).toInt();
+      case 'TB':
+        return (size * 1024 * 1024 * 1024 * 1024).toInt();
+      default:
+        logger('Invalid unit: $unit');
+        return 0;
+    }
   }
 
 
