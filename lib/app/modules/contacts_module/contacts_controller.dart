@@ -1,19 +1,14 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:common_utils/common_utils.dart';
 import 'package:get/get.dart';
-import 'package:rescue_station/app/db/db_helper.dart';
-import 'package:rescue_station/app/event/friend_delete_event.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
+import 'package:rescue_station/app/event/friend_delete_event.dart';
 import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_notice_entity.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
-import 'package:rescue_station/app/utils/logger.dart';
-import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 
 class ContactsController extends GetxController{

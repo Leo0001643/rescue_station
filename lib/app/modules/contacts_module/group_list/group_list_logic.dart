@@ -1,8 +1,6 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
-import 'package:rescue_station/app/db/message_box_table.dart';
-import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
@@ -55,7 +53,7 @@ class GroupListLogic extends GetxController {
         socketMsg.pushType = "MSG";
         socketMsg.boxId = groupInfo.groupId.em();
         socketMsg.createTime = DateUtil.getNowDateStr();
-        DbHelper().messageInsertOrUpdate(true, socketMsg);
+        await DbHelper().messageInsertOrUpdate(true, socketMsg);
         box = await DbHelper().findMessageBox(my.userId.em(), groupInfo.groupId.em());
         ///先存储再发消息通知
         eventBus.fire(NewChatEvent());//有新消息，需要刷新列表

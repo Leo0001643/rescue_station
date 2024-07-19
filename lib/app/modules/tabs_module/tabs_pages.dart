@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lifecycle/lifecycle.dart';
+import 'package:rescue_station/app/utils/audio_utils.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import 'tabs_controller.dart';
 import '../../utils/Icon.dart';
 
@@ -11,8 +14,25 @@ class TabsPage extends StatefulWidget {
 
 }
 
-class StateTabsPage extends State<TabsPage>{
+class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin {
   final controller = Get.find<TabsController>();
+
+  @override
+  void onLifecycleEvent(LifecycleEvent event) {
+    loggerArray(["生命周期变化了",event]);
+    switch (event) {
+      case LifecycleEvent.visible:
+      ///播放音乐
+        AudioUtils().appForeground = true;
+        break;
+      case LifecycleEvent.invisible:
+        AudioUtils().appForeground = false;
+        break;
+      default:
+        break;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +64,6 @@ class StateTabsPage extends State<TabsPage>{
           ]),
     ));
   }
-
 
 
 

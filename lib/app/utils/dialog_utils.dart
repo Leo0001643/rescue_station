@@ -36,10 +36,10 @@ class DialogUtils{
                   alignment: Alignment.center,
                   child: Text(title, style: TextStyle(fontSize: 16.sp,),),
                 ),
-                Divider(height: 1.h,),
+                Divider(height: 1.h,color: color_e6e,),
                 Align(
                   child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 15.h),
+                    margin: EdgeInsets.symmetric(vertical: 10.h),
                     width: double.infinity,
                     alignment: Alignment.center,
                     child: Row(

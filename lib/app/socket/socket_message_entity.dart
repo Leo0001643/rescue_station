@@ -23,6 +23,7 @@ class SocketMessageEntity {
 
 	Map<String, dynamic> toJson() => $SocketMessageEntityToJson(this);
 
+
 	@override
 	String toString() {
 		return jsonEncode(this);

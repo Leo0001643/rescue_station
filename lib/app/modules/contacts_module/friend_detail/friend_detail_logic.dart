@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:common_utils/common_utils.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/event/friend_delete_event.dart';
-import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
@@ -79,7 +77,7 @@ class FriendDetailLogic extends GetxController {
         socketMsg.pushType = "MSG";
         socketMsg.boxId = state.userInfo.value.userId.em();
         socketMsg.createTime = DateUtil.getNowDateStr();
-        DbHelper().messageInsertOrUpdate(true, socketMsg);
+        await DbHelper().messageInsertOrUpdate(true, socketMsg);
         ///先存储再发消息通知
         box = await DbHelper().findMessageBox(my.userId.em(), state.userInfo.value.userId.em());
         eventBus.fire(NewChatEvent());//有新消息，需要刷新列表

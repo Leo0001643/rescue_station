@@ -1,5 +1,3 @@
-import 'package:common_utils/common_utils.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/event/friend_delete_event.dart';
 import 'package:rescue_station/app/modules/contacts_module/new_friend/friend_apply_entity.dart';

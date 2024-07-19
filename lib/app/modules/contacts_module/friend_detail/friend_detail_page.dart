@@ -1,14 +1,10 @@
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:rescue_station/app/db/db_helper.dart';
-import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/AppLayout.dart';
-import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
 import 'friend_detail_logic.dart';

@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:rescue_station/generated/json/base/json_field.dart';
 import 'package:rescue_station/generated/json/friend_apply_entity.g.dart';
-import 'dart:convert';
+
 export 'package:rescue_station/generated/json/friend_apply_entity.g.dart';
 
 @JsonSerializable()

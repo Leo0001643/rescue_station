@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
-import 'package:rescue_station/app/utils/widget_utils.dart';
 /**
  * GetX Template Generator - fb.com/htngu.99
  * */

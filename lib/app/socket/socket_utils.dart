@@ -18,6 +18,7 @@ import 'package:rescue_station/app/socket/isolate_msg_entity.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/socket/socket_notice_entity.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
+import 'package:rescue_station/app/utils/audio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
@@ -78,9 +79,11 @@ class SocketUtils{
         DbHelper().messageInsertOrUpdate(false,message).then((v){
           eventBus.fire(message);
           eventBus.fire(NewChatEvent());//有新消息，需要刷新列表
+          AudioUtils().playReceiveMsg();//播放收到消息声音
         });
       }else if(message is SocketNoticeEntity){
         eventBus.fire(message);///发送添加好友通知
+        AudioUtils().playReceiveMsg();//播放收到消息声音
       }
     });
   }
