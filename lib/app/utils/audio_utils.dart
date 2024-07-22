@@ -13,7 +13,7 @@ class AudioUtils{
 
   factory AudioUtils() => getInstance();
 
-  static const message = 'assets/music/messagemp3';
+  static const message = 'assets/music/message.mp3';
 
   var messagePlayer = AudioPlayer();
   ///当前应用是否在前台显示

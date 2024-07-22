@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:lifecycle/lifecycle.dart';
 import 'package:rescue_station/app/constant/constant.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'app/routes/app_pages.dart';
@@ -40,7 +41,7 @@ void main() async{
                   GlobalCupertinoLocalizations.delegate, /// 对应的Cupertino风格
                   GlobalWidgetsLocalizations.delegate, /// 指定默认的文本排列方向, 由左到右或由右到左
                 ],
-                navigatorObservers: [navigatorObserver],
+                navigatorObservers: [defaultLifecycleObserver,navigatorObserver],
                 theme: ThemeData(primarySwatch: Colors.grey),
                 initialRoute: Routes.TABS,
                 defaultTransition:Transition.noTransition,//页面切换取消动画
