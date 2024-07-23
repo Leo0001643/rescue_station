@@ -32,6 +32,10 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
 
   @override
   void initState() {
+    if(Get.arguments == null){
+      Get.back();
+      return;
+    }
     ChatEvent event = Get.arguments;
     state.chatEvent = event;
     chatCtl.user = event.user;
@@ -126,7 +130,10 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
           buildAvatar(chatCtl.user.portrait.em()),
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 260.w),
-            child: message is types.ImageMessage ? child :
+            child: message is types.ImageMessage ? Padding(
+              padding: EdgeInsets.only(left: 10.w),
+              child: child,
+            ) :
             Bubble(
               nip: BubbleNip.leftCenter,
               nipOffset: -10,

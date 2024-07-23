@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:common_utils/common_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as diod;
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:rescue_station/app/constant/constant.dart';
@@ -116,10 +117,13 @@ class DioUtil {
   }
 
 
+
+
+
   ///上传文件
-  static Future<UploadFileEntity?> uploadFile(String path) async {
+  static Future<UploadFileEntity?> uploadFile(String filename,String path) async {
     loggerArray(["上传的文件路径",path]);
-    var mufile = await diod.MultipartFile.fromFile(path, filename: path.split("/").last,);
+    var mufile = await diod.MultipartFile.fromFile(path, filename: filename,);
     var result = await DioUtil().postAny(Api.FILE_UPLOAD,data: diod.FormData.fromMap({"file": mufile}),
         options: diod.Options(contentType: "multipart/form-data",headers: {}));
     if(result.data["code"] == 200){
@@ -130,6 +134,18 @@ class DioUtil {
     }
   }
 
-
+  ///上传文件
+  static Future<UploadFileEntity?> uploadWebFile(String filename,Uint8List bytes) async {
+    loggerArray(["上传的文件路径",]);
+    var mufile = diod.MultipartFile.fromBytes(bytes, filename: filename,);
+    var result = await DioUtil().postAny(Api.FILE_UPLOAD,data: diod.FormData.fromMap({"file": mufile}),
+        options: diod.Options(contentType: "multipart/form-data",headers: {}));
+    if(result.data["code"] == 200){
+      return UploadFileEntity.fromJson(result.data["data"]);
+    } else {
+      Get.snackbar('提醒', result.data["msg"]);
+      return null;
+    }
+  }
 
 }

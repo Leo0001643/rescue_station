@@ -30,6 +30,10 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
 
   @override
   void initState() {
+    if(Get.arguments == null){
+      Get.back();
+      return;
+    }
     ChatGroupEvent event = Get.arguments;
     state.chatEvent = event;
     chatCtl.group = event.group;
@@ -99,7 +103,8 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
         children: [
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 260.w),
-            child: Bubble(
+            child: message is types.ImageMessage ? child :
+            Bubble(
               nip: BubbleNip.rightCenter,
               nipOffset: -10,
               alignment: Alignment.bottomRight,
@@ -121,7 +126,11 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
           buildAvatar(chatCtl.user.portrait.em()),
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 260.w),
-            child: Bubble(
+            child: message is types.ImageMessage ? Padding(
+              padding: EdgeInsets.only(left: 10.w),
+              child: child,
+            ) :
+            Bubble(
               nip: BubbleNip.leftCenter,
               nipOffset: -10,
               alignment: Alignment.bottomLeft,

@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:common_utils/common_utils.dart';
+import 'package:get/get.dart';
 import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
@@ -10,6 +11,7 @@ import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 class DbHelper {
   DbHelper._internal();
@@ -30,15 +32,26 @@ class DbHelper {
 
   Future<void> init() async {
     var version = 1;
-    db = await openDatabase("rescue.db",version: version,onCreate: (db,ver) async {
-      await db.execute('CREATE TABLE $messageTable (id integer primary key autoincrement, userId TEXT, boxId TEXT, boxType INTEGER,'
-          ' lastMessage TEXT, lastMessageTime INTEGER, unreadCount INTEGER, isTop INTEGER, isDisturb INTEGER, fromInfo TEXT, isShow INTEGER)');
-
-      await db.execute('CREATE TABLE $chatMessageTable (id integer primary key autoincrement, msgId TEXT, pushType TEXT,'
-          ' msgContent TEXT, fromInfo TEXT, createTime TEXT, isTop INTEGER, groupInfo TEXT, boxId TEXT, userId TEXT)');
-    });
-
+    if(GetPlatform.isWeb){
+      db = await databaseFactoryFfiWeb.openDatabase("rescue.db",
+          options: OpenDatabaseOptions(
+            version: version,
+            onCreate: createDbForm,
+          ));
+    } else {
+      db = await openDatabase("rescue.db",version: version,onCreate: createDbForm);
+    }
   }
+
+
+  void createDbForm(db,ver) async {
+    await db.execute('CREATE TABLE $messageTable (id integer primary key autoincrement, userId TEXT, boxId TEXT, boxType INTEGER,'
+        ' lastMessage TEXT, lastMessageTime INTEGER, unreadCount INTEGER, isTop INTEGER, isDisturb INTEGER, fromInfo TEXT, isShow INTEGER)');
+
+    await db.execute('CREATE TABLE $chatMessageTable (id integer primary key autoincrement, msgId TEXT, pushType TEXT,'
+        ' msgContent TEXT, fromInfo TEXT, createTime TEXT, isTop INTEGER, groupInfo TEXT, boxId TEXT, userId TEXT)');
+  }
+
 
   void close(){
     db.close();
@@ -190,6 +203,7 @@ class DbHelper {
       await DbHelper().updateMessageBox(v);
     }
   }
+
 
 
 

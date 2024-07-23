@@ -42,7 +42,7 @@ EventBus eventBus=EventBus();
 EventBus behaviorBus = EventBus.customController(BehaviorSubject());
 
 /// Checks if string is URL.
-bool isURL(String s) => GetUtils.hasMatch(s, r'((https?|ftp|file):\/\/)[\w\-_]+(\.[\w\-_]+)+([\w\.,@?^=%&amp;:~\+#-]*[\w\@?^=%&amp;~\+#-])?');
+bool isURL(String s) => s.startsWith("http");
 
 
 bool isEmpty(Object? any){

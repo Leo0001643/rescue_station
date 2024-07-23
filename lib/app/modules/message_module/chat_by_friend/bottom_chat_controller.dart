@@ -13,6 +13,7 @@ class BottomChatController extends GetxController {
   final inputFocusNode = FocusNode();
 
   late UserInfoEntity user;
+
   late UserInfoEntity friend;
   late GroupInfoEntity group;
 

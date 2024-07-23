@@ -57,16 +57,25 @@ class ChatByGroupLogic extends GetxController {
     var content = "";
     var msgType = "";
     UploadFileEntity? uploadFile;
-
     if(msg is types.TextMessage){
       content = msg.text;
       msgType = MessageTypeEnum.TEXT.name;
-    }else if(msg is types.ImageMessage){
-      uploadFile = await DioUtil.uploadFile(msg.uri.em());
+    } else if (msg is types.ImageMessage){
+      if(GetPlatform.isWeb){
+        var bytes = msg.metadata!["file"];
+        uploadFile = await DioUtil.uploadWebFile(msg.name,bytes);
+      } else {
+        uploadFile = await DioUtil.uploadFile(msg.name,msg.uri.em());
+      }
       content = uploadFile?.fullPath ?? '';
       msgType = MessageTypeEnum.IMAGE.name;
-    }else if(msg is types.FileMessage){
-      uploadFile = await DioUtil.uploadFile(msg.uri.em());
+    } else if (msg is types.FileMessage){
+      if(GetPlatform.isWeb){
+        var bytes = msg.metadata!["file"];
+        uploadFile = await DioUtil.uploadWebFile(msg.name,bytes);
+      } else {
+        uploadFile = await DioUtil.uploadFile(msg.name,msg.uri.em());
+      }
       content = uploadFile?.fullPath ?? '';
       msgType = MessageTypeEnum.FILE.name;
     }
@@ -82,7 +91,7 @@ class ChatByGroupLogic extends GetxController {
           Get.snackbar("提示", result.data["data"]["statusLabel"]);
           return;
         }
-        state.messages.insert(0, msg);
+        // state.messages.insert(0, msg);
         var socketMsg = SocketMessageEntity();
         socketMsg.msgId = result.data["msgId"];
         socketMsg.boxId = chatCtl.group.groupId.em();
@@ -97,6 +106,7 @@ class ChatByGroupLogic extends GetxController {
         msgContent.content = uploadFile==null ? content : JsonUtil.encodeObj(uploadFile.toJson());
         msgContent.msgType = msgType;
         socketMsg.msgContent = msgContent;
+        insertMessageList(msgContent, chatCtl.user.toJson(), socketMsg.createTime.em());
         ///缓存消息到数据库
         DbHelper().messageInsertOrUpdate(true,socketMsg).then((v){
           eventBus.fire(NewChatEvent());//有新消息，需要刷新列表
@@ -114,27 +124,31 @@ class ChatByGroupLogic extends GetxController {
   void queryChatMessage() {
     DbHelper().queryChatMessageBox(AppData.getUser()!.userId.em(),chatCtl.group.groupId.em()).then((v){
       if(v.isNotEmpty){
-        v.forEach((item){
+        for (var item in v) {
           var msg = SocketMsgContent.fromJson(item.getMsgContent());
-          switch(find(msg.msgType)){
-            case MessageTypeEnum.TEXT:
-              state.messages.insert(0, SocketUtils().buildUserText(msg.content.em(), UserInfoEntity.fromJson(item.getFromInfo()),createdAt:
-              DateUtil.getDateMsByTimeStr(item.createTime.em())));
-              break;
-            case MessageTypeEnum.IMAGE:
-              state.messages.insert(0, SocketUtils().buildUserImageUrl(msg.content.em(), UserInfoEntity.fromJson(item.getFromInfo()),createdAt:
-              DateUtil.getDateMsByTimeStr(item.createTime.em())));
-              break;
-            case MessageTypeEnum.FILE:
-              state.messages.insert(0, SocketUtils().buildUserFileUrl(msg.content.em(), UserInfoEntity.fromJson(item.getFromInfo()),createdAt:
-              DateUtil.getDateMsByTimeStr(item.createTime.em())));
-              break;
-            default:
-              break;
-          }
-        });
+          insertMessageList(msg,item.getFromInfo(),item.createTime.em());
+        }
       }
     });
+  }
+
+  void insertMessageList(SocketMsgContent msg, Map<String, dynamic> fromInfo,String createTime) {
+    switch(find(msg.msgType)){
+      case MessageTypeEnum.TEXT:
+        state.messages.insert(0, SocketUtils().buildUserText(msg.content.em(), UserInfoEntity.fromJson(fromInfo),createdAt:
+        DateUtil.getDateMsByTimeStr(createTime)));
+        break;
+      case MessageTypeEnum.IMAGE:
+        state.messages.insert(0, SocketUtils().buildUserImageUrl(msg.content.em(), UserInfoEntity.fromJson(fromInfo),createdAt:
+        DateUtil.getDateMsByTimeStr(createTime)));
+        break;
+      case MessageTypeEnum.FILE:
+        state.messages.insert(0, SocketUtils().buildUserFileUrl(msg.content.em(), UserInfoEntity.fromJson(fromInfo),createdAt:
+        DateUtil.getDateMsByTimeStr(createTime)));
+        break;
+      default:
+        break;
+    }
   }
 
 
