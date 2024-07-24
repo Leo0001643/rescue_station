@@ -8,6 +8,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
+import 'package:rescue_station/app/theme/app_text_theme.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
@@ -38,6 +39,7 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
     state.chatEvent = event;
     chatCtl.group = event.group;
     chatCtl.user = event.user;
+    logic.queryChatMessage();
     super.initState();
   }
 
@@ -51,6 +53,9 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
 
   @override
   Widget build(BuildContext context) {
+    if(chatCtl.user.userId == null){
+      return Container();
+    }
     return Scaffold(
       appBar: WidgetUtils.buildAppBar(chatCtl.group.name.em(),
           actions: [
@@ -76,6 +81,7 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
             messages: state.messages.value,
             onSendPressed: (text){},
             // onMessageTap: (context, message) => logic.addMessage(),
+            textMessageBuilder: buildTextMessage,
             user: types.User(id: chatCtl.user.userId.em(),imageUrl: chatCtl.user.portrait.em()),
             showUserAvatars: false,
             showUserNames: false,
@@ -159,12 +165,18 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
     if(message.author.id == chatCtl.user.userId){
       return Container(
         margin: EdgeInsets.all(12.r),
-        child: TextMessageText(bodyTextStyle: TextStyle(fontSize: 16.sp,color: Colors.black), text: message.text),
+        child: TextMessageText(
+          bodyTextStyle: TextStyle(fontSize: 16.sp,color: Colors.black,fontFamilyFallback: AppTextTheme.fontFamily),
+          text: message.text,
+        ),
       );
     } else {
       return Container(
         margin: EdgeInsets.all(12.r),
-        child: TextMessageText(bodyTextStyle: TextStyle(fontSize: 16.sp,color: Colors.black), text: message.text),
+        child: TextMessageText(
+          bodyTextStyle: TextStyle(fontSize: 16.sp,color: Colors.black,fontFamilyFallback: AppTextTheme.fontFamily),
+          text: message.text,
+        ),
       );
     }
   }

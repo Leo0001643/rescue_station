@@ -11,6 +11,7 @@ import 'package:rescue_station/app/constant/constant.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
+import 'package:rescue_station/app/theme/app_text_theme.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
@@ -40,6 +41,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
     state.chatEvent = event;
     chatCtl.user = event.user;
     chatCtl.friend = event.friend;
+    logic.queryChatMessage();
     super.initState();
   }
 
@@ -53,6 +55,9 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
 
   @override
   Widget build(BuildContext context) {
+    if(chatCtl.user.userId == null){
+      return Container();
+    }
     return Scaffold(
       appBar: WidgetUtils.buildAppBar(chatCtl.friend.nickName.em(),
       actions: [
@@ -76,7 +81,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
             l10n: const ChatL10nZhCN(),
             messages: state.messages.value,
             // imageMessageBuilder: buildImageMessage,
-            // textMessageBuilder: buildTextMessage,
+            textMessageBuilder: buildTextMessage,
             // imageProviderBuilder: buildImageProvider,
             onSendPressed: (text){},
             // onMessageTap: (context, message) => logic.addMessage(),
@@ -160,15 +165,23 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
   }
 
   Widget buildTextMessage(types.TextMessage message, {required int messageWidth, required bool showName}) {
+    // var d = r'\\u{[0-9A-Fa-f]+}';
+    // loggerArray(["是否包含表情符号",GetUtils.hasMatch(message.text, d),message.text]);
     if(message.author.id == chatCtl.user.userId){
       return Container(
         margin: EdgeInsets.all(12.r),
-        child: TextMessageText(bodyTextStyle: TextStyle(fontSize: 16.sp,color: Colors.black), text: message.text),
+        child: TextMessageText(
+            bodyTextStyle: TextStyle(fontSize: 16.sp,color: Colors.black,fontFamilyFallback: AppTextTheme.fontFamily),
+            text: message.text,
+        ),
       );
     } else {
       return Container(
         margin: EdgeInsets.all(12.r),
-        child: TextMessageText(bodyTextStyle: TextStyle(fontSize: 16.sp,color: Colors.black), text: message.text),
+        child: TextMessageText(
+          bodyTextStyle: TextStyle(fontSize: 16.sp,color: Colors.black,fontFamilyFallback: AppTextTheme.fontFamily),
+            text: message.text,
+        ),
       );
     }
   }

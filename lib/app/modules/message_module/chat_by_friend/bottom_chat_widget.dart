@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
+import 'package:rescue_station/app/theme/app_text_theme.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
 import 'bottom_chat_controller.dart';
@@ -71,7 +72,7 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
                       if(isNotEmpty(text)){ widget.onSendChatListener(SocketUtils().buildUserText(text,chatCtl.user)); }
                       chatCtl.textController.clear();
                     },
-                    style: TextStyle(fontSize: 16.sp,color: Colors.black,fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 16.sp,color: Colors.black,fontWeight: FontWeight.w600,fontFamilyFallback: AppTextTheme.fontFamily),
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 15.h),
                       isCollapsed: true,
@@ -118,7 +119,7 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
               Obx(() {
                 return Offstage(
                   offstage: !chatCtl.emojiVisible.value,
-                  child: WidgetUtils.buildElevatedButton("发送", 60.w, 40.h, bg: color_703,onPressed: (){
+                  child: WidgetUtils.buildElevatedButton("发送", 60.w, 50.h, textSize: 10, bg: color_703,onPressed: (){
                     if(isNotEmpty(chatCtl.textController.text)){
                       widget.onSendChatListener(SocketUtils().buildUserText(chatCtl.textController.text,chatCtl.user));
                     }

@@ -52,6 +52,7 @@ dependencies:
   file_picker: 8.0.6
   #表情包
   emoji_picker_flutter: ^2.2.0
+#  google_fonts: ^6.2.1
   flutter_keyboard_visibility: ^6.0.0
   #socket通信
   web_socket_channel: ^2.4.0
@@ -92,10 +93,14 @@ flutter:
     - assets/images/banner/
     - assets/images/icon/
     - assets/music/
+    - assets/fonts/
   fonts:
     - family: rescue
       fonts:
         - asset: assets/fonts/iconfont.ttf
+    - family: NotoColorEmoji
+      fonts:
+        - asset: assets/fonts/NotoColorEmoji-Regular.ttf
 flutter_intl:
   enabled: true
 

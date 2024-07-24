@@ -115,10 +115,7 @@ class StateMessagePage extends State<MessagePage>{
         ),
         title: Text(user.nickName.em(),style: AppTextTheme.headLineStyle1,),
         subtitle: buildLastMessage(msg),
-        trailing: Transform.translate(
-            offset: Offset(AppLayout.width(18),0),
-            child : Text(DateUtil.formatDateMs(item.lastMessageTime ?? 0), style: AppTextTheme.headLineStyle0)
-        ),
+        trailing: Text(DateUtil.formatDateMs(item.lastMessageTime ?? 0), style: AppTextTheme.headLineStyle0),
       ),
     );
   }
@@ -164,10 +161,7 @@ class StateMessagePage extends State<MessagePage>{
         leading: GroupAvatarWidget(group.portrait ?? []),
         title: Text(group.name.em(),style: AppTextTheme.headLineStyle1,),
         subtitle: buildLastMessage(msg),
-        trailing: Transform.translate(
-            offset: Offset(AppLayout.width(18),0),
-            child : Text(DateUtil.formatDateMs(item.lastMessageTime ?? 0), style: AppTextTheme.headLineStyle0)
-        ),
+        trailing: Text(DateUtil.formatDateMs(item.lastMessageTime ?? 0), style: AppTextTheme.headLineStyle0),
       ),
     );
   }
@@ -175,7 +169,7 @@ class StateMessagePage extends State<MessagePage>{
   Widget buildLastMessage(SocketMsgContent msg) {
     // loggerArray(["没走这里吗",msg.msgType]);
     if(msg.msgType == MessageTypeEnum.TEXT.name){
-      return Text(msg.content.em(), style: AppTextTheme.headLineStyle0,);
+      return Text(msg.content.em(), style: TextStyle(color: AppStyles.lightGrey,fontSize: AppLayout.fontSize(14), fontFamilyFallback: AppTextTheme.fontFamily),);
     }else if(msg.msgType == MessageTypeEnum.IMAGE.name){
       return Text("[图片]", style: AppTextTheme.headLineStyle0,);
     }else if(msg.msgType == MessageTypeEnum.VOICE.name){

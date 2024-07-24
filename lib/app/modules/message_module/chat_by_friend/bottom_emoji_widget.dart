@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:rescue_station/app/theme/app_text_theme.dart';
 
 ///聊天框下方底部表情包
 class BottomEmojiWidget extends StatefulWidget {
@@ -35,6 +35,7 @@ class StateBottomEmojiWidget extends State<BottomEmojiWidget> {
           emojiSizeMax: 28 *
               (foundation.defaultTargetPlatform == TargetPlatform.iOS ? 1.2 : 1.0),
         ),
+        emojiTextStyle: TextStyle(fontFamilyFallback: AppTextTheme.fontFamily),
         swapCategoryAndBottomBar: false,
         skinToneConfig: const SkinToneConfig(),
         categoryViewConfig: const CategoryViewConfig(),
