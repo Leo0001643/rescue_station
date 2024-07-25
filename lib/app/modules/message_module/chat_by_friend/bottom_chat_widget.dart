@@ -1,4 +1,3 @@
-
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
@@ -16,11 +15,11 @@ import 'bottom_more_widget.dart';
 
 class BottomChatWidget extends StatefulWidget {
   final Function(Message msg) onSendChatListener;
+
   const BottomChatWidget(this.onSendChatListener, {super.key});
 
   @override
-  State<StatefulWidget> createState()=>StateBottomChatWidget();
-
+  State<StatefulWidget> createState() => StateBottomChatWidget();
 }
 
 class StateBottomChatWidget extends State<BottomChatWidget> {
@@ -28,8 +27,9 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
 
   @override
   void initState() {
-    chatCtl.keyboardVisibilityController.onChange.listen((visible){
-      if(visible){///当虚拟键盘显示需要隐藏表情和更多
+    chatCtl.keyboardVisibilityController.onChange.listen((visible) {
+      if (visible) {
+        ///当虚拟键盘显示需要隐藏表情和更多
         chatCtl.moreVisible.value = false;
         chatCtl.emojiVisible.value = false;
       }
@@ -66,15 +66,23 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
                     controller: chatCtl.textController,
                     textInputAction: TextInputAction.send,
                     focusNode: chatCtl.inputFocusNode,
-                    onSubmitted: (text){
+                    onSubmitted: (text) {
                       ///防止自动隐藏虚拟键盘
                       chatCtl.inputFocusNode.requestFocus();
-                      if(isNotEmpty(text)){ widget.onSendChatListener(SocketUtils().buildUserText(text,chatCtl.user)); }
+                      if (isNotEmpty(text)) {
+                        widget.onSendChatListener(
+                            SocketUtils().buildUserText(text, chatCtl.user));
+                      }
                       chatCtl.textController.clear();
                     },
-                    style: TextStyle(fontSize: 16.sp,color: Colors.black,fontWeight: FontWeight.w600,fontFamilyFallback: AppTextTheme.fontFamily),
+                    style: TextStyle(
+                        fontSize: 16.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontFamilyFallback: AppTextTheme.fontFamily),
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 15.h),
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: 10.w, vertical: 15.h),
                       isCollapsed: true,
                       border: InputBorder.none,
                       errorBorder: InputBorder.none,
@@ -87,28 +95,38 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
                 ),
               ),
               InkWell(
-                child: Icon(Icons.emoji_emotions_outlined,size: 40.r,color: color_333,),
-                onTap: (){
-                  if(chatCtl.keyboardVisibilityController.isVisible){
+                child: Icon(
+                  Icons.emoji_emotions_outlined,
+                  size: 40.r,
+                  color: color_333,
+                ),
+                onTap: () {
+                  if (chatCtl.keyboardVisibilityController.isVisible) {
                     FocusScope.of(context).unfocus();
                   }
-                  if(chatCtl.moreVisible.value){
+                  if (chatCtl.moreVisible.value) {
                     chatCtl.moreVisible.value = false;
                   }
                   chatCtl.emojiVisible.value = !chatCtl.emojiVisible.value;
                 },
               ),
-              SizedBox(width: 5.w,),
+              SizedBox(
+                width: 5.w,
+              ),
               Obx(() {
                 return Offstage(
                   offstage: chatCtl.emojiVisible.value,
                   child: InkWell(
-                    child: Icon(Icons.add_circle_outline_outlined,size: 40.r,color: color_333,),
-                    onTap: (){
-                      if(chatCtl.keyboardVisibilityController.isVisible){
+                    child: Icon(
+                      Icons.add_circle_outline_outlined,
+                      size: 40.r,
+                      color: color_333,
+                    ),
+                    onTap: () {
+                      if (chatCtl.keyboardVisibilityController.isVisible) {
                         FocusScope.of(context).unfocus();
                       }
-                      if(chatCtl.emojiVisible.value){
+                      if (chatCtl.emojiVisible.value) {
                         chatCtl.emojiVisible.value = false;
                       }
                       chatCtl.moreVisible.value = !chatCtl.moreVisible.value;
@@ -119,15 +137,19 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
               Obx(() {
                 return Offstage(
                   offstage: !chatCtl.emojiVisible.value,
-                  child: WidgetUtils.buildElevatedButton("发送", 60.w, 50.h, textSize: 10, bg: color_703,onPressed: (){
-                    if(isNotEmpty(chatCtl.textController.text)){
-                      widget.onSendChatListener(SocketUtils().buildUserText(chatCtl.textController.text,chatCtl.user));
+                  child: WidgetUtils.buildElevatedButton("发送", 60.w, 50.h,
+                      textSize: 10, bg: color_703, onPressed: () {
+                    if (isNotEmpty(chatCtl.textController.text)) {
+                      widget.onSendChatListener(SocketUtils().buildUserText(
+                          chatCtl.textController.text, chatCtl.user));
                     }
                     chatCtl.textController.clear();
                   }),
                 );
               }),
-              SizedBox(width: 5.w,),
+              SizedBox(
+                width: 5.w,
+              ),
             ],
           ),
           Obx(() {
@@ -140,7 +162,9 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
               ),
             );
           }),
-          SizedBox(height: 5.h,),
+          SizedBox(
+            height: 5.h,
+          ),
           Obx(() {
             return Offstage(
               offstage: !chatCtl.moreVisible.value,
@@ -157,9 +181,4 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
       ),
     );
   }
-
-
-
-
 }
-

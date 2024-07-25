@@ -20,6 +20,7 @@ class WidgetUtils {
       title: Text(title,style: TextStyle(fontSize: 18.sp,color: textColor ?? color_333,fontWeight: FontWeight.w700),),
       iconTheme: IconThemeData(color: textColor ?? color_333),
       centerTitle: true,
+      toolbarHeight: AppLayout.heigth(60),
       backgroundColor: backgroundColor,
       actions: actions,
     );
@@ -31,7 +32,7 @@ class WidgetUtils {
       toolbarHeight: AppLayout.heigth(120),
       backgroundColor: color_703,
       centerTitle: true,
-      title: Text(title, style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(20),fontWeight: FontWeight.w500)),
+      title: Text(title, style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(18),fontWeight: FontWeight.w500)),
       actions: [rightIcon,],
       bottom: PreferredSize(
           preferredSize: Size(double.infinity, 10.h),
@@ -51,12 +52,13 @@ class WidgetUtils {
                     Expanded(
                       child: TextField(
                         // keyboardType: TextInputType.number,
-                        style: TextStyle(fontSize: 16.sp),
+                        style: TextStyle(fontSize: 12.sp),
                         onChanged: onChange,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 10.h),
                           isCollapsed: true,
                           hintText: "搜索",
+                          hintStyle: TextStyle(fontSize: 12.sp),
                           border: InputBorder.none,
                           errorBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,

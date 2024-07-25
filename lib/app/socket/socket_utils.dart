@@ -18,10 +18,10 @@ import 'package:rescue_station/app/utils/audio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:web_socket_channel/html.dart';
-import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/adapter_web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket/io_web_socket.dart';
 
 /// Author: Soushin
 /// Date: 2024/2/26 16:53
@@ -54,13 +54,13 @@ class SocketUtils{
     loggerArray(["开始连接",url,]);
     // SendPort sendPort = params[0];
     if(GetPlatform.isWeb){
-      channel = HtmlWebSocketChannel.connect(uri);
+      channel = WebSocketChannel.connect(uri);
     } else {
       HttpClient client = HttpClient();
       client.badCertificateCallback = (X509Certificate cr, String host, int port) {
         return true;
       };
-      channel = IOWebSocketChannel.connect(uri,customClient: client);
+      channel = AdapterWebSocketChannel(IOWebSocket.fromWebSocket(await WebSocket.connect(url,customClient: client)));
     }
     channel?.ready.then((value) {
       isConnect = true;

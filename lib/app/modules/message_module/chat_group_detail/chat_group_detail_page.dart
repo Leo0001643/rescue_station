@@ -30,7 +30,6 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,20 +38,27 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
         children: [
           Container(
             color: Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 15.w),
+            padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 15.w),
             child: Obx(() {
-              if(isEmpty(state.groupDetail.value.user)){
+              if (isEmpty(state.groupDetail.value.user)) {
                 return Container();
               }
               return Row(
                 children: [
-                  ...state.groupDetail.value.user!.map((item){
+                  ...state.groupDetail.value.user!.map((item) {
                     return Container(
                       margin: EdgeInsets.symmetric(horizontal: 10.w),
                       child: Column(
                         children: [
-                          WidgetUtils.buildImage(item.portrait.em(), 45.r, 45.r),
-                          Text(item.nickName.em(),style: TextStyle(fontSize: 12.sp,color: color_333,),),
+                          WidgetUtils.buildImage(
+                              item.portrait.em(), 45.r, 45.r),
+                          Text(
+                            item.nickName.em(),
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: color_333,
+                            ),
+                          ),
                         ],
                       ),
                     );
@@ -63,40 +69,63 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
               );
             }),
           ),
-          SizedBox(height: 15.h,),
+          SizedBox(
+            height: 15.h,
+          ),
           ListTile(
-            title: Text("消息免打扰",style: TextStyle(fontSize: 15.sp,color: Colors.black),),
+            title: Text(
+              "消息免打扰",
+              style: TextStyle(fontSize: 15.sp, color: Colors.black),
+            ),
             trailing: Obx(() {
               return Switch(
                 value: state.isDisturb.value,
-                onChanged: (value)=> logic.chatSetDisturb(value),
+                onChanged: (value) => logic.chatSetDisturb(value),
               );
             }),
             tileColor: Colors.white,
           ),
-          SizedBox(height: 1.h,),
+          SizedBox(
+            height: 1.h,
+          ),
           ListTile(
-            title: Text("置顶聊天",style: TextStyle(fontSize: 15.sp,color: Colors.black),),
+            title: Text(
+              "置顶聊天",
+              style: TextStyle(fontSize: 15.sp, color: Colors.black),
+            ),
             trailing: Obx(() {
               return Switch(
                 value: state.isTop.value,
-                onChanged: (value)=> logic.chatSetTop(value),
+                onChanged: (value) => logic.chatSetTop(value),
               );
             }),
             tileColor: Colors.white,
           ),
-          SizedBox(height: 1.h,),
-          ListTile(
-            title: Text("清空聊天记录",style: TextStyle(fontSize: 15.sp,color: Colors.black),),
-            tileColor: Colors.white,
-            onTap: ()=> logic.messageClear(),
+          SizedBox(
+            height: 1.h,
           ),
-          SizedBox(height: 10.h,),
           ListTile(
-            title: Center(child: Text("退出群聊",style: TextStyle(fontSize: 18.sp,color: Colors.red),),),
+            title: Text(
+              "清空聊天记录",
+              style: TextStyle(fontSize: 15.sp, color: Colors.black),
+            ),
             tileColor: Colors.white,
-            onTap: ()=> DialogUtils.showAlertDialog(context,"确定要退出群聊吗？").then((value){
-              if(value == true){
+            onTap: () => logic.messageClear(),
+          ),
+          SizedBox(
+            height: 10.h,
+          ),
+          ListTile(
+            title: Center(
+              child: Text(
+                "退出群聊",
+                style: TextStyle(fontSize: 18.sp, color: Colors.red),
+              ),
+            ),
+            tileColor: Colors.white,
+            onTap: () =>
+                DialogUtils.showAlertDialog(context, "确定要退出群聊吗？").then((value) {
+              if (value == true) {
                 logic.leaveGroup();
               }
             }),
@@ -105,5 +134,4 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
       ),
     );
   }
-
 }

@@ -26,7 +26,6 @@ class _ChatFriendDetailPageState extends State<ChatFriendDetailPage> {
     super.initState();
   }
 
-
   @override
   void dispose() {
     Get.delete<ChatFriendDetailLogic>();
@@ -41,13 +40,20 @@ class _ChatFriendDetailPageState extends State<ChatFriendDetailPage> {
         children: [
           Container(
             color: Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 15.w),
+            padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 15.w),
             child: Row(
               children: [
                 Column(
                   children: [
-                    WidgetUtils.buildImage(state.chatEvent.friend.portrait.em(), 45.r, 45.r),
-                    Text(state.chatEvent.friend.nickName.em(),style: TextStyle(fontSize: 12.sp,color: color_333,),),
+                    WidgetUtils.buildImage(
+                        state.chatEvent.friend.portrait.em(), 45.r, 45.r),
+                    Text(
+                      state.chatEvent.friend.nickName.em(),
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: color_333,
+                      ),
+                    ),
                   ],
                 ),
                 // SizedBox(width: 10.w,),
@@ -55,41 +61,51 @@ class _ChatFriendDetailPageState extends State<ChatFriendDetailPage> {
               ],
             ),
           ),
-          SizedBox(height: 15.h,),
+          SizedBox(
+            height: 15.h,
+          ),
           ListTile(
-            title: Text("消息免打扰",style: TextStyle(fontSize: 15.sp,color: Colors.black),),
+            title: Text(
+              "消息免打扰",
+              style: TextStyle(fontSize: 15.sp, color: Colors.black),
+            ),
             trailing: Obx(() {
               return Switch(
                 value: state.isDisturb.value,
-                onChanged: (value)=> logic.chatSetDisturb(value),
+                onChanged: (value) => logic.chatSetDisturb(value),
               );
             }),
             tileColor: Colors.white,
           ),
-          SizedBox(height: 1.h,),
+          SizedBox(
+            height: 1.h,
+          ),
           ListTile(
-            title: Text("置顶聊天",style: TextStyle(fontSize: 15.sp,color: Colors.black),),
+            title: Text(
+              "置顶聊天",
+              style: TextStyle(fontSize: 15.sp, color: Colors.black),
+            ),
             trailing: Obx(() {
               return Switch(
                 value: state.isTop.value,
-                onChanged: (value)=> logic.chatSetTop(value),
+                onChanged: (value) => logic.chatSetTop(value),
               );
             }),
             tileColor: Colors.white,
           ),
-          SizedBox(height: 1.h,),
+          SizedBox(
+            height: 1.h,
+          ),
           ListTile(
-            title: Text("清空聊天记录",style: TextStyle(fontSize: 15.sp,color: Colors.black),),
+            title: Text(
+              "清空聊天记录",
+              style: TextStyle(fontSize: 15.sp, color: Colors.black),
+            ),
             tileColor: Colors.white,
-            onTap: ()=> logic.messageClear(),
+            onTap: () => logic.messageClear(),
           ),
         ],
       ),
     );
   }
-
-
-
-
-
 }

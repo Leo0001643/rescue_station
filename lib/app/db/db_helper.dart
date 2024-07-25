@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:common_utils/common_utils.dart';
-import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
 import 'package:rescue_station/app/db/chat_message_table.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
@@ -12,6 +12,8 @@ import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+
+
 
 class DbHelper {
   DbHelper._internal();
@@ -32,7 +34,7 @@ class DbHelper {
 
   Future<void> init() async {
     var version = 1;
-    if(GetPlatform.isWeb){
+    if(kIsWeb){
       db = await databaseFactoryFfiWeb.openDatabase("rescue.db",
           options: OpenDatabaseOptions(
             version: version,

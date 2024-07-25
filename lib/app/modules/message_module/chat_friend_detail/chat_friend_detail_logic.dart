@@ -25,13 +25,14 @@ class ChatFriendDetailLogic extends GetxController {
   }
 
   ///聊天置顶
-  void chatSetTop(bool value){
+  void chatSetTop(bool value) {
     EasyLoading.show();
     state.chatEvent.messageBox.isTop = value ? 1 : 0;
     var group = state.chatEvent.messageBox;
-    DioUtil().post(Api.CHAT_FRIEND_TOP,data: {"userId":group.boxId,"top": value ? "Y":"N"}).then((result){
-      if(result.data["code"] == 200){
-        DbHelper().updateMessageBox(state.chatEvent.messageBox).then((v){
+    DioUtil().post(Api.CHAT_FRIEND_TOP,
+        data: {"userId": group.boxId, "top": value ? "Y" : "N"}).then((result) {
+      if (result.data["code"] == 200) {
+        DbHelper().updateMessageBox(state.chatEvent.messageBox).then((v) {
           state.isTop.value = value;
           //聊天列表信息变更，需要刷新列表
           eventBus.fire(NewChatEvent());
@@ -41,26 +42,29 @@ class ChatFriendDetailLogic extends GetxController {
         EasyLoading.dismiss();
         Get.snackbar('提醒', result.data["msg"]);
       }
-    }).onError((e,stack){
+    }).onError((e, stack) {
       EasyLoading.dismiss();
       Get.snackbar('提醒', "系统异常！");
     });
   }
 
   ///免打扰
-  void chatSetDisturb(bool value){
+  void chatSetDisturb(bool value) {
     EasyLoading.show();
     state.chatEvent.messageBox.isDisturb = value ? 1 : 0;
-    DbHelper().updateMessageBox(state.chatEvent.messageBox).then((v){
+    DbHelper().updateMessageBox(state.chatEvent.messageBox).then((v) {
       state.isDisturb.value = value;
       EasyLoading.dismiss();
     });
   }
 
   ///清空消息
-  void messageClear(){
+  void messageClear() {
     EasyLoading.show();
-    DbHelper().deleteHistoryMessage(AppData.getUser()!.userId.em(), state.chatEvent.messageBox.boxId.em()).then((v){
+    DbHelper()
+        .deleteHistoryMessage(AppData.getUser()!.userId.em(),
+            state.chatEvent.messageBox.boxId.em())
+        .then((v) {
       eventBus.fire(ChartHistoryClearEvent());
       //聊天列表信息变更，需要刷新列表
       eventBus.fire(NewChatEvent());
@@ -68,8 +72,4 @@ class ChatFriendDetailLogic extends GetxController {
       showToasty("已清空");
     });
   }
-
-
-
-
 }

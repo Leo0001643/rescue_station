@@ -13,11 +13,11 @@ import 'bottom_chat_controller.dart';
 ///聊天框下方底部更多
 class BottomMoreWidget extends StatefulWidget {
   final Function(Message msg) onSendChatListener;
+
   const BottomMoreWidget(this.onSendChatListener, {super.key});
 
   @override
-  State<StatefulWidget> createState()=>StateBottomMoreWidget();
-
+  State<StatefulWidget> createState() => StateBottomMoreWidget();
 }
 
 class StateBottomMoreWidget extends State<BottomMoreWidget> {
@@ -30,29 +30,46 @@ class StateBottomMoreWidget extends State<BottomMoreWidget> {
       child: Row(
         children: [
           IconButton(
-              onPressed: (){
-                FilePicker.platform.pickFiles(type: FileType.image).then((result){
-                  print("选择的图片${result?.names.toString()}");
-                  if(result?.count == 1){ widget.onSendChatListener(SocketUtils().buildUserImage(result!.files[0],chatCtl.user)); }
-                });
-                chatCtl.moreVisible.value = false;
-              },
-              icon: Image.asset(ImageFont.select_img,width: 60.r, height: 60.r,),
-          ),
-          SizedBox(width: 10.w,),
-          IconButton(
-            onPressed: (){
-              FilePicker.platform.pickFiles().then((result){
-                print("选择的文件${result?.names.toString()}");
-                if(result?.count == 1){ widget.onSendChatListener(SocketUtils().buildUserFile(result!.files[0],chatCtl.user)); }
+            onPressed: () {
+              FilePicker.platform
+                  .pickFiles(type: FileType.image)
+                  .then((result) {
+                print("选择的图片${result?.names.toString()}");
+                if (result?.count == 1) {
+                  widget.onSendChatListener(SocketUtils()
+                      .buildUserImage(result!.files[0], chatCtl.user));
+                }
               });
               chatCtl.moreVisible.value = false;
             },
-            icon: Image.asset(ImageFont.select_file,width: 60.r, height: 60.r,),
+            icon: Image.asset(
+              ImageFont.select_img,
+              width: 60.r,
+              height: 60.r,
+            ),
+          ),
+          SizedBox(
+            width: 10.w,
+          ),
+          IconButton(
+            onPressed: () {
+              FilePicker.platform.pickFiles().then((result) {
+                print("选择的文件${result?.names.toString()}");
+                if (result?.count == 1) {
+                  widget.onSendChatListener(SocketUtils()
+                      .buildUserFile(result!.files[0], chatCtl.user));
+                }
+              });
+              chatCtl.moreVisible.value = false;
+            },
+            icon: Image.asset(
+              ImageFont.select_file,
+              width: 60.r,
+              height: 60.r,
+            ),
           ),
         ],
       ),
     );
   }
-
 }

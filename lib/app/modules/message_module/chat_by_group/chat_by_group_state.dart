@@ -10,6 +10,4 @@ class ChatByGroupState {
   final RxList<types.Message> messages = RxList.empty(growable: true);
 
   late ChatGroupEvent chatEvent;
-
-
 }

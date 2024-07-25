@@ -12,7 +12,4 @@ class ChatByFriendState {
   final RxList<types.Message> messages = RxList.empty(growable: true);
 
   late ChatEvent chatEvent;
-
-
-
 }

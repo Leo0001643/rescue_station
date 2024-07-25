@@ -10,10 +10,7 @@ class ChatFriendDetailState {
 
   ///是否免打扰
   var isDisturb = false.obs;
+
   ///是否置顶
   var isTop = false.obs;
-
-
-
-
 }

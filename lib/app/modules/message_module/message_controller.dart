@@ -16,8 +16,7 @@ import 'package:rescue_station/app/utils/dio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
-class MessageController extends GetxController{
-
+class MessageController extends GetxController {
   var messages = RxList<MessageBoxTable>.empty(growable: true);
   StreamSubscription? friendDelSub;
   StreamSubscription? newChatSub;
@@ -51,19 +50,18 @@ class MessageController extends GetxController{
 
   void getMessageList() {
     var user = AppData.getUser();
-    if(isNotEmpty(user)){
-      DbHelper().queryMessageBox(user!.userId.em()).then((v){
-        loggerArray(["查询消息列表结果",v,MessageTypeEnum.TEXT.name]);
+    if (isNotEmpty(user)) {
+      DbHelper().queryMessageBox(user!.userId.em()).then((v) {
+        loggerArray(["查询消息列表结果", v, MessageTypeEnum.TEXT.name]);
         messages.value = v;
       });
     }
   }
 
-
-  void chatSetTop(MessageBoxTable chat){
+  void chatSetTop(MessageBoxTable chat) {
     EasyLoading.show();
     chat.isTop = chat.getIsTop() ? 0 : 1;
-    DbHelper().updateMessageBox(chat).then((v){
+    DbHelper().updateMessageBox(chat).then((v) {
       ///置顶成功刷新数据
       getMessageList();
       EasyLoading.dismiss();
@@ -71,17 +69,14 @@ class MessageController extends GetxController{
   }
 
   ///删除群组聊天框以及聊天记录
-  void chatDelete(MessageBoxTable chat){
+  void chatDelete(MessageBoxTable chat) {
     EasyLoading.show();
-    DbHelper().deleteMessageBox(AppData.getUser()!.userId.em(), chat.boxId.em()).then((v){
+    DbHelper()
+        .deleteMessageBox(AppData.getUser()!.userId.em(), chat.boxId.em())
+        .then((v) {
       ///删除成功刷新数据
       getMessageList();
       EasyLoading.dismiss();
     });
   }
-
-
-
-
-
 }

@@ -1,4 +1,3 @@
-
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,31 +26,31 @@ class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
 
   @override
-  State<StatefulWidget> createState() =>StateMessagePage();
-
+  State<StatefulWidget> createState() => StateMessagePage();
 }
 
-class StateMessagePage extends State<MessagePage>{
+class StateMessagePage extends State<MessagePage> {
   final controller = Get.find<MessageController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WidgetUtils.buildSearchAppBar(context,"消息",Container()),
+      appBar: WidgetUtils.buildSearchAppBar(context, "消息", Container()),
       body: Obx(() {
         return ListView.separated(
           itemCount: controller.messages.length,
           separatorBuilder: (context, index) {
             return Padding(
                 padding: EdgeInsets.only(left: AppLayout.width(80)),
-                child: Divider(height: AppLayout.heigth(0),color: AppStyles.lightGreyWile)
-            );
+                child: Divider(
+                    height: AppLayout.heigth(0),
+                    color: AppStyles.lightGreyWile));
           },
           itemBuilder: (context, index) {
             var item = controller.messages[index];
-            if(item.boxType == 0){
+            if (item.boxType == 0) {
               return buildMessageBox(item);
-            }else {
+            } else {
               return buildGroupMessageBox(item);
             }
           },
@@ -71,8 +70,12 @@ class StateMessagePage extends State<MessagePage>{
         // dismissible: DismissiblePane(onDismissed: () {}),
         children: [
           SlidableAction(
-            onPressed: (context)=> DialogUtils.showAlertDialog(context,"确定要删除该对话吗？").then((value){
-              if(value == true){ controller.chatDelete(item); }
+            onPressed: (context) =>
+                DialogUtils.showAlertDialog(context, "确定要删除该对话吗？")
+                    .then((value) {
+              if (value == true) {
+                controller.chatDelete(item);
+              }
             }),
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
@@ -81,7 +84,7 @@ class StateMessagePage extends State<MessagePage>{
             label: '删除',
           ),
           SlidableAction(
-            onPressed: (context)=> controller.chatSetTop(item),
+            onPressed: (context) => controller.chatSetTop(item),
             backgroundColor: Colors.lightGreen,
             foregroundColor: Colors.white,
             flex: 3,
@@ -93,8 +96,9 @@ class StateMessagePage extends State<MessagePage>{
       child: ListTile(
         onTap: () {
           var my = AppData.getUser();
-          if(isNotEmpty(my)){
-            Get.toNamed(Routes.CHAT_BY_FRIEND,arguments: ChatEvent(my!, user, item));
+          if (isNotEmpty(my)) {
+            Get.toNamed(Routes.CHAT_BY_FRIEND,
+                arguments: ChatEvent(my!, user, item));
           }
         },
         leading: GFAvatar(
@@ -113,9 +117,13 @@ class StateMessagePage extends State<MessagePage>{
             ),
           ),
         ),
-        title: Text(user.nickName.em(),style: AppTextTheme.headLineStyle1,),
+        title: Text(
+          user.nickName.em(),
+          style: AppTextTheme.headLineStyle1,
+        ),
         subtitle: buildLastMessage(msg),
-        trailing: Text(DateUtil.formatDateMs(item.lastMessageTime ?? 0), style: AppTextTheme.headLineStyle0),
+        trailing: Text(DateUtil.formatDateMs(item.lastMessageTime ?? 0),
+            style: AppTextTheme.headLineStyle0),
       ),
     );
   }
@@ -130,8 +138,12 @@ class StateMessagePage extends State<MessagePage>{
         // dismissible: DismissiblePane(onDismissed: () {}),
         children: [
           SlidableAction(
-            onPressed: (context)=> DialogUtils.showAlertDialog(context,"确定要删除该对话吗？").then((value){
-              if(value == true){ controller.chatDelete(item); }
+            onPressed: (context) =>
+                DialogUtils.showAlertDialog(context, "确定要删除该对话吗？")
+                    .then((value) {
+              if (value == true) {
+                controller.chatDelete(item);
+              }
             }),
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
@@ -141,7 +153,7 @@ class StateMessagePage extends State<MessagePage>{
             label: '删除',
           ),
           SlidableAction(
-            onPressed: (context)=> controller.chatSetTop(item),
+            onPressed: (context) => controller.chatSetTop(item),
             backgroundColor: Colors.lightGreen,
             foregroundColor: Colors.white,
             padding: EdgeInsets.zero,
@@ -154,37 +166,55 @@ class StateMessagePage extends State<MessagePage>{
       child: ListTile(
         onTap: () {
           var my = AppData.getUser();
-          if(isNotEmpty(my)){
-            Get.toNamed(Routes.CHAT_BY_GROUP,arguments: ChatGroupEvent(my!, group, item));
+          if (isNotEmpty(my)) {
+            Get.toNamed(Routes.CHAT_BY_GROUP,
+                arguments: ChatGroupEvent(my!, group, item));
           }
         },
         leading: GroupAvatarWidget(group.portrait ?? []),
-        title: Text(group.name.em(),style: AppTextTheme.headLineStyle1,),
+        title: Text(
+          group.name.em(),
+          style: AppTextTheme.headLineStyle1,
+        ),
         subtitle: buildLastMessage(msg),
-        trailing: Text(DateUtil.formatDateMs(item.lastMessageTime ?? 0), style: AppTextTheme.headLineStyle0),
+        trailing: Text(DateUtil.formatDateMs(item.lastMessageTime ?? 0),
+            style: AppTextTheme.headLineStyle0),
       ),
     );
   }
 
   Widget buildLastMessage(SocketMsgContent msg) {
     // loggerArray(["没走这里吗",msg.msgType]);
-    if(msg.msgType == MessageTypeEnum.TEXT.name){
-      return Text(msg.content.em(), style: TextStyle(color: AppStyles.lightGrey,fontSize: AppLayout.fontSize(14), fontFamilyFallback: AppTextTheme.fontFamily),);
-    }else if(msg.msgType == MessageTypeEnum.IMAGE.name){
-      return Text("[图片]", style: AppTextTheme.headLineStyle0,);
-    }else if(msg.msgType == MessageTypeEnum.VOICE.name){
-      return Text("[语音]", style: AppTextTheme.headLineStyle0,);
-    }else if(msg.msgType == MessageTypeEnum.VIDEO.name){
-      return Text("[视频]", style: AppTextTheme.headLineStyle0,);
-    }else if(msg.msgType == MessageTypeEnum.FILE.name){
-      return Text("[文件]", style: AppTextTheme.headLineStyle0,);
-    }else {
+    if (msg.msgType == MessageTypeEnum.TEXT.name) {
+      return Text(
+        msg.content.em(),
+        style: TextStyle(
+            color: AppStyles.lightGrey,
+            fontSize: AppLayout.fontSize(14),
+            fontFamilyFallback: AppTextTheme.fontFamily),
+      );
+    } else if (msg.msgType == MessageTypeEnum.IMAGE.name) {
+      return Text(
+        "[图片]",
+        style: AppTextTheme.headLineStyle0,
+      );
+    } else if (msg.msgType == MessageTypeEnum.VOICE.name) {
+      return Text(
+        "[语音]",
+        style: AppTextTheme.headLineStyle0,
+      );
+    } else if (msg.msgType == MessageTypeEnum.VIDEO.name) {
+      return Text(
+        "[视频]",
+        style: AppTextTheme.headLineStyle0,
+      );
+    } else if (msg.msgType == MessageTypeEnum.FILE.name) {
+      return Text(
+        "[文件]",
+        style: AppTextTheme.headLineStyle0,
+      );
+    } else {
       return Container();
     }
   }
-
 }
-
-
-
-

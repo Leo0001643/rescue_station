@@ -8,12 +8,12 @@ class ChatGroupDetailState {
   }
 
   late ChatGroupEvent chatEvent;
+
   ///是否免打扰
   var isDisturb = false.obs;
+
   ///是否置顶
   var isTop = false.obs;
 
   var groupDetail = GroupDetailEntity().obs;
-
-
 }
