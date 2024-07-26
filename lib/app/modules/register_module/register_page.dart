@@ -43,7 +43,7 @@ class RegisterPage extends GetView<RegisterController> {
                   Image.asset('assets/images/icon/logo.png', height: AppLayout.heigth(100)),
                   Gap(AppLayout.heigth(20)),
                   Text('会员注册', style: TextStyle(fontSize: AppLayout.fontSize(20), color: Colors.white, fontWeight:FontWeight.w900)),
-                  Gap(AppLayout.heigth(40)),
+                  Gap(AppLayout.heigth(30)),
                   TextFormField(
                     controller: controller.phoneController,
                     decoration: InputDecoration(
@@ -191,12 +191,12 @@ class RegisterPage extends GetView<RegisterController> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      fixedSize: Size(AppLayout.width(366), AppLayout.heigth(60)),
+                      fixedSize: Size(AppLayout.width(300), AppLayout.heigth(46)),
                       backgroundColor: const Color(0xFFC249EC),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AppLayout.heigth(12)),
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(100), vertical: AppLayout.width(18)),
+                      // padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(100), vertical: AppLayout.width(18)),
                     ),
                     child: Text('提交注册', style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(18), fontWeight: FontWeight.w900)),
                   ),

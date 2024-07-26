@@ -52,8 +52,8 @@ class LoginPage extends GetView<LoginController> {
           children: [
             Image.asset('assets/images/icon/logo.png', height: AppLayout.heigth(100)),
             Gap(AppLayout.heigth(20)),
-            Text('登录',style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(26), fontWeight: FontWeight.w900)),
-            Gap(AppLayout.heigth(40)),
+            Text('登录',style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(20), fontWeight: FontWeight.w900)),
+            Gap(AppLayout.heigth(30)),
             Form(
                 key: _formKey,
                 child: Column(
@@ -139,12 +139,12 @@ class LoginPage extends GetView<LoginController> {
                     Gap(AppLayout.heigth(20)),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        fixedSize: Size(AppLayout.width(366), AppLayout.heigth(60)),
+                        fixedSize: Size(AppLayout.width(300), AppLayout.heigth(48)),
                         backgroundColor: const Color.fromRGBO(100, 42, 248, 1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppLayout.heigth(12)),
                         ),
-                        padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(100), vertical: AppLayout.width(18)),
+                        // padding: EdgeInsets.symmetric(horizontal: AppLayout.heigth(100), vertical: AppLayout.width(18)),
                       ),
                       child: Text('登录', style: TextStyle(color: Colors.white, fontSize: AppLayout.fontSize(18), fontWeight: FontWeight.w900)),
                       onPressed: (){

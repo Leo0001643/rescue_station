@@ -23,7 +23,7 @@ class StateHomePage extends State<HomePage>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(AppLayout.heigth(50)),
+          preferredSize: Size.fromHeight(AppLayout.heigth(60)),
           child: AppBar(
             elevation: 0,
             leading: Icon(Icons.abc_rounded, size: AppLayout.fontSize(50)),
@@ -42,13 +42,13 @@ class StateHomePage extends State<HomePage>{
               _swiper(),
               Gap(AppLayout.heigth(8)),
               _marquee(),
-              Gap(AppLayout.heigth(60)),
+              Gap(AppLayout.heigth(30)),
               Center(child: Text("最高申请额度", style: AppTextTheme.headLineStyle4)),
               Gap(AppLayout.heigth(30)),
               Center(child: Text("${controller.loanAmount.value}￥", style: AppTextTheme.headLineStyle4)),
               Gap(AppLayout.heigth(30)),
               _loanSlider(context),
-              Gap(AppLayout.heigth(120)),
+              Gap(AppLayout.heigth(48)),
               _submit()
             ],
           ),
@@ -60,8 +60,8 @@ class StateHomePage extends State<HomePage>{
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppLayout.width(8)),
       child: SizedBox(
-        width: AppLayout.width(1080),
-        height: AppLayout.heigth(160),
+        width: double.infinity,
+        height: AppLayout.heigth(140),
         child: Swiper(
             autoplay: true,
             loop: true,
@@ -156,8 +156,8 @@ class StateHomePage extends State<HomePage>{
   Widget _submit(){
     return InkWell(
       child: Container(
-        height: AppLayout.heigth(60),
-        width: AppLayout.width(300),
+        height: AppLayout.heigth(46),
+        width: AppLayout.width(260),
         decoration: BoxDecoration(
             color: AppStyles.buttonColor,
             borderRadius: BorderRadius.circular(8)

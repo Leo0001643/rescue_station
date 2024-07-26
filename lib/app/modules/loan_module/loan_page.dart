@@ -91,7 +91,7 @@ class LoanPage extends GetView<LoanController> {
                     InkWell(
                       onTap: controller.submitForm,
                       child: Container(
-                        height: AppLayout.heigth(60),
+                        height: AppLayout.heigth(48),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: AppStyles.buttonColor),
                         child: Text('提交申请',style: TextStyle(fontSize: AppLayout.fontSize(18),color: Colors.white, fontWeight: FontWeight.w600),textAlign: TextAlign.center,),
