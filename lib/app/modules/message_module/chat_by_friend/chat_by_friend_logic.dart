@@ -132,10 +132,7 @@ class ChatByFriendLogic extends GetxController {
 
   void queryChatMessage() {
     state.messages.clear();
-    DbHelper()
-        .queryChatMessageBox(
-            AppData.getUser()!.userId.em(), chatCtl.friend.userId.em())
-        .then((v) {
+    DbHelper().queryChatMessageBox(AppData.getUser()!.userId.em(), chatCtl.friend.userId.em()).then((v) {
       if (v.isNotEmpty) {
         for (var item in v) {
           var msg = SocketMsgContent.fromJson(item.getMsgContent());

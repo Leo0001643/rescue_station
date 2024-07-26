@@ -152,6 +152,13 @@ class DbHelper {
 
 
   Future<int> addChatMessageBox(ChatMessageTable message) async {
+    ///根据msgId查询有没有存储过这条消息，存储过则返回不再存储
+    if(isNotEmpty(message.msgId)){
+      var list = await db.query(chatMessageTable,where: "msgId = ?",whereArgs: [message.msgId]);
+      if(list.isNotEmpty){
+        return 0;
+      }
+    }
     return db.insert(chatMessageTable, message.toJson());
   }
 
@@ -186,8 +193,12 @@ class DbHelper {
     var user = AppData.getUser()!;
     if(message.msgContent != null){
       ///缓存消息到数据库
-      await DbHelper().addChatMessageBox(ChatMessageTable.fromJson2(user.userId.em(),
+      var count = await DbHelper().addChatMessageBox(ChatMessageTable.fromJson2(user.userId.em(),
           message.boxId!,isSend ? AppData.getUser()!:message.fromInfo!,message));
+      ///存在已经存储过的聊天消息，不需要更新
+      if(count == 0){
+        return;
+      }
     }
     var userId = user.userId.em();
     var v = await DbHelper().findMessageBox(userId.em(),message.boxId!);

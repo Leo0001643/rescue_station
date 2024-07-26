@@ -132,12 +132,10 @@ class ChatByGroupLogic extends GetxController {
   }
 
   void queryChatMessage() {
-    DbHelper()
-        .queryChatMessageBox(
-            AppData.getUser()!.userId.em(), chatCtl.group.groupId.em())
-        .then((v) {
+    DbHelper().queryChatMessageBox(AppData.getUser()!.userId.em(), chatCtl.group.groupId.em()).then((v) {
       if (v.isNotEmpty) {
         for (var item in v) {
+          loggerArray(["输出一下消息id",item.msgId]);
           var msg = SocketMsgContent.fromJson(item.getMsgContent());
           insertMessageList(msg, item.getFromInfo(), item.createTime.em());
         }
@@ -149,23 +147,17 @@ class ChatByGroupLogic extends GetxController {
       SocketMsgContent msg, Map<String, dynamic> fromInfo, String createTime) {
     switch (find(msg.msgType)) {
       case MessageTypeEnum.TEXT:
-        state.messages.insert(
-            0,
-            SocketUtils().buildUserText(
+        state.messages.insert(0, SocketUtils().buildUserText(
                 msg.content.em(), UserInfoEntity.fromJson(fromInfo),
                 createdAt: DateUtil.getDateMsByTimeStr(createTime)));
         break;
       case MessageTypeEnum.IMAGE:
-        state.messages.insert(
-            0,
-            SocketUtils().buildUserImageUrl(
+        state.messages.insert(0, SocketUtils().buildUserImageUrl(
                 msg.content.em(), UserInfoEntity.fromJson(fromInfo),
                 createdAt: DateUtil.getDateMsByTimeStr(createTime)));
         break;
       case MessageTypeEnum.FILE:
-        state.messages.insert(
-            0,
-            SocketUtils().buildUserFileUrl(
+        state.messages.insert(0, SocketUtils().buildUserFileUrl(
                 msg.content.em(), UserInfoEntity.fromJson(fromInfo),
                 createdAt: DateUtil.getDateMsByTimeStr(createTime)));
         break;
