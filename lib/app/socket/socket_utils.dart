@@ -1,7 +1,9 @@
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:common_utils/common_utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:get/get.dart';
@@ -65,6 +67,9 @@ class SocketUtils{
     channel?.ready.then((value) {
       isConnect = true;
       callback?.call(true);
+      if(periodicTimer == null){
+        pengPeriodic();
+      }
       // sendPort.send(buildMessage("connected"));
     });
     channel?.stream.interval(const Duration(seconds: 1)).listen((event) {
@@ -72,7 +77,9 @@ class SocketUtils{
       ///{"msgId":"1805140119376756738","pushType":"MSG","msgContent":{"msgType":"TEXT","content":"哈哈哈哈","top":"N","disturb":"N"},"fromInfo":{"nickName":"上官婉儿","portrait":"http://q3z3-im.oss-cn-beijing.aliyuncs.com/61bed1c563de173eb00e8d8c.png","userId":"1800817039510786049","userType":"self"},"createTime":"2024-06-23 23:25:20","groupInfo":{}}
       ///{"msgId":"1805438066169634817","pushType":"NOTICE","msgContent":{"friendApply":{"count":1},"topicRed":{},"topicReply":{}},"createTime":"2024-06-24 19:09:13","groupInfo":{}}
       ///{"msgId":"1808765416252825601","pushType":"MSG","msgContent":{"msgType":"ALERT","content":"你邀请貂蝉加入了群聊","top":"N","disturb":"N"},"fromInfo":{"nickName":"上官婉儿的群聊-hi1f(2)","portrait":"[\"https://img.alicdn.com/imgextra/i3/87413133/O1CN01mHA9DJ1Z0xlORnKuW_!!87413133.png\"]","userId":"1808765416043110401","userType":"normal"},"createTime":"2024-07-03 23:30:55","groupInfo":{"nickName":"上官婉儿的群聊-hi1f(2)","portrait":"[\"https://img.alicdn.com/imgextra/i3/87413133/O1CN01mHA9DJ1Z0xlORnKuW_!!87413133.png\"]","userId":"1808765416043110401"}}
-      if(event is String){
+      if(event == "ok"){
+        isConnect = true;
+      } else if(event is String){
         var dataMap = jsonDecode(event);
         switch(dataMap["pushType"]){
           case "MSG":
@@ -110,19 +117,22 @@ class SocketUtils{
         }
       }
     },onDone: (){
-      logger("长连接已关闭");
       closed();
-      // sendPort.send(buildMessage("closed"));
+      ///延时两秒自动重连
+      Future.delayed(Duration(seconds: 2),()=> reConnect());
     });
   }
 
   void closed(){
-    channel?.sink.close(status.normalClosure);
     logger("已关闭长连接");
+    isConnect = false;
+    channel?.sink.close(status.normalClosure);
   }
 
   void destroy(){
     closed();
+    periodicTimer?.cancel();
+    periodicTimer = null;
     // childSendPort?.send(buildMessage("close"));
     isConnect = false;
     Future.delayed(const Duration(milliseconds: 100),(){
@@ -135,6 +145,26 @@ class SocketUtils{
     });
   }
 
+  Timer? periodicTimer;
+  void pengPeriodic(){
+    periodicTimer = Timer.periodic(Duration(seconds: 5), (timer) {
+      channel?.sink.add("isConnect");
+    });
+  }
+
+  void reConnect() {
+    if(!isConnect && ObjectUtil.isNotEmpty(AppData.getUser()?.token)){
+      ///如果已经登录了，有token
+      SocketUtils().connect(callback: (result){
+        loggerArray(["连接结果",result]);
+        if(result){
+          ///连接成功
+        } else {
+          ///失败应退出登录
+        }
+      });
+    }
+  }
 
 
   types.Message buildUserText(String text,UserInfoEntity user,{int? createdAt}){

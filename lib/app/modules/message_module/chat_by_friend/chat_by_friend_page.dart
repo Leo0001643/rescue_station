@@ -95,7 +95,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
             showUserNames: false,
             dateLocale: Constant.locale.toString(),
             bubbleBuilder: buildBubble,
-            avatarBuilder: (user) => buildAvatar(user.imageUrl.em()),
+            // avatarBuilder: (user) => buildAvatar(user.imageUrl.em()),
             emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
             customBottomWidget:
                 BottomChatWidget((msg) => logic.sendMessage(msg)),
@@ -113,14 +113,14 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
   Widget buildBubble(child, {required message, required nextMessageInGroup}) {
     if (message.author.id == chatCtl.user.userId) {
       return Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 260.w),
+            constraints: BoxConstraints(maxWidth: 230.w),
             child: message is types.ImageMessage
                 ? child
                 : Bubble(
-                    nip: BubbleNip.rightCenter,
+                    nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.rightCenter,
                     nipOffset: -10,
                     alignment: Alignment.bottomRight,
                     color: color_65d,
@@ -138,18 +138,18 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
       );
     } else {
       return Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           buildAvatar(chatCtl.user.portrait.em()),
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 260.w),
+            constraints: BoxConstraints(maxWidth: 230.w),
             child: message is types.ImageMessage
                 ? Padding(
                     padding: EdgeInsets.only(left: 10.w),
                     child: child,
                   )
                 : Bubble(
-                    nip: BubbleNip.leftCenter,
+                    nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.leftCenter,
                     nipOffset: -10,
                     alignment: Alignment.bottomLeft,
                     color: Colors.white,
@@ -166,7 +166,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
 
   Widget buildAvatar(String image) {
     return GFAvatar(
-      radius: 30.r,
+      radius: 25.r,
       shape: GFAvatarShape.standard,
       borderRadius: BorderRadius.circular(5.r),
       backgroundImage: NetworkImage(image),

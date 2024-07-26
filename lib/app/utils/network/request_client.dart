@@ -1,12 +1,14 @@
 import 'dart:convert';
-import 'package:get/get.dart' as getx;
+
 import 'package:dio/dio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart' as getx;
 import 'package:rescue_station/app/routes/app_pages.dart';
+
+import '../../domains/api_response.dart';
 import 'RawData.dart';
 import 'api_exception.dart';
 import 'network_config.dart';
-import '../../domains/api_response.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class RequestClient {
   late Dio _dio;

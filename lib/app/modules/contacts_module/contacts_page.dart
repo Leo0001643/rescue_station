@@ -10,6 +10,7 @@ import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../theme/app_colors_theme.dart';
 import '../../utils/AppLayout.dart';
 import '../../utils/Icon.dart';
+import 'azlistview/az_listview.dart';
 import 'contacts_controller.dart';
 
 
@@ -38,77 +39,93 @@ class StateContactsPage extends State<ContactsPage> {
           onChange: (text)=> controller.filterContacts(text)
       ),
       body: Obx((){
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              ListTile(
-                leading: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.r),
-                    color: Colors.deepOrangeAccent,
-                  ),
-                  padding: EdgeInsets.all(5.r),
-                  child: Icon(Icons.add_reaction_outlined,size: 40.r,color: Colors.white,),
+        return Column(
+          children: [
+            ListTile(
+              leading: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.r),
+                  color: Colors.deepOrangeAccent,
                 ),
-                trailing: Obx(() {
-                  return Visibility(
-                    visible: controller.applyCount.value > 0,
-                    child: GFBadge(
-                      text: controller.applyCount.value.toString(),
-                      shape: GFBadgeShape.circle,
-                    ),
-                  );
-                }),
-                title: Text("新的朋友",style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
-                onTap: () => Get.toNamed(Routes.NEW_FRIEND),
+                padding: EdgeInsets.all(5.r),
+                child: Icon(Icons.add_reaction_outlined,size: 30.r,color: Colors.white,),
               ),
-              Container(
-                height: 1.h,
-                width: double.infinity,
-                color: Colors.black12,
-                margin: EdgeInsets.only(left: 80.w,right: 10.w),
-              ),
-              ListTile(
-                leading: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.r),
-                    color: Colors.green,
+              trailing: Obx(() {
+                return Visibility(
+                  visible: controller.applyCount.value > 0,
+                  child: GFBadge(
+                    text: controller.applyCount.value.toString(),
+                    shape: GFBadgeShape.circle,
                   ),
-                  padding: EdgeInsets.all(5.r),
-                  child: Icon(Icons.group,size: 40.r,color: Colors.white,),
-                ),
-                title: Text("群聊",style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
-                onTap: () => Get.toNamed(Routes.GROUP_LIST),
-              ),
-              Container(
-                height: 10.h,
-                width: double.infinity,
-                color: Colors.black12,
-              ),
-              ...controller.filteredContacts.map((contact){
-                return Column(
-                  children: [
-                    ListTile(
-                      leading: GFAvatar(
-                        backgroundImage: NetworkImage(contact.portrait.em()),
-                        radius: 25.r,
-                        shape: GFAvatarShape.standard,
-                        borderRadius: BorderRadius.circular(5.r),
-                      ),
-                      title: Text(contact.nickName.em(),style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
-                      onTap: () => Get.toNamed(Routes.FRIEND_DETAIL,arguments: contact),
-                    ),
-                    Container(
-                      height: 1.h,
-                      width: double.infinity,
-                      color: AppStyles.lightGreyWile,
-                      margin: EdgeInsets.only(left: 80.w,right: 10.w),
-                    ),
-                  ],
                 );
-              })
-            ],
-          ),
+              }),
+              title: Text("新的朋友",style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
+              onTap: () => Get.toNamed(Routes.NEW_FRIEND),
+            ),
+            Container(
+              height: 1.h,
+              width: double.infinity,
+              color: Colors.black12,
+              margin: EdgeInsets.only(left: 80.w,right: 10.w),
+            ),
+            ListTile(
+              leading: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.r),
+                  color: Colors.green,
+                ),
+                padding: EdgeInsets.all(5.r),
+                child: Icon(Icons.group,size: 30.r,color: Colors.white,),
+              ),
+              title: Text("群聊",style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
+              onTap: () => Get.toNamed(Routes.GROUP_LIST),
+            ),
+            Container(
+              height: 10.h,
+              width: double.infinity,
+              color: Colors.black12,
+            ),
+            Expanded(
+              child: AzListView(
+                data: controller.filteredContacts.value,
+                itemCount: controller.filteredContacts.length,
+                itemBuilder: (context,index){
+                  var contact = controller.filteredContacts[index];
+                  return Column(
+                    children: [
+                      Offstage(
+                        offstage: contact.isShowSuspension != true,
+                        child: Container(
+                          // color: ColorX.appBarBg2(),
+                          padding: EdgeInsets.symmetric(vertical: 8.h,horizontal: 15.w),
+                          width: 1.sw,
+                          child: Text(contact.tabIndex,style: TextStyle(fontSize: 14.sp,color: Colors.black),),
+                        ),
+                      ),
+                      ListTile(
+                        leading: GFAvatar(
+                          backgroundImage: NetworkImage(contact.portrait.em()),
+                          radius: 20.r,
+                          shape: GFAvatarShape.standard,
+                          borderRadius: BorderRadius.circular(5.r),
+                        ),
+                        title: Text(contact.nickName.em(),style: TextStyle(fontSize: 16.sp,color: Colors.black,),),
+                        onTap: () => Get.toNamed(Routes.FRIEND_DETAIL,arguments: contact),
+                      ),
+                      Container(
+                        height: 1.h,
+                        width: double.infinity,
+                        color: AppStyles.lightGreyWile,
+                        margin: EdgeInsets.only(left: 80.w,right: 10.w),
+                      ),
+                    ],
+                  );
+                },
+                padding: EdgeInsets.zero,
+                physics: BouncingScrollPhysics(),
+              ),
+            ),
+          ],
         );
       }),
     );

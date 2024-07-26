@@ -64,6 +64,8 @@ dependencies:
   cached_network_image: ^3.3.1
   just_audio: ^0.9.39
   lifecycle: ^0.8.0
+  scrollable_positioned_list: ^0.3.8
+  lpinyin: ^2.0.3
 
 dependency_overrides:
   meta: ^1.10.0 # 替换为你需要的meta库的版本号

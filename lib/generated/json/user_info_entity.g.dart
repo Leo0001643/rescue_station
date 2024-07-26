@@ -1,5 +1,7 @@
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
+import 'package:rescue_station/app/modules/contacts_module/azlistview/az_common.dart';
+
 
 UserInfoEntity $UserInfoEntityFromJson(Map<String, dynamic> json) {
   final UserInfoEntity userInfoEntity = UserInfoEntity();
@@ -75,6 +77,10 @@ UserInfoEntity $UserInfoEntityFromJson(Map<String, dynamic> json) {
   if (select != null) {
     userInfoEntity.select = select;
   }
+  final String? tabIndex = jsonConvert.convert<String>(json['tabIndex']);
+  if (tabIndex != null) {
+    userInfoEntity.tabIndex = tabIndex;
+  }
   return userInfoEntity;
 }
 
@@ -98,6 +104,7 @@ Map<String, dynamic> $UserInfoEntityToJson(UserInfoEntity entity) {
   data['phone'] = entity.phone;
   data['token'] = entity.token;
   data['select'] = entity.select;
+  data['tabIndex'] = entity.tabIndex;
   return data;
 }
 
@@ -121,6 +128,7 @@ extension UserInfoEntityExtension on UserInfoEntity {
     String? phone,
     String? token,
     bool? select,
+    String? tabIndex,
   }) {
     return UserInfoEntity()
       ..userId = userId ?? this.userId
@@ -140,6 +148,7 @@ extension UserInfoEntityExtension on UserInfoEntity {
       ..sourceLabel = sourceLabel ?? this.sourceLabel
       ..phone = phone ?? this.phone
       ..token = token ?? this.token
-      ..select = select ?? this.select;
+      ..select = select ?? this.select
+      ..tabIndex = tabIndex ?? this.tabIndex;
   }
 }

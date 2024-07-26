@@ -1,14 +1,17 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:lpinyin/lpinyin.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/friend_delete_event.dart';
 import 'package:rescue_station/app/event/logout_event.dart';
+import 'package:rescue_station/app/modules/contacts_module/azlistview/az_common.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_notice_entity.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
+import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 
 class ContactsController extends GetxController{
@@ -84,9 +87,22 @@ class ContactsController extends GetxController{
     DioUtil().post(Api.FRIEND_LIST,data: {"params":""}).then((result){
       if(result.data["code"] == 200){
         var data = JsonConvert.fromJsonAsT<List<UserInfoEntity>>(result.data["data"]) ?? [];
+        data.forEach((e){
+          var shortPy = PinyinHelper.getShortPinyin(e.nickName.em());
+          e.tabIndex = isNotEmpty(shortPy) ? shortPy[0].toUpperCase() : "#";
+        });
+        data.sort((a,b) => a.tabIndex.compareTo(b.tabIndex));
+        SuspensionUtil.setShowSuspensionStatus(data);
+        // loggerArray(["看看排序结果吧",JsonUtil.encodeObj(data)]);
         contacts.value = data.where((v)=> v.userId != user.userId).toList(growable: true);
         List<UserInfoEntity> data1 = JsonConvert.fromJsonAsT<List<UserInfoEntity>>(result.data["data"]) ?? [];
+        data1.forEach((e){
+          var shortPy = PinyinHelper.getShortPinyin(e.nickName.em());
+          e.tabIndex = isNotEmpty(shortPy) ? shortPy[0].toUpperCase() : "#";
+        });
+        data1.sort((a,b) => a.tabIndex.compareTo(b.tabIndex));
         filteredContacts.value = data1.where((v)=> v.userId != user.userId).toList(growable: true);
+        SuspensionUtil.setShowSuspensionStatus(data1);
       } else {
         Get.snackbar('联系人提醒', "系统异常！");
       }

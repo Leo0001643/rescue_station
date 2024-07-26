@@ -1,9 +1,10 @@
+import 'package:rescue_station/app/modules/contacts_module/azlistview/az_common.dart';
 import 'package:rescue_station/generated/json/base/json_field.dart';
 import 'dart:convert';
 import '../../generated/json/user_info_entity.g.dart';
 
 @JsonSerializable()
-class UserInfoEntity{
+class UserInfoEntity  extends ISuspensionBean {
 	String? userId;
 
 	String? portrait;
@@ -50,6 +51,10 @@ class UserInfoEntity{
 	String toString() {
 		return jsonEncode(this);
 	}
+	String tabIndex = "";
+
+	@override
+	String getSuspensionTag() => tabIndex;
 
 
 

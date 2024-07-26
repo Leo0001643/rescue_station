@@ -1,7 +1,6 @@
 
 import 'dart:convert';
 
-import 'package:common_utils/common_utils.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/utils/shared_preferences_util.dart';
 

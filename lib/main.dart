@@ -27,7 +27,7 @@ void main() async{
   initializeDateFormatting().then((_){
     runApp(
         ScreenUtilInit(
-            designSize: const Size(360, 800),   //设计稿的宽度和高度px
+            designSize: const Size(375, 800),   //设计稿的宽度和高度px
             minTextAdapt: true,
             splitScreenMode: true,
             builder: (context , child) {

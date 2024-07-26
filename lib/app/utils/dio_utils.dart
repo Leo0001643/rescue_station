@@ -1,11 +1,9 @@
 import 'dart:convert';
 
-import 'package:common_utils/common_utils.dart';
-import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as diod;
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:rescue_station/app/constant/constant.dart';
 import 'package:rescue_station/app/domains/upload_file_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
