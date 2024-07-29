@@ -10,10 +10,8 @@ import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/modules/message_module/group_avatar_aidget.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
-import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/dialog_utils.dart';
-import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../routes/app_pages.dart';
 import '../../theme/app_text_theme.dart';
@@ -113,6 +111,7 @@ class StateMessagePage extends State<MessagePage> {
               child: GFBadge(
                 size: 20.r,
                 shape: GFBadgeShape.circle,
+                border: BorderSide.none,
               ),
             ),
           ),
@@ -171,7 +170,7 @@ class StateMessagePage extends State<MessagePage> {
                 arguments: ChatGroupEvent(my!, group, item));
           }
         },
-        leading: GroupAvatarWidget(group.portrait ?? []),
+        leading: GroupAvatarWidget(group.portrait ?? [],unreadCount: item.unreadCount ?? 0,),
         title: Text(
           group.name.em(),
           style: AppTextTheme.headLineStyle1,

@@ -28,7 +28,7 @@ class SocketNoticeEntity {
 class SocketNoticeMsgContent {
 	SocketNoticeMsgContentFriendApply? friendApply;
 	SocketNoticeMsgContentTopicRed? topicRed;
-	SocketNoticeMsgContentTopicReply? topicReply;
+	SocketNoticeMsgContentFriendApply? topicReply;
 
 	SocketNoticeMsgContent();
 
@@ -73,17 +73,3 @@ class SocketNoticeMsgContentTopicRed {
 	}
 }
 
-@JsonSerializable()
-class SocketNoticeMsgContentTopicReply {
-
-	SocketNoticeMsgContentTopicReply();
-
-	factory SocketNoticeMsgContentTopicReply.fromJson(Map<String, dynamic> json) => $SocketNoticeMsgContentTopicReplyFromJson(json);
-
-	Map<String, dynamic> toJson() => $SocketNoticeMsgContentTopicReplyToJson(this);
-
-	@override
-	String toString() {
-		return jsonEncode(this);
-	}
-}

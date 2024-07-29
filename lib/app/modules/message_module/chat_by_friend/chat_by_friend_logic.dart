@@ -140,6 +140,13 @@ class ChatByFriendLogic extends GetxController {
         }
       }
     });
+
+    ///消息标记已读
+    DbHelper().setMessageRead(state.chatEvent.messageBox).then((v){
+      if(v){
+        eventBus.fire(NewChatEvent()); //消息未读数变更，需要刷新列表
+      }
+    });
   }
 
   void insertMessageList(

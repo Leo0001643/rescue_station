@@ -56,6 +56,7 @@ class StateContactsPage extends State<ContactsPage> {
                   child: GFBadge(
                     text: controller.applyCount.value.toString(),
                     shape: GFBadgeShape.circle,
+                    border: BorderSide.none,
                   ),
                 );
               }),

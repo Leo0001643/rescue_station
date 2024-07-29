@@ -271,7 +271,7 @@ class SocketUtils{
     final match = regex.firstMatch(sizeStr);
 
     if (match == null) {
-      logger('Invalid size format: $sizeStr');
+      logger('文件大小值不可用: $sizeStr');
       return 0;
     }
 

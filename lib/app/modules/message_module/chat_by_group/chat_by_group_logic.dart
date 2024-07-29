@@ -135,10 +135,17 @@ class ChatByGroupLogic extends GetxController {
     DbHelper().queryChatMessageBox(AppData.getUser()!.userId.em(), chatCtl.group.groupId.em()).then((v) {
       if (v.isNotEmpty) {
         for (var item in v) {
-          loggerArray(["输出一下消息id",item.msgId]);
+          // loggerArray(["输出一下消息id",item.msgId]);
           var msg = SocketMsgContent.fromJson(item.getMsgContent());
           insertMessageList(msg, item.getFromInfo(), item.createTime.em());
         }
+      }
+    });
+    ///消息标记已读
+    DbHelper().setMessageRead(state.chatEvent.messageBox).then((v){
+      loggerArray(["消息标记已读",v]);
+      if(v){
+        eventBus.fire(NewChatEvent()); //消息未读数变更，需要刷新列表
       }
     });
   }

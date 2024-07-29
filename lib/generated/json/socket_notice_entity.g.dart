@@ -67,8 +67,8 @@ SocketNoticeMsgContent $SocketNoticeMsgContentFromJson(
   if (topicRed != null) {
     socketNoticeMsgContent.topicRed = topicRed;
   }
-  final SocketNoticeMsgContentTopicReply? topicReply = jsonConvert.convert<
-      SocketNoticeMsgContentTopicReply>(json['topicReply']);
+  final SocketNoticeMsgContentFriendApply? topicReply = jsonConvert.convert<
+      SocketNoticeMsgContentFriendApply>(json['topicReply']);
   if (topicReply != null) {
     socketNoticeMsgContent.topicReply = topicReply;
   }
@@ -88,7 +88,7 @@ extension SocketNoticeMsgContentExtension on SocketNoticeMsgContent {
   SocketNoticeMsgContent copyWith({
     SocketNoticeMsgContentFriendApply? friendApply,
     SocketNoticeMsgContentTopicRed? topicRed,
-    SocketNoticeMsgContentTopicReply? topicReply,
+    SocketNoticeMsgContentFriendApply? topicReply,
   }) {
     return SocketNoticeMsgContent()
       ..friendApply = friendApply ?? this.friendApply
@@ -136,19 +136,4 @@ Map<String, dynamic> $SocketNoticeMsgContentTopicRedToJson(
 }
 
 extension SocketNoticeMsgContentTopicRedExtension on SocketNoticeMsgContentTopicRed {
-}
-
-SocketNoticeMsgContentTopicReply $SocketNoticeMsgContentTopicReplyFromJson(
-    Map<String, dynamic> json) {
-  final SocketNoticeMsgContentTopicReply socketNoticeMsgContentTopicReply = SocketNoticeMsgContentTopicReply();
-  return socketNoticeMsgContentTopicReply;
-}
-
-Map<String, dynamic> $SocketNoticeMsgContentTopicReplyToJson(
-    SocketNoticeMsgContentTopicReply entity) {
-  final Map<String, dynamic> data = <String, dynamic>{};
-  return data;
-}
-
-extension SocketNoticeMsgContentTopicReplyExtension on SocketNoticeMsgContentTopicReply {
 }

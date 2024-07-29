@@ -185,6 +185,7 @@ class DbHelper {
   }
 
   ///更新数据库中消息或者插入消息
+  ///处理消息已读未读数量
   Future<void> messageInsertOrUpdate(bool isSend,SocketMessageEntity message) async {
     var isFriend = isEmpty(message.groupInfo?.groupId);
     if(!isSend){///如果不是发送者，需要定义boxId
@@ -206,18 +207,34 @@ class DbHelper {
       ///boxId为聊天好友的id
       var boxType = isFriend ? 0 : 1;
       var fromInfo = isFriend ? jsonEncode(message.fromInfo?.toJson()) : jsonEncode(message.groupInfo?.toJson());
+      ///如果不是发送者，而且消息内容不为空,则默认消息未读数为1
+      var unreadCount = (!isSend && isNotEmpty(message.msgContent)) ? 1 : 0;
       await DbHelper().addMessageBox(MessageBoxTable(userId: userId, boxId: message.boxId, boxType: boxType, lastMessage: jsonEncode(message.msgContent?.toJson()),
-          lastMessageTime: DateUtil.getDateMsByTimeStr(message.createTime.em()),unreadCount: 0,fromInfo: fromInfo));
+          lastMessageTime: DateUtil.getDateMsByTimeStr(message.createTime.em()),unreadCount: unreadCount,fromInfo: fromInfo));
     } else {
       var fromInfo = v!.isGroup()==false ? jsonEncode(message.fromInfo?.toJson()) : jsonEncode(message.groupInfo?.toJson());
       v.fromInfo = fromInfo;
       v.lastMessageTime = DateUtil.getDateMsByTimeStr(message.createTime.em());
       v.lastMessage = jsonEncode(message.msgContent?.toJson());
+      v.unreadCount = (v.unreadCount ?? 0) + 1;
       await DbHelper().updateMessageBox(v);
     }
   }
 
-
+  ///标记消息已读
+  Future<bool> setMessageRead(MessageBoxTable table) async {
+    loggerArray(["消息标记已读111",table.unreadCount]);
+    // var msgBox = await findMessageBox(userId,boxId);
+    loggerArray(["消息标记已读2222",table.boxId,table.unreadCount]);
+    if(table.unreadCount != 0){
+      table.unreadCount = 0;
+      loggerArray(["消息标记已读5555",table.boxId]);
+      var res = await updateMessageBox(table);
+      return res > 0;
+    }
+    loggerArray(["消息标记已读4444",table.boxId]);
+    return false;
+  }
 
 
 }

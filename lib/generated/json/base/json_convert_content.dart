@@ -221,11 +221,6 @@ class JsonConvert {
           Map<String, dynamic> e) => SocketNoticeMsgContentTopicRed.fromJson(e))
           .toList() as M;
     }
-    if (<SocketNoticeMsgContentTopicReply>[] is M) {
-      return data.map<SocketNoticeMsgContentTopicReply>((
-          Map<String, dynamic> e) =>
-          SocketNoticeMsgContentTopicReply.fromJson(e)).toList() as M;
-    }
 
     debugPrint("$M not found");
 
@@ -266,8 +261,6 @@ class JsonConvertClassCollection {
         .toString(): SocketNoticeMsgContentFriendApply.fromJson,
     (SocketNoticeMsgContentTopicRed).toString(): SocketNoticeMsgContentTopicRed
         .fromJson,
-    (SocketNoticeMsgContentTopicReply)
-        .toString(): SocketNoticeMsgContentTopicReply.fromJson,
   };
 
   bool containsKey(String type) {

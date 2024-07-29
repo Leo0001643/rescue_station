@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:lifecycle/lifecycle.dart';
 import 'package:rescue_station/app/utils/audio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
@@ -56,10 +58,58 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
               controller.setCurrentIndex(index);
             }
           },
-          items: const [
+          items: [
             BottomNavigationBarItem(icon: Icon(IconFont.HOME), label: "首页"),
-            BottomNavigationBarItem(icon: Icon(IconFont.MESSAGE), label: "消息"),
-            BottomNavigationBarItem(icon: Icon(IconFont.CONTACTS), label: "通讯录"),
+            BottomNavigationBarItem(
+                label: "消息",
+                icon: Container(
+                  width: 50.w,
+                  child: Stack(
+                    children: [
+                      Center(child: Icon(IconFont.MESSAGE),),
+                      Obx(() {
+                        return Visibility(
+                          visible: controller.unReadMsg > 0,
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: GFBadge(
+                              text: "${controller.unReadMsg.value}",
+                              size: 20.sp,
+                              shape: GFBadgeShape.circle,
+                              border: BorderSide.none,
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+            ),
+            BottomNavigationBarItem(
+              label: "通讯录",
+              icon: Container(
+                width: 50.w,
+                child: Stack(
+                  children: [
+                    Center(child: Icon(IconFont.CONTACTS),),
+                    Obx(() {
+                      return Visibility(
+                        visible: controller.unReadContact > 0,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: GFBadge(
+                            text: "${controller.unReadContact.value}",
+                            size: 20.sp,
+                            shape: GFBadgeShape.circle,
+                            border: BorderSide.none,
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            ),
             BottomNavigationBarItem(icon: Icon(IconFont.MINE), label: "我的")
           ]),
     ));
