@@ -7,6 +7,7 @@ import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_text_theme.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
 import 'bottom_chat_controller.dart';
@@ -66,12 +67,16 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
                     controller: chatCtl.textController,
                     textInputAction: TextInputAction.send,
                     focusNode: chatCtl.inputFocusNode,
+                    onChanged: (text){
+                      if(text.endsWith("\n")){
+                        chatCtl.textController.text = text.replaceRange(text.length - "\n".length, text.length, "");
+                      }
+                    },
                     onSubmitted: (text) {
                       ///防止自动隐藏虚拟键盘
                       chatCtl.inputFocusNode.requestFocus();
                       if (isNotEmpty(text)) {
-                        widget.onSendChatListener(
-                            SocketUtils().buildUserText(text, chatCtl.user));
+                        widget.onSendChatListener(SocketUtils().buildUserText(text, chatCtl.user));
                       }
                       chatCtl.textController.clear();
                     },
@@ -79,10 +84,10 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
                         fontSize: 16.sp,
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
-                        fontFamilyFallback: AppTextTheme.fontFamily),
+                        fontFamilyFallback: AppTextTheme.fontFamily,
+                    ),
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: 10.w, vertical: 15.h),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
                       isCollapsed: true,
                       border: InputBorder.none,
                       errorBorder: InputBorder.none,
@@ -110,9 +115,7 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
                   chatCtl.emojiVisible.value = !chatCtl.emojiVisible.value;
                 },
               ),
-              SizedBox(
-                width: 5.w,
-              ),
+              SizedBox(width: 5.w,),
               Obx(() {
                 return Offstage(
                   offstage: chatCtl.emojiVisible.value,

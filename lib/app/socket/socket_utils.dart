@@ -167,16 +167,17 @@ class SocketUtils{
   }
 
 
-  types.Message buildUserText(String text,UserInfoEntity user,{int? createdAt}){
+  types.Message buildUserText(String text,UserInfoEntity user,{int? createdAt,types.Message? replied}){
     return types.TextMessage(
       author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
       createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
       id: randomString(),
       text: text,
+      repliedMessage: replied,
     );
   }
 
-  types.Message buildUserImage(PlatformFile image,UserInfoEntity user,{int? createdAt}){
+  types.Message buildUserImage(PlatformFile image,UserInfoEntity user,{int? createdAt,types.Message? replied}){
     if(GetPlatform.isWeb){
       return types.ImageMessage(
         author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
@@ -186,6 +187,7 @@ class SocketUtils{
         metadata: {"file":image.bytes},
         size: image.size,
         name: image.name,
+        repliedMessage: replied,
       );
     } else {
       return types.ImageMessage(
@@ -195,11 +197,12 @@ class SocketUtils{
         uri: image.path.em(),
         size: image.size,
         name: image.name,
+        repliedMessage: replied,
       );
     }
   }
 
-  types.Message buildUserFile(PlatformFile image,UserInfoEntity user,{int? createdAt}){
+  types.Message buildUserFile(PlatformFile image,UserInfoEntity user,{int? createdAt,types.Message? replied}){
     if(GetPlatform.isWeb){
       return types.FileMessage(
         author: types.User(id: user.userId.em(),imageUrl: user.portrait.em()),
@@ -209,6 +212,7 @@ class SocketUtils{
         metadata: {"file":image.bytes},
         size: image.size,
         name: image.name,
+        repliedMessage: replied,
       );
     } else {
       return types.FileMessage(
@@ -218,11 +222,12 @@ class SocketUtils{
         uri: image.path.em(),
         size: image.size,
         name: image.name,
+        repliedMessage: replied,
       );
     }
   }
 
-  types.Message buildUserImageUrl(String content,UserInfoEntity user,{int? createdAt}){
+  types.Message buildUserImageUrl(String content,UserInfoEntity user,{int? createdAt,types.Message? replied}){
     UploadFileEntity uploadFile;
     loggerArray(["这个是图片地址吗",content,isURL(content)]);
     if(isURL(content)){
@@ -238,10 +243,11 @@ class SocketUtils{
       uri: uploadFile.fullPath.em(),
       size: parseSize(uploadFile.fileSize.em()),
       name: uploadFile.fileName.em(),
+      repliedMessage: replied,
     );
   }
 
-  types.Message buildUserFileUrl(String content,UserInfoEntity user,{int? createdAt}){
+  types.Message buildUserFileUrl(String content,UserInfoEntity user,{int? createdAt,types.Message? replied}){
     UploadFileEntity uploadFile;
     if(isURL(content)){
       uploadFile = UploadFileEntity(fullPath: content);
@@ -255,6 +261,7 @@ class SocketUtils{
       uri: uploadFile.fullPath.em(),
       size: parseSize(uploadFile.fileSize.em()),
       name: uploadFile.fileName.em(),
+      repliedMessage: replied,
     );
   }
 

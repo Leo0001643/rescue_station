@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
@@ -149,6 +150,13 @@ class WidgetUtils {
     }
   }
 
+
+  void clickCopy(String value) {
+    if (isNotEmpty(value)) {
+      Clipboard.setData(ClipboardData(text: value));
+      showToasty("已复制");
+    }
+  }
 
 
 }

@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:common_utils/common_utils.dart';
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
+import 'package:rescue_station/app/domains/item_model.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/domains/upload_file_entity.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
@@ -52,6 +54,8 @@ class ChatByFriendLogic extends GetxController {
   void onClose() {
     msgReceiveSub?.cancel();
     msgClearSub?.cancel();
+    state.popCtlList.forEach((v)=> v.dispose());
+    state.popCtlList.clear();
     super.onClose();
   }
 
@@ -148,16 +152,14 @@ class ChatByFriendLogic extends GetxController {
       }
     });
   }
-
   void insertMessageList(
       SocketMsgContent msg, Map<String, dynamic> fromInfo, String createTime) {
     switch (find(msg.msgType)) {
       case MessageTypeEnum.TEXT:
         state.messages.insert(
-            0,
-            SocketUtils().buildUserText(
-                msg.content.em(), UserInfoEntity.fromJson(fromInfo),
-                createdAt: DateUtil.getDateMsByTimeStr(createTime)));
+          0, SocketUtils().buildUserText(
+          msg.content.em(), UserInfoEntity.fromJson(fromInfo),
+          createdAt: DateUtil.getDateMsByTimeStr(createTime),),);
         break;
       case MessageTypeEnum.IMAGE:
         state.messages.insert(
@@ -177,4 +179,26 @@ class ChatByFriendLogic extends GetxController {
         break;
     }
   }
+
+  void clickMessage(types.Message message,ItemModel item){
+    switch(item.index){
+      case 0:
+        if(message is types.TextMessage){
+          WidgetUtils().clickCopy(message.text);
+        }else if(message is types.ImageMessage){
+          WidgetUtils().clickCopy(message.uri);
+        }else if(message is types.FileMessage){
+          WidgetUtils().clickCopy(message.uri);
+        }
+        state.popCtlList.forEach((v)=> v.hideMenu());
+        break;
+      case 1:
+
+        break;
+    }
+  }
+
+
+
+
 }

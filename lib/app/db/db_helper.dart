@@ -216,23 +216,18 @@ class DbHelper {
       v.fromInfo = fromInfo;
       v.lastMessageTime = DateUtil.getDateMsByTimeStr(message.createTime.em());
       v.lastMessage = jsonEncode(message.msgContent?.toJson());
-      v.unreadCount = (v.unreadCount ?? 0) + 1;
+      v.unreadCount = isSend ? v.unreadCount : (v.unreadCount ?? 0) + 1;
       await DbHelper().updateMessageBox(v);
     }
   }
 
   ///标记消息已读
   Future<bool> setMessageRead(MessageBoxTable table) async {
-    loggerArray(["消息标记已读111",table.unreadCount]);
-    // var msgBox = await findMessageBox(userId,boxId);
-    loggerArray(["消息标记已读2222",table.boxId,table.unreadCount]);
     if(table.unreadCount != 0){
       table.unreadCount = 0;
-      loggerArray(["消息标记已读5555",table.boxId]);
       var res = await updateMessageBox(table);
       return res > 0;
     }
-    loggerArray(["消息标记已读4444",table.boxId]);
     return false;
   }
 

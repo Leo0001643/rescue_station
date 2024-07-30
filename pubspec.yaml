@@ -66,6 +66,7 @@ dependencies:
   lifecycle: ^0.8.0
   scrollable_positioned_list: ^0.3.8
   lpinyin: ^2.0.3
+  custom_pop_up_menu: ^1.2.4
 
 dependency_overrides:
   meta: ^1.10.0 # 替换为你需要的meta库的版本号

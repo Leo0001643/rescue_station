@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:common_utils/common_utils.dart';
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
+import 'package:rescue_station/app/domains/item_model.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/domains/upload_file_entity.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
@@ -51,6 +53,8 @@ class ChatByGroupLogic extends GetxController {
   void onClose() {
     msgReceiveSub?.cancel();
     msgClearSub?.cancel();
+    state.popCtlList.forEach((v)=> v.dispose());
+    state.popCtlList.clear();
     super.onClose();
   }
 
@@ -172,4 +176,26 @@ class ChatByGroupLogic extends GetxController {
         break;
     }
   }
+
+
+  void clickMessage(types.Message message,ItemModel item){
+    switch(item.index){
+      case 0:
+        if(message is types.TextMessage){
+          WidgetUtils().clickCopy(message.text);
+        }else if(message is types.ImageMessage){
+          WidgetUtils().clickCopy(message.uri);
+        }else if(message is types.FileMessage){
+          WidgetUtils().clickCopy(message.uri);
+        }
+        state.popCtlList.forEach((v)=> v.hideMenu());
+        break;
+      case 1:
+
+        break;
+    }
+  }
+
+
+
 }

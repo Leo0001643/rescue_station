@@ -1,3 +1,4 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -12,4 +13,7 @@ class ChatByFriendState {
   final RxList<types.Message> messages = RxList.empty(growable: true);
 
   late ChatEvent chatEvent;
+
+  var popCtlList = List<CustomPopupMenuController>.empty(growable: true);
+
 }

@@ -1,10 +1,12 @@
 import 'package:bubble/bubble.dart';
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:rescue_station/app/domains/item_model.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
@@ -117,7 +119,7 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 230.w),
             child: message is types.ImageMessage
-                ? child
+                ? buildPopChild(child,message)
                 : Bubble(
                     nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.rightCenter,
                     nipOffset: -10,
@@ -126,7 +128,7 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
                     elevation: 0,
                     margin: const BubbleEdges.all(0),
                     padding: const BubbleEdges.all(0),
-                    child: child,
+                    child: buildPopChild(child,message),
                   ),
           ),
           SizedBox(
@@ -145,7 +147,7 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
             child: message is types.ImageMessage
                 ? Padding(
                     padding: EdgeInsets.only(left: 10.w),
-                    child: child,
+                    child: buildPopChild(child,message),
                   )
                 : Bubble(
                     nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.leftCenter,
@@ -155,7 +157,7 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
                     elevation: 0,
                     margin: BubbleEdges.only(left: 10.w),
                     padding: const BubbleEdges.all(0),
-                    child: child,
+                    child: buildPopChild(child,message),
                   ),
           ),
         ],
@@ -198,4 +200,62 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
       );
     }
   }
+
+
+
+  List<ItemModel> menuItems = [
+    ItemModel('复制', Icons.content_copy,0),
+    ItemModel('转发', Icons.send,1),
+    // ItemModel('收藏', Icons.collections),
+    // ItemModel('删除', Icons.delete),
+    // ItemModel('多选', Icons.playlist_add_check),
+    ItemModel('引用', Icons.format_quote,2),
+    // ItemModel('提醒', Icons.add_alert),
+    // ItemModel('搜一搜', Icons.search),
+  ];
+
+  Widget buildPopChild(Widget child,types.Message message) {
+    var controller = CustomPopupMenuController();
+    state.popCtlList.add(controller);
+    return CustomPopupMenu(
+      pressType: PressType.singleClick,
+      controller: controller,
+      menuBuilder: ()=>buildLongPressMenu(message),
+      child: child,
+    );
+  }
+
+
+  Widget buildLongPressMenu(types.Message message) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(5),
+      child: Container(
+        color: const Color(0xFF4C4C4C),
+        padding: EdgeInsets.all(5.r),
+        child: Wrap(
+          children: menuItems.map((item) => Container(
+            margin: EdgeInsets.symmetric(horizontal: 5.w),
+            child: InkWell(
+              onTap: ()=> logic.clickMessage(message,item),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(item.icon, size: 15.r, color: Colors.white,),
+                  Container(
+                    margin: EdgeInsets.only(top: 2.h),
+                    child: Text(
+                      item.title,
+                      style: TextStyle(color: Colors.white, fontSize: 10.sp),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )).toList(),
+        ),
+      ),
+    );
+  }
+
+
 }
