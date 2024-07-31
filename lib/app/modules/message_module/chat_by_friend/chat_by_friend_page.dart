@@ -231,7 +231,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
     var controller = CustomPopupMenuController();
     state.popCtlList.add(controller);
     return CustomPopupMenu(
-      pressType: PressType.singleClick,
+      pressType: PressType.longPress,
       controller: controller,
       menuBuilder: ()=>buildLongPressMenu(message),
       child: child,

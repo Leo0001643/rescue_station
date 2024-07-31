@@ -26,6 +26,7 @@ abstract class Routes {
   static const NICK_NAME_EDIT = '/nick_name_edit';// NickNameEdit page
   static const CHAT_FRIEND_DETAIL = '/chat_friend_detail';// chat friend detail
   static const CHAT_GROUP_DETAIL = '/chat_group_detail';// chat group detail
+  static const FORWARD_MESSAGE = '/forward_message';// forward message
 
 }
 

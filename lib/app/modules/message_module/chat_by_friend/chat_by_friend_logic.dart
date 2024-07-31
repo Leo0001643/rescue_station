@@ -181,6 +181,7 @@ class ChatByFriendLogic extends GetxController {
   }
 
   void clickMessage(types.Message message,ItemModel item){
+    state.popCtlList.forEach((v)=> v.hideMenu());
     switch(item.index){
       case 0:
         if(message is types.TextMessage){
@@ -190,10 +191,11 @@ class ChatByFriendLogic extends GetxController {
         }else if(message is types.FileMessage){
           WidgetUtils().clickCopy(message.uri);
         }
-        state.popCtlList.forEach((v)=> v.hideMenu());
         break;
       case 1:
-
+        Get.toNamed(Routes.FORWARD_MESSAGE,arguments: message)?.then((v){
+          if(v == true){ showToasty("转发成功"); }
+        });
         break;
     }
   }

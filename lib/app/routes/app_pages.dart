@@ -8,6 +8,8 @@ import 'package:rescue_station/app/modules/message_module/chat_friend_detail/cha
 import 'package:rescue_station/app/modules/message_module/chat_friend_detail/chat_friend_detail_page.dart';
 import 'package:rescue_station/app/modules/message_module/chat_group_detail/chat_group_detail_binding.dart';
 import 'package:rescue_station/app/modules/message_module/chat_group_detail/chat_group_detail_page.dart';
+import 'package:rescue_station/app/modules/message_module/forward_message/forward_message_binding.dart';
+import 'package:rescue_station/app/modules/message_module/forward_message/forward_message_page.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/modules/contacts_module/group_list/group_list_binding.dart';
@@ -157,6 +159,11 @@ abstract class AppPages {
       name: Routes.CHAT_GROUP_DETAIL,
       page: () => ChatGroupDetailPage(),
       binding: ChatGroupDetailBinding(),
+    ),
+    GetPage(
+      name: Routes.FORWARD_MESSAGE,
+      page: () => ForwardMessagePage(),
+      binding: ForwardMessageBinding(),
     ),
   ];
 }

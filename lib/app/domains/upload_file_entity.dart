@@ -10,7 +10,7 @@ class UploadFileEntity {
 	String? fileType;
 	String? fileSize;
 
-	UploadFileEntity({this.fullPath});
+	UploadFileEntity({this.fullPath,this.fileName,this.fileType,this.fileSize});
 
 	factory UploadFileEntity.fromJson(Map<String, dynamic> json) => $UploadFileEntityFromJson(json);
 

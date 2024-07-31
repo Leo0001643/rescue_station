@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/event/logout_event.dart';
@@ -50,13 +51,16 @@ class TabsController extends GetxController {
       ContactsPage(),
       MinePage()
     ];
-
+    GoogleFonts.pendingFonts([GoogleFonts.notoColorEmoji()]).then((v){
+      loggerArray(["字体库加载结果",v]);
+    });
     super.onInit();
   }
 
   @override
   void onReady() {
     ifLoginInit();
+
     logoutSub = eventBus.on<LogoutEvent>().listen((v){
       isLogin.value = false;
       unReadMsg.value = 0;

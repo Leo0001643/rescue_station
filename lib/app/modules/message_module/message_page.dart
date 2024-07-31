@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:rescue_station/app/domains/group_info_entity.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
@@ -40,9 +41,8 @@ class StateMessagePage extends State<MessagePage> {
           separatorBuilder: (context, index) {
             return Padding(
                 padding: EdgeInsets.only(left: AppLayout.width(80)),
-                child: Divider(
-                    height: AppLayout.heigth(0),
-                    color: AppStyles.lightGreyWile));
+                child: Divider(height: AppLayout.heigth(0), color: AppStyles.lightGreyWile),
+            );
           },
           itemBuilder: (context, index) {
             var item = controller.messages[index];
@@ -116,13 +116,18 @@ class StateMessagePage extends State<MessagePage> {
             ),
           ),
         ),
-        title: Text(
-          user.nickName.em(),
-          style: AppTextTheme.headLineStyle1,
+        contentPadding: EdgeInsets.symmetric(horizontal: 10.w),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(user.nickName.em(), style: AppTextTheme.headLineStyle1,),
+            ),
+            Text(formatTime(item.lastMessageTime ?? 0),
+                style: AppTextTheme.headLineStyle0),
+          ],
         ),
         subtitle: buildLastMessage(msg),
-        trailing: Text(DateUtil.formatDateMs(item.lastMessageTime ?? 0),
-            style: AppTextTheme.headLineStyle0),
       ),
     );
   }
@@ -171,13 +176,16 @@ class StateMessagePage extends State<MessagePage> {
           }
         },
         leading: GroupAvatarWidget(group.portrait ?? [],unreadCount: item.unreadCount ?? 0,),
-        title: Text(
-          group.name.em(),
-          style: AppTextTheme.headLineStyle1,
+        contentPadding: EdgeInsets.symmetric(horizontal: 10.w),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: Text(group.name.em(), style: AppTextTheme.headLineStyle1,),),
+            Text(formatTime(item.lastMessageTime ?? 0),
+                style: AppTextTheme.headLineStyle0),
+          ],
         ),
         subtitle: buildLastMessage(msg),
-        trailing: Text(DateUtil.formatDateMs(item.lastMessageTime ?? 0),
-            style: AppTextTheme.headLineStyle0),
       ),
     );
   }
@@ -188,9 +196,9 @@ class StateMessagePage extends State<MessagePage> {
       return Text(
         msg.content.em(),
         style: TextStyle(
-            color: AppStyles.lightGrey,
-            fontSize: AppLayout.fontSize(14),
-            fontFamilyFallback: AppTextTheme.fontFamily),
+          color: AppStyles.lightGrey,
+          fontSize: AppLayout.fontSize(14),
+          fontFamilyFallback: AppTextTheme.fontFamily,),
       );
     } else if (msg.msgType == MessageTypeEnum.IMAGE.name) {
       return Text(
@@ -216,4 +224,9 @@ class StateMessagePage extends State<MessagePage> {
       return Container();
     }
   }
+
+  String formatTime(int time) {
+    return DateUtil.formatDateMs(time);
+  }
+
 }

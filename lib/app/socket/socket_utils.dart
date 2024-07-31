@@ -104,9 +104,11 @@ class SocketUtils{
               }
             }
             DbHelper().messageInsertOrUpdate(false,response).then((v){
-              eventBus.fire(response);
-              eventBus.fire(NewChatEvent());//有新消息，需要刷新列表
-              AudioUtils().playReceiveMsg();//播放收到消息声音
+              if(v){
+                eventBus.fire(response);
+                eventBus.fire(NewChatEvent());//有新消息，需要刷新列表
+                AudioUtils().playReceiveMsg();//播放收到消息声音
+              }
             });
             break;
           case "NOTICE":
@@ -303,6 +305,22 @@ class SocketUtils{
       default:
         logger('Invalid unit: $unit');
         return 0;
+    }
+  }
+
+  String parseFileSize(double size){
+    if(size < 1024){
+      return "${size.toStringAsFixed(2)}B";
+    }else if(size < 1024 * 1024){
+      return "${(size / 1024).toStringAsFixed(2)}KB";
+    }else if(size < 1024 * 1024 * 1024){
+      return "${(size / (1024 * 1024)).toStringAsFixed(2)}MB";
+    }else if(size < 1024 * 1024 * 1024 * 1024){
+      return "${(size / (1024 * 1024 * 1024)).toStringAsFixed(2)}GB";
+    }else if(size < 1024 * 1024 * 1024 * 1024 * 1024){
+      return "${(size / (1024 * 1024 * 1024 * 1024)).toStringAsFixed(2)}TB";
+    }else {
+      return "文件过大";
     }
   }
 

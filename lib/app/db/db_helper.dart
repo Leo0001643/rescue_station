@@ -186,7 +186,7 @@ class DbHelper {
 
   ///更新数据库中消息或者插入消息
   ///处理消息已读未读数量
-  Future<void> messageInsertOrUpdate(bool isSend,SocketMessageEntity message) async {
+  Future<bool> messageInsertOrUpdate(bool isSend,SocketMessageEntity message) async {
     var isFriend = isEmpty(message.groupInfo?.groupId);
     if(!isSend){///如果不是发送者，需要定义boxId
       message.boxId = isFriend ? message.fromInfo!.userId.em() : message.groupInfo!.groupId.em();
@@ -198,7 +198,7 @@ class DbHelper {
           message.boxId!,isSend ? AppData.getUser()!:message.fromInfo!,message));
       ///存在已经存储过的聊天消息，不需要更新
       if(count == 0){
-        return;
+        return false;
       }
     }
     var userId = user.userId.em();
@@ -219,6 +219,7 @@ class DbHelper {
       v.unreadCount = isSend ? v.unreadCount : (v.unreadCount ?? 0) + 1;
       await DbHelper().updateMessageBox(v);
     }
+    return true;
   }
 
   ///标记消息已读
