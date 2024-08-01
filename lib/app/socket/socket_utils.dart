@@ -25,6 +25,8 @@ import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket/io_web_socket.dart';
 
+import '../constant/constant.dart';
+
 /// Author: Soushin
 /// Date: 2024/2/26 16:53
 /// Description: websocket长连接处理
@@ -51,7 +53,7 @@ class SocketUtils{
   void connect({Function? callback}) async {
     // sendPort.send('Message from child Isolate');
     // var url = "ws://124.222.224.186:8800";
-    var url = 'ws://103.143.80.82:9699/ws?Authorization=${AppData.getUser()?.token.em()}';
+    var url ='${Constant.BASE_WS_URL}?Authorization=${AppData.getUser()?.token.em()}';
     var uri = Uri.parse(url);
     loggerArray(["开始连接",url,]);
     // SendPort sendPort = params[0];
