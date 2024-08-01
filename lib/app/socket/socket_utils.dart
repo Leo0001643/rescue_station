@@ -66,6 +66,10 @@ class SocketUtils{
       };
       channel = AdapterWebSocketChannel(IOWebSocket.fromWebSocket(await WebSocket.connect(url,customClient: client)));
     }
+    channel?.sink.add({
+      "version": Constant.VERSION
+    });
+
     channel?.ready.then((value) {
       isConnect = true;
       callback?.call(true);
