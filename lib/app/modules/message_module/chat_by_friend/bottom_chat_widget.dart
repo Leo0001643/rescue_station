@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
+import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_text_theme.dart';
+import 'package:rescue_station/app/utils/data_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import 'bottom_chat_controller.dart';
 import 'bottom_emoji_widget.dart';
@@ -55,48 +59,84 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
           Row(
             children: [
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  margin: EdgeInsets.all(15.r),
-                  child: TextField(
-                    maxLines: 10,
-                    minLines: 1,
-                    controller: chatCtl.textController,
-                    textInputAction: TextInputAction.send,
-                    focusNode: chatCtl.inputFocusNode,
-                    onChanged: (text){
-                      if(text.endsWith("\n")){
-                        chatCtl.textController.text = text.replaceRange(text.length - "\n".length, text.length, "");
-                      }
-                    },
-                    onSubmitted: (text) {
-                      ///防止自动隐藏虚拟键盘
-                      chatCtl.inputFocusNode.requestFocus();
-                      if (isNotEmpty(text)) {
-                        widget.onSendChatListener(SocketUtils().buildUserText(text, chatCtl.user));
-                      }
-                      chatCtl.textController.clear();
-                    },
-                    style: TextStyle(
-                        fontSize: 16.sp,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                        fontFamilyFallback: AppTextTheme.fontFamily,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      margin: EdgeInsets.only(left: 15.r,right: 15.r,top: 15.r,bottom: 5.r),
+                      child: TextField(
+                        maxLines: 10,
+                        minLines: 1,
+                        controller: chatCtl.textController,
+                        textInputAction: TextInputAction.send,
+                        focusNode: chatCtl.inputFocusNode,
+                        onChanged: (text){
+                          if(text.endsWith("\n")){
+                            chatCtl.textController.text = text.replaceRange(text.length - "\n".length, text.length, "");
+                          }
+                        },
+                        onSubmitted: (text) {
+                          ///防止自动隐藏虚拟键盘
+                          chatCtl.inputFocusNode.requestFocus();
+                          if (isNotEmpty(text)) {
+                            widget.onSendChatListener(SocketUtils().buildUserText(text, chatCtl.user));
+                          }
+                          chatCtl.textController.clear();
+                        },
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                          fontFamilyFallback: AppTextTheme.fontFamily,
+                        ),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 10.h),
+                          isCollapsed: true,
+                          border: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          focusedErrorBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                        ),
+                      ),
                     ),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
-                      isCollapsed: true,
-                      border: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      focusedErrorBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                    ),
-                  ),
+                    Obx(() {
+                      var reply = chatCtl.replyMessage.value;
+                      return Visibility(
+                        visible: reply != null,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: color_e6e,
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          margin: EdgeInsets.symmetric(vertical: 5.h,horizontal: 15.r),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  child: Text("${reply?.author.firstName}：${DataUtils.getMsgContent(reply)}",
+                                    style: TextStyle(fontSize: 10.sp,color: color_333,overflow: TextOverflow.ellipsis),),
+                                  padding: EdgeInsets.symmetric(horizontal: 3.w),
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.clear_rounded,color: color_333,),
+                                onPressed: (){
+                                  chatCtl.replyMessage.value = null;
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
                 ),
               ),
               InkWell(
@@ -184,4 +224,7 @@ class StateBottomChatWidget extends State<BottomChatWidget> {
       ),
     );
   }
+
+
+
 }

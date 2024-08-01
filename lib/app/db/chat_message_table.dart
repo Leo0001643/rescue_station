@@ -25,6 +25,8 @@ class ChatMessageTable{
 
 	String? groupInfo;
 
+	String? refMsg;
+
 	String? boxId;///对应聊天框的boxId
 
 	String? userId;///用于标识当前消息属于哪个登录用户
@@ -40,6 +42,7 @@ class ChatMessageTable{
 		chat.msgContent = jsonEncode(entity.msgContent?.toJson());
 		chat.fromInfo = jsonEncode(fromInfo.toJson());
 		chat.groupInfo = jsonEncode(entity.groupInfo?.toJson());
+		chat.refMsg = jsonEncode(entity.refMsg?.toJson());
 		return chat;
 	}
 
@@ -73,6 +76,14 @@ class ChatMessageTable{
 			return {};
 		}else {
 			return jsonDecode(groupInfo.em());
+		}
+	}
+
+	Map<String,dynamic> getRefMsg(){
+		if(isEmpty(refMsg)){
+			return {};
+		}else {
+			return jsonDecode(refMsg.em());
 		}
 	}
 

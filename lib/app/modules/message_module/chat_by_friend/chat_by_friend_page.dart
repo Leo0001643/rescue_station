@@ -13,6 +13,7 @@ import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_text_theme.dart';
+import 'package:rescue_station/app/utils/data_utils.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
@@ -113,52 +114,96 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
   }
 
   Widget buildBubble(Widget child, {required message, required nextMessageInGroup}) {
+    var reply = (message as types.Message).repliedMessage;
+
     if (message.author.id == chatCtl.user.userId) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 230.w),
-            child: message is types.ImageMessage
-                ? buildPopChild(child,message)
-                : Bubble(
-              nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.rightCenter,
-              nipOffset: -10,
-              alignment: Alignment.bottomRight,
-              color: color_65d,
-              elevation: 0,
-              margin: const BubbleEdges.all(0),
-              padding: const BubbleEdges.all(0),
-              child: buildPopChild(child,message),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 230.w),
+                child: message is types.ImageMessage
+                    ? buildPopChild(child,message)
+                    : Bubble(
+                  nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.rightCenter,
+                  nipOffset: -10,
+                  alignment: Alignment.bottomRight,
+                  color: color_65d,
+                  elevation: 0,
+                  margin: const BubbleEdges.all(0),
+                  padding: const BubbleEdges.all(0),
+                  child: buildPopChild(child,message),
+                ),
+              ),
+              SizedBox(
+                width: 10.w,
+              ),
+              buildAvatar(chatCtl.user.portrait.em()),
+            ],
+          ),
+          Visibility(
+            visible: reply != null,
+            child: Container(
+              decoration: BoxDecoration(
+                color: color_e6e,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              margin: EdgeInsets.only(left:15.w,right: 30.w,top: 5.h,bottom: 5.h),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 3.w),
+                child: Text("${reply?.author.firstName.em()}：${DataUtils.getMsgContent(reply)}",
+                  style: TextStyle(fontSize: 10.sp,color: color_333,overflow: TextOverflow.ellipsis),maxLines: 1,),
+              ),
             ),
-          ),
-          SizedBox(
-            width: 10.w,
-          ),
-          buildAvatar(chatCtl.user.portrait.em()),
+          )
         ],
       );
     } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildAvatar(chatCtl.user.portrait.em()),
-          ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 230.w),
-              child: message is types.ImageMessage
-                  ? Padding(
-                padding: EdgeInsets.only(left: 10.w),
-                child: buildPopChild(child,message),
-              ) : Bubble(
-                nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.leftCenter,
-                nipOffset: -10,
-                alignment: Alignment.bottomLeft,
-                color: Colors.white,
-                elevation: 0,
-                margin: BubbleEdges.only(left: 10.w),
-                padding: const BubbleEdges.all(0),
-                child: buildPopChild(child,message),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              buildAvatar(chatCtl.user.portrait.em()),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 230.w),
+                child: message is types.ImageMessage
+                    ? Padding(
+                  padding: EdgeInsets.only(left: 10.w),
+                  child: buildPopChild(child,message),
+                ) : Bubble(
+                  nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.leftCenter,
+                  nipOffset: -10,
+                  alignment: Alignment.bottomLeft,
+                  color: Colors.white,
+                  elevation: 0,
+                  margin: BubbleEdges.only(left: 10.w),
+                  padding: const BubbleEdges.all(0),
+                  child: buildPopChild(child,message),
+                ),
               ),
+            ],
+          ),
+          Visibility(
+            visible: reply != null,
+            child: Container(
+              decoration: BoxDecoration(
+                color: color_e6e,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              margin: EdgeInsets.only(left:30.w,right: 15.w,top: 5.h,bottom: 5.h),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 3.w),
+                child: Text("${reply?.author.firstName.em()}：${DataUtils.getMsgContent(reply)}",
+                  style: TextStyle(fontSize: 10.sp,color: color_333,overflow: TextOverflow.ellipsis,),maxLines: 1,),
+              ),
+            ),
           ),
         ],
       );

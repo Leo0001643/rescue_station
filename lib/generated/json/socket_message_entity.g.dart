@@ -24,6 +24,11 @@ SocketMessageEntity $SocketMessageEntityFromJson(Map<String, dynamic> json) {
   if (msgContent != null) {
     socketMessageEntity.msgContent = msgContent;
   }
+  final SocketRefMsgContent? refMsg = jsonConvert.convert<SocketRefMsgContent>(
+      json['refMsg']);
+  if (refMsg != null) {
+    socketMessageEntity.refMsg = refMsg;
+  }
   final UserInfoEntity? fromInfo = jsonConvert.convert<UserInfoEntity>(
       json['fromInfo']);
   if (fromInfo != null) {
@@ -47,6 +52,7 @@ Map<String, dynamic> $SocketMessageEntityToJson(SocketMessageEntity entity) {
   data['pushType'] = entity.pushType;
   data['boxId'] = entity.boxId;
   data['msgContent'] = entity.msgContent?.toJson();
+  data['refMsg'] = entity.refMsg?.toJson();
   data['fromInfo'] = entity.fromInfo?.toJson();
   data['createTime'] = entity.createTime;
   data['groupInfo'] = entity.groupInfo?.toJson();
@@ -59,6 +65,7 @@ extension SocketMessageEntityExtension on SocketMessageEntity {
     String? pushType,
     String? boxId,
     SocketMsgContent? msgContent,
+    SocketRefMsgContent? refMsg,
     UserInfoEntity? fromInfo,
     String? createTime,
     GroupInfoEntity? groupInfo,
@@ -68,6 +75,7 @@ extension SocketMessageEntityExtension on SocketMessageEntity {
       ..pushType = pushType ?? this.pushType
       ..boxId = boxId ?? this.boxId
       ..msgContent = msgContent ?? this.msgContent
+      ..refMsg = refMsg ?? this.refMsg
       ..fromInfo = fromInfo ?? this.fromInfo
       ..createTime = createTime ?? this.createTime
       ..groupInfo = groupInfo ?? this.groupInfo;
@@ -116,5 +124,50 @@ extension SocketMsgContentExtension on SocketMsgContent {
       ..content = content ?? this.content
       ..top = top ?? this.top
       ..disturb = disturb ?? this.disturb;
+  }
+}
+
+SocketRefMsgContent $SocketRefMsgContentFromJson(Map<String, dynamic> json) {
+  final SocketRefMsgContent socketRefMsgContent = SocketRefMsgContent();
+  final String? msgType = jsonConvert.convert<String>(json['msgType']);
+  if (msgType != null) {
+    socketRefMsgContent.msgType = msgType;
+  }
+  final String? content = jsonConvert.convert<String>(json['content']);
+  if (content != null) {
+    socketRefMsgContent.content = content;
+  }
+  final String? msgId = jsonConvert.convert<String>(json['msgId']);
+  if (msgId != null) {
+    socketRefMsgContent.msgId = msgId;
+  }
+  final String? nickName = jsonConvert.convert<String>(json['nickName']);
+  if (nickName != null) {
+    socketRefMsgContent.nickName = nickName;
+  }
+  return socketRefMsgContent;
+}
+
+Map<String, dynamic> $SocketRefMsgContentToJson(SocketRefMsgContent entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['msgType'] = entity.msgType;
+  data['content'] = entity.content;
+  data['msgId'] = entity.msgId;
+  data['nickName'] = entity.nickName;
+  return data;
+}
+
+extension SocketRefMsgContentExtension on SocketRefMsgContent {
+  SocketRefMsgContent copyWith({
+    String? msgType,
+    String? content,
+    String? msgId,
+    String? nickName,
+  }) {
+    return SocketRefMsgContent()
+      ..msgType = msgType ?? this.msgType
+      ..content = content ?? this.content
+      ..msgId = msgId ?? this.msgId
+      ..nickName = nickName ?? this.nickName;
   }
 }

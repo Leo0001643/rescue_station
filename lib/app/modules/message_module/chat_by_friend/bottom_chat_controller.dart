@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/domains/group_info_entity.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class BottomChatController extends GetxController {
   final textController = TextEditingController();
@@ -21,4 +22,8 @@ class BottomChatController extends GetxController {
 
   ///更多是否可见
   var moreVisible = false.obs;
+  ///被回复的消息体
+  Rx<types.Message?> replyMessage = Rx<types.Message?>(null);
+
+
 }

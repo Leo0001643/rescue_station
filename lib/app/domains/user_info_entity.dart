@@ -41,7 +41,7 @@ class UserInfoEntity  extends ISuspensionBean {
 
 	bool select = false;
 
-	UserInfoEntity({this.userId});
+	UserInfoEntity({this.userId,this.nickName});
 
 	factory UserInfoEntity.fromJson(Map<String, dynamic> json) => $UserInfoEntityFromJson(json);
 

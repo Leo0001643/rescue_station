@@ -203,6 +203,10 @@ class JsonConvert {
       return data.map<SocketMsgContent>((Map<String, dynamic> e) =>
           SocketMsgContent.fromJson(e)).toList() as M;
     }
+    if (<SocketRefMsgContent>[] is M) {
+      return data.map<SocketRefMsgContent>((Map<String, dynamic> e) =>
+          SocketRefMsgContent.fromJson(e)).toList() as M;
+    }
     if (<SocketNoticeEntity>[] is M) {
       return data.map<SocketNoticeEntity>((Map<String, dynamic> e) =>
           SocketNoticeEntity.fromJson(e)).toList() as M;
@@ -255,6 +259,7 @@ class JsonConvertClassCollection {
     (IsolateMsgEntity).toString(): IsolateMsgEntity.fromJson,
     (SocketMessageEntity).toString(): SocketMessageEntity.fromJson,
     (SocketMsgContent).toString(): SocketMsgContent.fromJson,
+    (SocketRefMsgContent).toString(): SocketRefMsgContent.fromJson,
     (SocketNoticeEntity).toString(): SocketNoticeEntity.fromJson,
     (SocketNoticeMsgContent).toString(): SocketNoticeMsgContent.fromJson,
     (SocketNoticeMsgContentFriendApply)

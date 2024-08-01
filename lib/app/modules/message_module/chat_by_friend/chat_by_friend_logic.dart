@@ -1,9 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:common_utils/common_utils.dart';
-import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
-import 'package:dio/dio.dart' as dio;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -19,6 +16,7 @@ import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
+import 'package:rescue_station/app/utils/data_utils.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
@@ -35,12 +33,7 @@ class ChatByFriendLogic extends GetxController {
   void onReady() {
     msgReceiveSub = eventBus.on<SocketMessageEntity>().listen((message) {
       if (message.boxId == chatCtl.friend.userId) {
-        state.messages.insert(
-            0,
-            SocketUtils().buildUserText(
-                message.msgContent!.content.em(), message.fromInfo!,
-                createdAt:
-                    DateUtil.getDateMsByTimeStr(message.createTime.em())));
+        insertMessageList(message, message.fromInfo!.toJson(), message.createTime.em(),replied: DataUtils.getRefMsg(message.refMsg));
       }
     });
     msgClearSub = eventBus.on<ChartHistoryClearEvent>().listen((event) {
@@ -94,8 +87,11 @@ class ChatByFriendLogic extends GetxController {
     var params = {
       "userId": chatCtl.friend.userId.em(),
       "msgType": msgType,
-      "content": content
+      "content": content,
     };
+    if(chatCtl.replyMessage.value !=null){
+      params["refMsgId"] = chatCtl.replyMessage.value!.metadata?["msgId"];
+    }
     DioUtil().post(Api.CHAT_SEND_MESSAGE, data: params).then((result) {
       EasyLoading.dismiss();
       if (result.data["code"] == 200) {
@@ -117,10 +113,12 @@ class ChatByFriendLogic extends GetxController {
             ? content
             : JsonUtil.encodeObj(uploadFile.toJson());
         msgContent.msgType = msgType;
+        if(chatCtl.replyMessage.value != null){
+          socketMsg.refMsg = buildRefMessage(socketMsg.msgId.em(),chatCtl.replyMessage.value!);
+        }
         socketMsg.msgContent = msgContent;
-        insertMessageList(
-            msgContent, chatCtl.user.toJson(), socketMsg.createTime.em());
-
+        insertMessageList(socketMsg, chatCtl.user.toJson(), socketMsg.createTime.em(),replied: DataUtils.getRefMsg(socketMsg.refMsg));
+        chatCtl.replyMessage.value = null;
         ///缓存消息到数据库
         DbHelper().messageInsertOrUpdate(true, socketMsg).then((v) {
           eventBus.fire(NewChatEvent()); //有新消息，需要刷新列表
@@ -140,7 +138,13 @@ class ChatByFriendLogic extends GetxController {
       if (v.isNotEmpty) {
         for (var item in v) {
           var msg = SocketMsgContent.fromJson(item.getMsgContent());
-          insertMessageList(msg, item.getFromInfo(), item.createTime.em());
+          var socketMsg = SocketMessageEntity();
+          socketMsg.msgContent = msg;
+          socketMsg.msgId = item.msgId;
+          if(item.refMsg != null){
+            socketMsg.refMsg = SocketRefMsgContent.fromJson(item.getRefMsg());
+          }
+          insertMessageList(socketMsg, item.getFromInfo(), item.createTime.em(),replied: DataUtils.getRefMsg(socketMsg.refMsg));
         }
       }
     });
@@ -152,28 +156,22 @@ class ChatByFriendLogic extends GetxController {
       }
     });
   }
-  void insertMessageList(
-      SocketMsgContent msg, Map<String, dynamic> fromInfo, String createTime) {
-    switch (find(msg.msgType)) {
+  void insertMessageList(SocketMessageEntity socketMsg, Map<String, dynamic> fromInfo, String createTime,{types.Message? replied}) {
+    switch (find(socketMsg.msgContent?.msgType)) {
       case MessageTypeEnum.TEXT:
-        state.messages.insert(
-          0, SocketUtils().buildUserText(
-          msg.content.em(), UserInfoEntity.fromJson(fromInfo),
-          createdAt: DateUtil.getDateMsByTimeStr(createTime),),);
+        state.messages.insert(0, SocketUtils().buildUserText(
+            socketMsg.msgContent!.content.em(), UserInfoEntity.fromJson(fromInfo),
+          createdAt: DateUtil.getDateMsByTimeStr(createTime),msgId: socketMsg.msgId,replied: replied),);
         break;
       case MessageTypeEnum.IMAGE:
-        state.messages.insert(
-            0,
-            SocketUtils().buildUserImageUrl(
-                msg.content.em(), UserInfoEntity.fromJson(fromInfo),
-                createdAt: DateUtil.getDateMsByTimeStr(createTime)));
+        state.messages.insert(0, SocketUtils().buildUserImageUrl(
+            socketMsg.msgContent!.content.em(), UserInfoEntity.fromJson(fromInfo),
+                createdAt: DateUtil.getDateMsByTimeStr(createTime),msgId: socketMsg.msgId,replied: replied));
         break;
       case MessageTypeEnum.FILE:
-        state.messages.insert(
-            0,
-            SocketUtils().buildUserFileUrl(
-                msg.content.em(), UserInfoEntity.fromJson(fromInfo),
-                createdAt: DateUtil.getDateMsByTimeStr(createTime)));
+        state.messages.insert(0, SocketUtils().buildUserFileUrl(
+            socketMsg.msgContent!.content.em(), UserInfoEntity.fromJson(fromInfo),
+                createdAt: DateUtil.getDateMsByTimeStr(createTime),msgId: socketMsg.msgId,replied: replied));
         break;
       default:
         break;
@@ -197,8 +195,24 @@ class ChatByFriendLogic extends GetxController {
           if(v == true){ showToasty("转发成功"); }
         });
         break;
+      case 2:
+        chatCtl.replyMessage.value = message;
+        break;
     }
   }
+
+  SocketRefMsgContent buildRefMessage(String msgId,types.Message msg) {
+    if (msg is types.TextMessage) {
+      return SocketRefMsgContent(msgId: msgId,content: msg.text,msgType: MessageTypeEnum.TEXT.name,nickName: msg.author.firstName);
+    } else if (msg is types.ImageMessage) {
+      return SocketRefMsgContent(msgId: msgId,content: msg.uri,msgType: MessageTypeEnum.IMAGE.name,nickName: msg.author.firstName);
+    } else if (msg is types.FileMessage) {
+      return SocketRefMsgContent(msgId: msgId,content: msg.uri,msgType: MessageTypeEnum.FILE.name,nickName: msg.author.firstName);
+    }else {
+      return SocketRefMsgContent();
+    }
+  }
+
 
 
 

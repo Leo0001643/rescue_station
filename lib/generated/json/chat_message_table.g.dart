@@ -41,6 +41,10 @@ ChatMessageTable $ChatMessageTableFromJson(Map<String, dynamic> json) {
   if (groupInfo != null) {
     chatMessageTable.groupInfo = groupInfo;
   }
+  final String? refMsg = jsonConvert.convert<String>(json['refMsg']);
+  if (refMsg != null) {
+    chatMessageTable.refMsg = refMsg;
+  }
   final String? boxId = jsonConvert.convert<String>(json['boxId']);
   if (boxId != null) {
     chatMessageTable.boxId = boxId;
@@ -61,6 +65,7 @@ Map<String, dynamic> $ChatMessageTableToJson(ChatMessageTable entity) {
   data['fromInfo'] = entity.fromInfo;
   data['createTime'] = entity.createTime;
   data['groupInfo'] = entity.groupInfo;
+  data['refMsg'] = entity.refMsg;
   data['boxId'] = entity.boxId;
   data['userId'] = entity.userId;
   return data;
@@ -75,6 +80,7 @@ extension ChatMessageTableExtension on ChatMessageTable {
     String? fromInfo,
     String? createTime,
     String? groupInfo,
+    String? refMsg,
     String? boxId,
     String? userId,
   }) {
@@ -86,6 +92,7 @@ extension ChatMessageTableExtension on ChatMessageTable {
       ..fromInfo = fromInfo ?? this.fromInfo
       ..createTime = createTime ?? this.createTime
       ..groupInfo = groupInfo ?? this.groupInfo
+      ..refMsg = refMsg ?? this.refMsg
       ..boxId = boxId ?? this.boxId
       ..userId = userId ?? this.userId;
   }

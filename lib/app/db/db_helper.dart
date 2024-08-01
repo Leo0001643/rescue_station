@@ -51,7 +51,7 @@ class DbHelper {
         ' lastMessage TEXT, lastMessageTime INTEGER, unreadCount INTEGER, isTop INTEGER, isDisturb INTEGER, fromInfo TEXT, isShow INTEGER)');
 
     await db.execute('CREATE TABLE $chatMessageTable (id integer primary key autoincrement, msgId TEXT, pushType TEXT,'
-        ' msgContent TEXT, fromInfo TEXT, createTime TEXT, isTop INTEGER, groupInfo TEXT, boxId TEXT, userId TEXT)');
+        ' msgContent TEXT, fromInfo TEXT,refMsg TEXT, createTime TEXT, isTop INTEGER, groupInfo TEXT, boxId TEXT, userId TEXT)');
   }
 
 

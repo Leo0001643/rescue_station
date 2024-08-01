@@ -36,8 +36,7 @@ class StateBottomMoreWidget extends State<BottomMoreWidget> {
                   .then((result) {
                 print("选择的图片${result?.names.toString()}");
                 if (result?.count == 1) {
-                  widget.onSendChatListener(SocketUtils()
-                      .buildUserImage(result!.files[0], chatCtl.user));
+                  widget.onSendChatListener(SocketUtils().buildUserImage(result!.files[0], chatCtl.user));
                 }
               });
               chatCtl.moreVisible.value = false;
@@ -56,8 +55,7 @@ class StateBottomMoreWidget extends State<BottomMoreWidget> {
               FilePicker.platform.pickFiles().then((result) {
                 print("选择的文件${result?.names.toString()}");
                 if (result?.count == 1) {
-                  widget.onSendChatListener(SocketUtils()
-                      .buildUserFile(result!.files[0], chatCtl.user));
+                  widget.onSendChatListener(SocketUtils().buildUserFile(result!.files[0], chatCtl.user));
                 }
               });
               chatCtl.moreVisible.value = false;

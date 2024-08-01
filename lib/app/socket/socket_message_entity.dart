@@ -13,6 +13,7 @@ class SocketMessageEntity {
 	String? pushType;
 	String? boxId;///用于在聊天窗口区分消息来自哪个群组或好友
 	SocketMsgContent? msgContent;
+	SocketRefMsgContent? refMsg;
 	UserInfoEntity? fromInfo;
 	String? createTime;
 	GroupInfoEntity? groupInfo;
@@ -49,3 +50,24 @@ class SocketMsgContent {
 	}
 }
 
+@JsonSerializable()
+class SocketRefMsgContent {
+	String? msgType;
+	String? content;
+	String? msgId;
+	String? nickName;
+
+	SocketRefMsgContent({this.msgType,this.content,this.msgId,this.nickName});
+
+	factory SocketRefMsgContent.fromJson(Map<String, dynamic> json) => $SocketRefMsgContentFromJson(json);
+
+	Map<String, dynamic> toJson() => $SocketRefMsgContentToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+
+
+
+}

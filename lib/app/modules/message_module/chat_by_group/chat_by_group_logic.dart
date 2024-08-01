@@ -32,12 +32,7 @@ class ChatByGroupLogic extends GetxController {
   void onReady() {
     msgReceiveSub = eventBus.on<SocketMessageEntity>().listen((message) {
       if (message.boxId == chatCtl.group.groupId) {
-        state.messages.insert(
-            0,
-            SocketUtils().buildUserText(
-                message.msgContent!.content.em(), message.fromInfo!,
-                createdAt:
-                    DateUtil.getDateMsByTimeStr(message.createTime.em())));
+        insertMessageList(message.msgContent!, message.fromInfo!.toJson(), message.createTime.em(),);
       }
     });
     msgClearSub = eventBus.on<ChartHistoryClearEvent>().listen((event) {
@@ -119,7 +114,7 @@ class ChatByGroupLogic extends GetxController {
         socketMsg.msgContent = msgContent;
         insertMessageList(
             msgContent, chatCtl.user.toJson(), socketMsg.createTime.em());
-
+        chatCtl.replyMessage.value = null;
         ///缓存消息到数据库
         DbHelper().messageInsertOrUpdate(true, socketMsg).then((v) {
           eventBus.fire(NewChatEvent()); //有新消息，需要刷新列表
