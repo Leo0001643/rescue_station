@@ -26,12 +26,20 @@ class StateHomePage extends State<HomePage>{
           preferredSize: Size.fromHeight(AppLayout.heigth(60)),
           child: AppBar(
             elevation: 0,
-            leading: Icon(Icons.abc_rounded, size: AppLayout.fontSize(50)),
+            titleSpacing: 0,
+            title: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: AppLayout.width(160),
+                height: AppLayout.heigth(38),
+                child: Image.asset("assets/images/icon/logo-nav.png", fit: BoxFit.fitHeight),
+              ),
+            ),
             actions: [
               IconButton(onPressed: ()=>Get.toNamed(Routes.NOTICE),
-                  icon: Image.asset("assets/images/icon/email.png")),
-              IconButton(onPressed: (){},
-                  icon: Image.asset("assets/images/icon/settings.png")),
+                  icon: Image.asset("assets/images/icon/email.png",fit: BoxFit.cover)),
+              IconButton(onPressed: ()=>Get.toNamed(Routes.MINE),
+                  icon: Image.asset("assets/images/icon/settings.png",fit: BoxFit.cover)),
             ],
           ),
         ),

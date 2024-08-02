@@ -43,6 +43,7 @@ import '../modules/message_module/chat_by_friend/chat_by_friend_binding.dart';
 import '../modules/message_module/chat_by_friend/chat_by_friend_page.dart';
 import '../modules/message_module/chat_by_group/chat_by_group_binding.dart';
 import '../modules/message_module/chat_by_group/chat_by_group_page.dart';
+import '../modules/mine_module/mine_page.dart';
 
 part './app_routes.dart';
 
@@ -65,11 +66,11 @@ abstract class AppPages {
       page: () => NoticePage(),
       binding: NoticeBinding(),
     ),
-    // GetPage(
-    //   name: Routes.MINE,
-    //   page: () => MinePage(),
-    //   binding: MineBinding(),
-    // ),
+    GetPage(
+      name: Routes.MINE,
+      page: () => MinePage(),
+      binding: MineBinding(),
+    ),
     // GetPage(
     //   name: Routes.MESSAGE,
     //   page: () => MessagePage(),
