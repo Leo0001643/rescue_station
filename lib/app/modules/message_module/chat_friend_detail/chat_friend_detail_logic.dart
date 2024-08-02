@@ -38,6 +38,8 @@ class ChatFriendDetailLogic extends GetxController {
           eventBus.fire(NewChatEvent());
           EasyLoading.dismiss();
         });
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         EasyLoading.dismiss();
         Get.snackbar('提醒', result.data["msg"]);

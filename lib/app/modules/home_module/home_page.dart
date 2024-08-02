@@ -35,24 +35,26 @@ class StateHomePage extends State<HomePage>{
             ],
           ),
         ),
-        body: Obx(()=>Container(
-          padding: EdgeInsets.symmetric(horizontal: AppLayout.width(8)),
-          child: Column(
-            children: [
-              _swiper(),
-              Gap(AppLayout.heigth(8)),
-              _marquee(),
-              Gap(AppLayout.heigth(30)),
-              Center(child: Text("最高申请额度", style: AppTextTheme.headLineStyle4)),
-              Gap(AppLayout.heigth(30)),
-              Center(child: Text("${controller.loanAmount.value}￥", style: AppTextTheme.headLineStyle4)),
-              Gap(AppLayout.heigth(30)),
-              _loanSlider(context),
-              Gap(AppLayout.heigth(48)),
-              _submit()
-            ],
-          ),
-        ))
+        body: SingleChildScrollView(
+          child: Obx(()=>Container(
+            padding: EdgeInsets.symmetric(horizontal: AppLayout.width(8)),
+            child: Column(
+              children: [
+                _swiper(),
+                Gap(AppLayout.heigth(8)),
+                _marquee(),
+                Gap(AppLayout.heigth(30)),
+                Center(child: Text("最高申请额度", style: AppTextTheme.headLineStyle4)),
+                Gap(AppLayout.heigth(30)),
+                Center(child: Text("${controller.loanAmount.value}￥", style: AppTextTheme.headLineStyle4)),
+                Gap(AppLayout.heigth(30)),
+                _loanSlider(context),
+                Gap(AppLayout.heigth(48)),
+                _submit()
+              ],
+            ),
+          )),
+        )
     );
   }
 

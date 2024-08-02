@@ -54,10 +54,10 @@ class ChatByFriendLogic extends GetxController {
 
   void sendMessage(types.Message msg) async {
     loggerArray(["socket状态", SocketUtils().isConnect]);
+    EasyLoading.show();
     var content = "";
     var msgType = "";
     UploadFileEntity? uploadFile;
-    EasyLoading.show();
     if (msg is types.TextMessage) {
       content = msg.text;
       msgType = MessageTypeEnum.TEXT.name;
@@ -90,7 +90,7 @@ class ChatByFriendLogic extends GetxController {
       "content": content,
     };
     if(chatCtl.replyMessage.value !=null){
-      params["refMsgId"] = chatCtl.replyMessage.value!.metadata?["msgId"];
+      params["refMsgId"] = chatCtl.replyMessage.value!.metadata?["msgId"] ?? "";
     }
     DioUtil().post(Api.CHAT_SEND_MESSAGE, data: params).then((result) {
       EasyLoading.dismiss();
@@ -123,6 +123,8 @@ class ChatByFriendLogic extends GetxController {
         DbHelper().messageInsertOrUpdate(true, socketMsg).then((v) {
           eventBus.fire(NewChatEvent()); //有新消息，需要刷新列表
         });
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('提醒', result.data["msg"]);
       }
@@ -183,11 +185,11 @@ class ChatByFriendLogic extends GetxController {
     switch(item.index){
       case 0:
         if(message is types.TextMessage){
-          WidgetUtils().clickCopy(message.text);
+          WidgetUtils.clickCopy(message.text);
         }else if(message is types.ImageMessage){
-          WidgetUtils().clickCopy(message.uri);
+          WidgetUtils.clickCopy(message.uri);
         }else if(message is types.FileMessage){
-          WidgetUtils().clickCopy(message.uri);
+          WidgetUtils.clickCopy(message.uri);
         }
         break;
       case 1:

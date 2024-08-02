@@ -85,6 +85,7 @@ class SocketUtils{
       ///{"msgId":"1808765416252825601","pushType":"MSG","msgContent":{"msgType":"ALERT","content":"你邀请貂蝉加入了群聊","top":"N","disturb":"N"},"fromInfo":{"nickName":"上官婉儿的群聊-hi1f(2)","portrait":"[\"https://img.alicdn.com/imgextra/i3/87413133/O1CN01mHA9DJ1Z0xlORnKuW_!!87413133.png\"]","userId":"1808765416043110401","userType":"normal"},"createTime":"2024-07-03 23:30:55","groupInfo":{"nickName":"上官婉儿的群聊-hi1f(2)","portrait":"[\"https://img.alicdn.com/imgextra/i3/87413133/O1CN01mHA9DJ1Z0xlORnKuW_!!87413133.png\"]","userId":"1808765416043110401"}}
       if(event == "ok"){
         isConnect = true;
+        loggerArray(["什么情况，还活着呢",channel == null,periodicTimer == null]);
       } else if(event is String){
         var dataMap = jsonDecode(event);
         switch(dataMap["pushType"]){
@@ -125,34 +126,25 @@ class SocketUtils{
         }
       }
     },onDone: (){
-      closed();
-      ///延时两秒自动重连
-      delayConnect ??= Future.delayed(Duration(seconds: 2),()=> reConnect());
+      destroy().then((v){
+        if(!connecting && isNotEmpty(AppData.getUser()?.token)){
+          ///延时两秒自动重连
+          Future.delayed(Duration(seconds: 2),()=> reConnect());
+        }
+      });
     });
   }
 
-  Future<void>? delayConnect;
+  bool connecting = false;
 
-  void closed(){
-    logger("已关闭长连接");
-    isConnect = false;
-    channel?.sink.close(status.normalClosure);
-  }
-
-  void destroy(){
-    closed();
+  Future destroy() async {
+    await channel?.sink.close(status.normalClosure);
+    channel = null;
     periodicTimer?.cancel();
     periodicTimer = null;
-    // childSendPort?.send(buildMessage("close"));
     isConnect = false;
-    Future.delayed(const Duration(milliseconds: 100),(){
-      // childSendPort = null;
-      // mainSendPort = null;
-      // ///立即停止异步任务
-      // isolate?.kill(priority: Isolate.immediate);
-      // isolate = null;
-      logger("已关闭长连接");
-    });
+    loggerArray(["已关闭长连接1",channel==null,periodicTimer == null]);
+    return;
   }
 
   Timer? periodicTimer;
@@ -168,8 +160,8 @@ class SocketUtils{
     if(!isConnect && ObjectUtil.isNotEmpty(AppData.getUser()?.token)){
       ///如果已经登录了，有token
       SocketUtils().connect(callback: (result){
-        delayConnect = null;
         loggerArray(["连接结果",result]);
+        connecting = true;
         if(result){
           ///连接成功
         } else {

@@ -5,10 +5,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/AppLayout.dart';
 import 'package:rescue_station/app/utils/Icon.dart';
+import 'package:rescue_station/app/utils/app_data.dart';
+import 'package:rescue_station/app/utils/dialog_utils.dart';
 
 import 'logger.dart';
 
@@ -151,12 +156,27 @@ class WidgetUtils {
   }
 
 
-  void clickCopy(String value) {
+  static void clickCopy(String value) {
     if (isNotEmpty(value)) {
       Clipboard.setData(ClipboardData(text: value));
       showToasty("已复制");
     }
   }
+
+  ////token过期
+  static void logSqueezeOut(){
+    DialogUtils.showSingleDialog(Get.context!, "您的登录已过期，请重新登录！").then((v) async {
+      await AppData.clearUser();
+      await SocketUtils().destroy();
+      eventBus.fire(LogoutEvent());
+      Get.until((ModalRoute.withName(Routes.TABS)));
+      Future.delayed(Duration(milliseconds: 300),(){
+        Get.toNamed(Routes.LOGIN);
+      });
+    });
+  }
+
+
 
 
 }

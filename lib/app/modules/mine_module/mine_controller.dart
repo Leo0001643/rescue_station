@@ -53,15 +53,15 @@ class MineController extends GetxController{
   void logout() async{
     try {
       await EasyLoading.show(status: '正在登出...',maskType: EasyLoadingMaskType.black,);
-        await DioUtil().get(Api.LOGOUT);
-        await AppData.clearUser();
-        SocketUtils().destroy();
-        eventBus.fire(LogoutEvent());
-        // await DbHelper().clearUser();
-        await Future.delayed(const Duration(seconds: 2));
-        await EasyLoading.dismiss();
-        EasyLoading.showSuccess('登出成功!');
-        Get.toNamed(Routes.LOGIN);
+      await DioUtil().get(Api.LOGOUT);
+      await AppData.clearUser();
+      await SocketUtils().destroy();
+      eventBus.fire(LogoutEvent());
+      // await DbHelper().clearUser();
+      await Future.delayed(const Duration(seconds: 2));
+      await EasyLoading.dismiss();
+      EasyLoading.showSuccess('登出成功!');
+      Get.toNamed(Routes.LOGIN);
     } catch (e) {
       EasyLoading.showError("登出异常！");
     }

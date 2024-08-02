@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
+import 'package:rescue_station/app/utils/widget_utils.dart';
 /**
  * GetX Template Generator - fb.com/htngu.99
  * */
@@ -18,6 +19,8 @@ class AddFriendController extends GetxController{
       if(result.data["code"] == 200){
         var entity = UserInfoEntity.fromJson(result.data["data"]);
         finds.assign(entity);
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         finds.value = [];
         Get.snackbar('添加好友提醒', result.data["msg"]);

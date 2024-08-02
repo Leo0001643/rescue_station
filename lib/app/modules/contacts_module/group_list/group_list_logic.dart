@@ -33,6 +33,8 @@ class GroupListLogic extends GetxController {
       if(result.data["code"] == 200){
         var list = JsonConvert.fromJsonAsT<List<GroupInfoEntity>>(result.data["data"]) ?? [];
         state.data.assignAll(list);
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('提醒', "系统异常！");
       }
