@@ -11,6 +11,7 @@ import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
+import 'package:rescue_station/app/utils/data_utils.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../../event/new_chat_event.dart';
 import '../../../routes/api_info.dart';
@@ -32,7 +33,7 @@ class ChatByGroupLogic extends GetxController {
   void onReady() {
     msgReceiveSub = eventBus.on<SocketMessageEntity>().listen((message) {
       if (message.boxId == chatCtl.group.groupId) {
-        insertMessageList(message.msgContent!, message.fromInfo!.toJson(), message.createTime.em(),);
+        insertMessageList(message, message.fromInfo!.toJson(), message.createTime.em(),replied: DataUtils.getRefMsg(message.refMsg));
       }
     });
     msgClearSub = eventBus.on<ChartHistoryClearEvent>().listen((event) {
@@ -86,8 +87,11 @@ class ChatByGroupLogic extends GetxController {
     var params = {
       "groupId": chatCtl.group.groupId.em(),
       "msgType": msgType,
-      "content": content
+      "content": content,
     };
+    if(chatCtl.replyMessage.value !=null){
+      params["refMsgId"] = chatCtl.replyMessage.value!.metadata?["msgId"] ?? "";
+    }
     DioUtil().post(Api.GROUP_SEND_MSG, data: params).then((result) {
       EasyLoading.dismiss();
       if (result.data["code"] == 200) {
@@ -97,7 +101,7 @@ class ChatByGroupLogic extends GetxController {
         }
         // state.messages.insert(0, msg);
         var socketMsg = SocketMessageEntity();
-        socketMsg.msgId = result.data["msgId"];
+        socketMsg.msgId = result.data["data"]["msgId"];
         socketMsg.boxId = chatCtl.group.groupId.em();
         socketMsg.pushType = 'MSG';
         socketMsg.createTime = DateUtil.getNowDateStr();
@@ -107,18 +111,20 @@ class ChatByGroupLogic extends GetxController {
         var msgContent = SocketMsgContent();
         msgContent.disturb = 'N';
         msgContent.top = 'N';
-        msgContent.content = uploadFile == null
-            ? content
-            : JsonUtil.encodeObj(uploadFile.toJson());
+        msgContent.content = uploadFile == null ? content : JsonUtil.encodeObj(uploadFile.toJson());
         msgContent.msgType = msgType;
+        if(chatCtl.replyMessage.value != null){
+          socketMsg.refMsg = buildRefMessage(socketMsg.msgId.em(),chatCtl.replyMessage.value!);
+        }
         socketMsg.msgContent = msgContent;
-        insertMessageList(
-            msgContent, chatCtl.user.toJson(), socketMsg.createTime.em());
+        insertMessageList(socketMsg, chatCtl.user.toJson(), socketMsg.createTime.em(),replied: DataUtils.getRefMsg(socketMsg.refMsg));
         chatCtl.replyMessage.value = null;
         ///缓存消息到数据库
         DbHelper().messageInsertOrUpdate(true, socketMsg).then((v) {
           eventBus.fire(NewChatEvent()); //有新消息，需要刷新列表
         });
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('提醒', result.data["msg"]);
       }
@@ -134,7 +140,13 @@ class ChatByGroupLogic extends GetxController {
         for (var item in v) {
           // loggerArray(["输出一下消息id",item.msgId]);
           var msg = SocketMsgContent.fromJson(item.getMsgContent());
-          insertMessageList(msg, item.getFromInfo(), item.createTime.em());
+          var socketMsg = SocketMessageEntity();
+          socketMsg.msgContent = msg;
+          socketMsg.msgId = item.msgId;
+          if(item.refMsg != null){
+            socketMsg.refMsg = SocketRefMsgContent.fromJson(item.getRefMsg());
+          }
+          insertMessageList(socketMsg, item.getFromInfo(), item.createTime.em(),replied: DataUtils.getRefMsg(socketMsg.refMsg));
         }
       }
     });
@@ -147,23 +159,22 @@ class ChatByGroupLogic extends GetxController {
     });
   }
 
-  void insertMessageList(
-      SocketMsgContent msg, Map<String, dynamic> fromInfo, String createTime) {
-    switch (find(msg.msgType)) {
+  void insertMessageList(SocketMessageEntity socketMsg, Map<String, dynamic> fromInfo, String createTime,{types.Message? replied}) {
+    switch (find(socketMsg.msgContent?.msgType)) {
       case MessageTypeEnum.TEXT:
         state.messages.insert(0, SocketUtils().buildUserText(
-                msg.content.em(), UserInfoEntity.fromJson(fromInfo),
-                createdAt: DateUtil.getDateMsByTimeStr(createTime)));
+            socketMsg.msgContent!.content.em(), UserInfoEntity.fromJson(fromInfo),
+            createdAt: DateUtil.getDateMsByTimeStr(createTime),msgId: socketMsg.msgId,replied: replied),);
         break;
       case MessageTypeEnum.IMAGE:
         state.messages.insert(0, SocketUtils().buildUserImageUrl(
-                msg.content.em(), UserInfoEntity.fromJson(fromInfo),
-                createdAt: DateUtil.getDateMsByTimeStr(createTime)));
+            socketMsg.msgContent!.content.em(), UserInfoEntity.fromJson(fromInfo),
+            createdAt: DateUtil.getDateMsByTimeStr(createTime),msgId: socketMsg.msgId,replied: replied));
         break;
       case MessageTypeEnum.FILE:
         state.messages.insert(0, SocketUtils().buildUserFileUrl(
-                msg.content.em(), UserInfoEntity.fromJson(fromInfo),
-                createdAt: DateUtil.getDateMsByTimeStr(createTime)));
+            socketMsg.msgContent!.content.em(), UserInfoEntity.fromJson(fromInfo),
+            createdAt: DateUtil.getDateMsByTimeStr(createTime),msgId: socketMsg.msgId,replied: replied));
         break;
       default:
         break;
@@ -176,11 +187,11 @@ class ChatByGroupLogic extends GetxController {
     switch(item.index){
       case 0:
         if(message is types.TextMessage){
-          WidgetUtils().clickCopy(message.text);
+          WidgetUtils.clickCopy(message.text);
         }else if(message is types.ImageMessage){
-          WidgetUtils().clickCopy(message.uri);
+          WidgetUtils.clickCopy(message.uri);
         }else if(message is types.FileMessage){
-          WidgetUtils().clickCopy(message.uri);
+          WidgetUtils.clickCopy(message.uri);
         }
         break;
       case 1:
@@ -188,9 +199,23 @@ class ChatByGroupLogic extends GetxController {
           if(v == true){ showToasty("转发成功"); }
         });
         break;
+      case 2:
+        chatCtl.replyMessage.value = message;
+        break;
     }
   }
 
+  SocketRefMsgContent buildRefMessage(String msgId,types.Message msg) {
+    if (msg is types.TextMessage) {
+      return SocketRefMsgContent(msgId: msgId,content: msg.text,msgType: MessageTypeEnum.TEXT.name,nickName: msg.author.firstName);
+    } else if (msg is types.ImageMessage) {
+      return SocketRefMsgContent(msgId: msgId,content: msg.uri,msgType: MessageTypeEnum.IMAGE.name,nickName: msg.author.firstName);
+    } else if (msg is types.FileMessage) {
+      return SocketRefMsgContent(msgId: msgId,content: msg.uri,msgType: MessageTypeEnum.FILE.name,nickName: msg.author.firstName);
+    }else {
+      return SocketRefMsgContent();
+    }
+  }
 
 
 }

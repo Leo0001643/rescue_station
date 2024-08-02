@@ -4,6 +4,7 @@ import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
+import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 
 class CreateGroupController extends GetxController{
@@ -46,6 +47,8 @@ class CreateGroupController extends GetxController{
       ///[log] [返回响应, /group/createGroup, 200, ["10003","1800813200611135490"]
       if(result.data["code"] == 200){
         Get.back();
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('提醒', "系统异常！");
       }

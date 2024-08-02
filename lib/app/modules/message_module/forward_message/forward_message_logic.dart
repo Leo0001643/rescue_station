@@ -102,6 +102,8 @@ class ForwardMessageLogic extends GetxController {
           eventBus.fire(NewChatEvent()); //有新消息，需要刷新列表
           Get.back(result: true);
         });
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('提醒', result.data["msg"]);
       }
@@ -172,6 +174,8 @@ class ForwardMessageLogic extends GetxController {
           eventBus.fire(NewChatEvent()); //有新消息，需要刷新列表
           Get.back(result: true);
         });
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('提醒', result.data["msg"]);
       }

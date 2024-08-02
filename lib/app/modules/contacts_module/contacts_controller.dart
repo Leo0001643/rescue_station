@@ -103,6 +103,8 @@ class ContactsController extends GetxController{
         data1.sort((a,b) => a.tabIndex.compareTo(b.tabIndex));
         filteredContacts.value = data1.where((v)=> v.userId != user.userId).toList(growable: true);
         SuspensionUtil.setShowSuspensionStatus(data1);
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('联系人提醒', "系统异常！");
       }

@@ -65,6 +65,8 @@ class TabsController extends GetxController {
       isLogin.value = false;
       unReadMsg.value = 0;
       unReadContact.value = 0;
+      ///退出登录需设置当前页面在首页上
+      setCurrentIndex(0);
     });
     loginSub = eventBus.on<LoginEvent>().listen((v){
       isLogin.value = true;

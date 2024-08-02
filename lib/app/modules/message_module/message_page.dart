@@ -221,7 +221,7 @@ class StateMessagePage extends State<MessagePage> {
         style: AppTextTheme.headLineStyle0,
       );
     } else {
-      return Container();
+      return Text("");
     }
   }
 

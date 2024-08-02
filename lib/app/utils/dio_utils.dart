@@ -126,6 +126,9 @@ class DioUtil {
         options: diod.Options(contentType: "multipart/form-data",headers: {}));
     if(result.data["code"] == 200){
       return UploadFileEntity.fromJson(result.data["data"]);
+    } else if(result.data["code"] == 401){
+      WidgetUtils.logSqueezeOut();
+      return null;
     } else {
       Get.snackbar('提醒', result.data["msg"]);
       return null;
@@ -140,6 +143,9 @@ class DioUtil {
         options: diod.Options(contentType: "multipart/form-data",headers: {}));
     if(result.data["code"] == 200){
       return UploadFileEntity.fromJson(result.data["data"]);
+    } else if(result.data["code"] == 401){
+      WidgetUtils.logSqueezeOut();
+      return null;
     } else {
       Get.snackbar('提醒', result.data["msg"]);
       return null;

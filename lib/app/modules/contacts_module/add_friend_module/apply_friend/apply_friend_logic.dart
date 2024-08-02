@@ -44,6 +44,8 @@ class ApplyFriendLogic extends GetxController {
       if(result.data["code"] == 200){
         Get.snackbar('添加好友提醒', "申请已发送！");
         Get.until((ModalRoute.withName(Routes.TABS)));
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('添加好友提醒', result.data["msg"]);
       }

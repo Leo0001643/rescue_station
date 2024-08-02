@@ -117,12 +117,12 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
     var reply = (message as types.Message).repliedMessage;
 
     if (message.author.id == chatCtl.user.userId) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
+      return           Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 230.w),
@@ -139,38 +139,38 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
                   child: buildPopChild(child,message),
                 ),
               ),
-              SizedBox(
-                width: 10.w,
+              Visibility(
+                visible: reply != null,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: color_e6e,
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  margin: EdgeInsets.only(top: 5.h,bottom: 5.h),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 3.w),
+                    child: Text("${reply?.author.firstName.em()}：${DataUtils.getMsgContent(reply)}",
+                      style: TextStyle(fontSize: 10.sp,color: color_333,overflow: TextOverflow.ellipsis),maxLines: 1,),
+                  ),
+                ),
               ),
-              buildAvatar(chatCtl.user.portrait.em()),
             ],
           ),
-          Visibility(
-            visible: reply != null,
-            child: Container(
-              decoration: BoxDecoration(
-                color: color_e6e,
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              margin: EdgeInsets.only(left:15.w,right: 30.w,top: 5.h,bottom: 5.h),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 3.w),
-                child: Text("${reply?.author.firstName.em()}：${DataUtils.getMsgContent(reply)}",
-                  style: TextStyle(fontSize: 10.sp,color: color_333,overflow: TextOverflow.ellipsis),maxLines: 1,),
-              ),
-            ),
-          )
+          SizedBox(
+            width: 10.w,
+          ),
+          buildAvatar(chatCtl.user.portrait.em()),
         ],
       );
     } else {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          buildAvatar(chatCtl.user.portrait.em()),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildAvatar(chatCtl.user.portrait.em()),
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 230.w),
                 child: message is types.ImageMessage
@@ -188,22 +188,22 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
                   child: buildPopChild(child,message),
                 ),
               ),
+              Visibility(
+                visible: reply != null,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: color_e6e,
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  margin: EdgeInsets.only(top: 5.h,bottom: 5.h),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 3.w),
+                    child: Text("${reply?.author.firstName.em()}：${DataUtils.getMsgContent(reply)}",
+                      style: TextStyle(fontSize: 10.sp,color: color_333,overflow: TextOverflow.ellipsis,),maxLines: 1,),
+                  ),
+                ),
+              ),
             ],
-          ),
-          Visibility(
-            visible: reply != null,
-            child: Container(
-              decoration: BoxDecoration(
-                color: color_e6e,
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              margin: EdgeInsets.only(left:30.w,right: 15.w,top: 5.h,bottom: 5.h),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 3.w),
-                child: Text("${reply?.author.firstName.em()}：${DataUtils.getMsgContent(reply)}",
-                  style: TextStyle(fontSize: 10.sp,color: color_333,overflow: TextOverflow.ellipsis,),maxLines: 1,),
-              ),
-            ),
           ),
         ],
       );

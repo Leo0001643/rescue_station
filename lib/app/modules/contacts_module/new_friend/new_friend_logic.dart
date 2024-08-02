@@ -31,6 +31,8 @@ class NewFriendLogic extends GetxController {
           var data = JsonConvert.fromJsonAsT<List<FriendApplyEntity>>(result.data['rows']) ?? [];
           state.data.assignAll(data);
         }
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('提醒', result.data["msg"]);
       }
@@ -45,6 +47,8 @@ class NewFriendLogic extends GetxController {
         eventBus.fire(FriendDeleteEvent(entity.userId.em()));
         Get.snackbar('提醒', "操作成功！");
         getApplyList();
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('提醒', result.data["msg"]);
       }
@@ -58,6 +62,8 @@ class NewFriendLogic extends GetxController {
       if(result.data["code"] == 200){
         Get.snackbar('提醒', "操作成功！");
         getApplyList();
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('提醒', result.data["msg"]);
       }

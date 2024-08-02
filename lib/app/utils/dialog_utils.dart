@@ -71,6 +71,46 @@ class DialogUtils{
         });
   }
 
+  ///消息提示
+  static Future<bool?> showSingleDialog(BuildContext context,String title) {
+    return showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            titlePadding: EdgeInsets.zero,
+            contentPadding: EdgeInsets.symmetric(horizontal: 15.w),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 70.h,
+                  alignment: Alignment.center,
+                  child: Text(title, style: TextStyle(fontSize: 16.sp,),),
+                ),
+                Divider(height: 1.h,color: color_e6e,),
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 10.h),
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: WidgetUtils.buildElevatedButton(
+                        "确定", 116.w, 40.h,
+                        bg: color_703,
+                        textColor: Colors.white, onPressed: () {
+                      Navigator.of(context).pop(true);
+                    }),
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+  }
+
 }
 
 

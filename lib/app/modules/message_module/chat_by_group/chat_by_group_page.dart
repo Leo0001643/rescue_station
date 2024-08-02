@@ -1,6 +1,7 @@
 import 'package:bubble/bubble.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +12,7 @@ import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_text_theme.dart';
+import 'package:rescue_station/app/utils/data_utils.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
@@ -112,53 +114,139 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
   }
 
   Widget buildBubble(child, {required message, required nextMessageInGroup}) {
+    var reply = (message as types.Message).repliedMessage;
     if (message.author.id == chatCtl.user.userId) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 230.w),
-            child: message is types.ImageMessage
-                ? buildPopChild(child,message)
-                : Bubble(
-                    nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.rightCenter,
-                    nipOffset: -10,
-                    alignment: Alignment.bottomRight,
-                    color: color_65d,
-                    elevation: 0,
-                    margin: const BubbleEdges.all(0),
-                    padding: const BubbleEdges.all(0),
-                    child: buildPopChild(child,message),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text((message).author.firstName.em(),style: TextStyle(fontSize: 10.sp,color: Colors.black45),),
+              SizedBox(height: 5.h,),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 230.w),
+                child: message is types.ImageMessage
+                    ? buildPopChild(child,message)
+                    : Bubble(
+                  nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.rightCenter,
+                  nipOffset: -10,
+                  alignment: Alignment.bottomRight,
+                  color: color_65d,
+                  elevation: 0,
+                  margin: const BubbleEdges.all(0),
+                  padding: const BubbleEdges.all(0),
+                  child: buildPopChild(child,message),
+                ),
+              ),
+              Visibility(
+                visible: reply != null,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: color_e6e,
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
+                  margin: EdgeInsets.only(top: 5.h,bottom: 5.h),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 3.w),
+                    child: Text("${reply?.author.firstName.em()}：${DataUtils.getMsgContent(reply)}",
+                      style: TextStyle(fontSize: 10.sp,color: color_333,overflow: TextOverflow.ellipsis),maxLines: 1,),
+                  ),
+                ),
+              ),
+            ],
           ),
           SizedBox(
             width: 10.w,
           ),
-          buildAvatar(chatCtl.user.portrait.em()),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Visibility(
+                visible: false,//chatCtl.group.name?.startsWith(message.author.firstName.em()) == true,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    borderRadius: BorderRadius.circular(5.r),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 7.w,vertical: 3.h),
+                  child: Text("群主",style: TextStyle(fontSize: 10.sp,color: Colors.white),),
+                ),
+              ),
+              SizedBox(height: 5.h,),
+              buildAvatar(chatCtl.user.portrait.em()),
+            ],
+          ),
         ],
       );
     } else {
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          buildAvatar(chatCtl.user.portrait.em()),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 230.w),
-            child: message is types.ImageMessage
-                ? Padding(
-                    padding: EdgeInsets.only(left: 10.w),
-                    child: buildPopChild(child,message),
-                  )
-                : Bubble(
-                    nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.leftCenter,
-                    nipOffset: -10,
-                    alignment: Alignment.bottomLeft,
-                    color: Colors.white,
-                    elevation: 0,
-                    margin: BubbleEdges.only(left: 10.w),
-                    padding: const BubbleEdges.all(0),
-                    child: buildPopChild(child,message),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Visibility(
+                visible: false,//chatCtl.group.name?.startsWith(message.author.firstName.em()) == true,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    borderRadius: BorderRadius.circular(5.r),
                   ),
+                  padding: EdgeInsets.symmetric(horizontal: 7.w,vertical: 3.h),
+                  child: Text("群主",style: TextStyle(fontSize: 10.sp,color: Colors.white),),
+                ),
+              ),
+              SizedBox(height: 5.h,),
+              buildAvatar(chatCtl.user.portrait.em()),
+            ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 10.w),
+                child: Text((message).author.firstName.em(),style: TextStyle(fontSize: 10.sp,color: Colors.black45),),
+              ),
+              SizedBox(height: 5.h,),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 230.w),
+                child: message is types.ImageMessage
+                    ? Padding(
+                  padding: EdgeInsets.only(left: 10.w),
+                  child: buildPopChild(child,message),
+                )
+                    : Bubble(
+                  nip: GetPlatform.isWeb ? BubbleNip.no:BubbleNip.leftCenter,
+                  nipOffset: -10,
+                  alignment: Alignment.bottomLeft,
+                  color: Colors.white,
+                  elevation: 0,
+                  margin: BubbleEdges.only(left: 10.w),
+                  padding: const BubbleEdges.all(0),
+                  child: buildPopChild(child,message),
+                ),
+              ),
+              Visibility(
+                visible: reply != null,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: color_e6e,
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  margin: EdgeInsets.only(top: 5.h,bottom: 5.h),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 3.w),
+                    child: Text("${reply?.author.firstName.em()}：${DataUtils.getMsgContent(reply)}",
+                      style: TextStyle(fontSize: 10.sp,color: color_333,overflow: TextOverflow.ellipsis,),maxLines: 1,),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       );

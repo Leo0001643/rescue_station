@@ -35,10 +35,11 @@ class FriendDetailLogic extends GetxController {
   }
 
   void getFriendDetail(UserInfoEntity user) {
-
     DioUtil().get("${Api.FRIEND_INFO}${user.userId.em()}").then((result){
       if(result.data["code"] == 200){
         state.userInfo.value = UserInfoEntity.fromJson(result.data["data"]);
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('联系人提醒', result.data["msg"]);
       }
@@ -57,6 +58,8 @@ class FriendDetailLogic extends GetxController {
           Get.back();
           Get.snackbar('联系人提醒', "删除成功！");
         });
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('联系人提醒', result.data["msg"]);
       }

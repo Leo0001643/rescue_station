@@ -35,15 +35,13 @@ class ChatGroupDetailLogic extends GetxController {
   void getGroupDetail() {
     EasyLoading.show();
     loggerArray(["群详情", state.chatEvent.messageBox.toJson()]);
-    DioUtil()
-        .get(
-      Api.GET_GROUP_INFO + state.chatEvent.messageBox.boxId.em(),
-    )
-        .then((result) {
+    DioUtil().get(Api.GET_GROUP_INFO + state.chatEvent.messageBox.boxId.em(),).then((result) {
       EasyLoading.dismiss();
       if (result.data["code"] == 200) {
         state.groupDetail.value =
             GroupDetailEntity.fromJson(result.data['data']);
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         Get.snackbar('提醒', result.data["msg"]);
       }
@@ -69,6 +67,8 @@ class ChatGroupDetailLogic extends GetxController {
           eventBus.fire(NewChatEvent());
           EasyLoading.dismiss();
         });
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         EasyLoading.dismiss();
         Get.snackbar('提醒', result.data["msg"]);
@@ -93,6 +93,8 @@ class ChatGroupDetailLogic extends GetxController {
           state.isDisturb.value = value;
           EasyLoading.dismiss();
         });
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         EasyLoading.dismiss();
         Get.snackbar('提醒', result.data["msg"]);
@@ -122,11 +124,7 @@ class ChatGroupDetailLogic extends GetxController {
   void leaveGroup() {
     EasyLoading.show();
     var group = state.chatEvent.messageBox;
-    DioUtil()
-        .get(
-      Api.LOGOUT_GROUP + group.boxId.em(),
-    )
-        .then((result) {
+    DioUtil().get(Api.LOGOUT_GROUP + group.boxId.em(),).then((result) {
       if (result.data["code"] == 200) {
         DbHelper()
             .deleteMessageBox(AppData.getUser()!.userId.em(), group.boxId.em())
@@ -136,6 +134,8 @@ class ChatGroupDetailLogic extends GetxController {
           EasyLoading.dismiss();
           Get.until((ModalRoute.withName(Routes.TABS)));
         });
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
       } else {
         EasyLoading.dismiss();
         Get.snackbar('提醒', result.data["msg"]);
