@@ -33,7 +33,7 @@ void main() async{
             builder: (context , child) {
               return GetMaterialApp(
                 debugShowCheckedModeBanner: false,
-                title: "绿色扶贫",
+                title: "水滴扶贫",
                 locale: Constant.locale,
                 fallbackLocale: Constant.locale,
                 localizationsDelegates: const [
