@@ -75,39 +75,7 @@ class MinePage extends GetView<MineController> {
                 ),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                onTap: ()=> print("昵称"),
-              ),
-              Divider(height: 0.1,color: AppStyles.lightGreyWile),
-
-              ListTile(
-                leading: Icon(IconFont.BIRTHDAY, size: AppLayout.fontSize(28), color: Colors.pinkAccent),
-                title: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("生日"),
-                      Text("1998-01-06")
-                    ]
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                onTap: ()=> print("生日"),
-              ),
-              Divider(height: 0.1,color: AppStyles.lightGreyWile),
-
-              ListTile(
-                leading: Icon(IconFont.SEX, size: AppLayout.fontSize(28), color: Colors.pink),
-                title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("性别"),
-                      Obx(() {
-                        return Text("${userController.userInfo.value.genderLabel}");
-                      })
-                    ]
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                onTap: ()=> print("性别"),
+                onTap: ()=> print("微聊号"),
               ),
               Divider(height: 0.1,color: AppStyles.lightGreyWile),
 

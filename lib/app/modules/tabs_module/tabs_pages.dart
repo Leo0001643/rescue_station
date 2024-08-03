@@ -52,7 +52,7 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
           currentIndex: controller.currentIndex.value,
           type:BottomNavigationBarType.fixed,
           onTap: (index) {
-            if ((index == 1 || index == 2 || index == 4) && !controller.isLogin.value) {
+            if ((index == 1 || index == 2 || index == 3) && !controller.isLogin.value) {
               controller.navigateToLogin();
             } else {
               controller.setCurrentIndex(index);

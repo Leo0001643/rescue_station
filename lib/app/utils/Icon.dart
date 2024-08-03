@@ -15,8 +15,8 @@ class IconFont{
  static const IconData BIRTHDAY = IconData(0xe6a0, fontFamily: "rescue", matchTextDirection: true);
  static const IconData SEX = IconData(0xe604, fontFamily: "rescue", matchTextDirection: true);
  static const IconData ADDRESS = IconData(0xe62c, fontFamily: "rescue", matchTextDirection: true);
- static const IconData PHONE = IconData(0xe7f2, fontFamily: "rescue", matchTextDirection: true);
- static const IconData EDITPWD = IconData(0xe629, fontFamily: "rescue", matchTextDirection: true);
+ static const IconData PHONE = IconData(0xe607, fontFamily: "rescue", matchTextDirection: true);
+ static const IconData EDITPWD = IconData(0xe64c, fontFamily: "rescue", matchTextDirection: true);
  static const IconData EMAIL = IconData(0xe666, fontFamily: "rescue", matchTextDirection: true);
 }
 

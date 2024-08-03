@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12678367",
+      "name": "生日礼",
+      "font_class": "shengrili",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "23943154",
+      "name": "性别",
+      "font_class": "xingbie1",
+      "unicode": "f97a",
+      "unicode_decimal": 63866
+    },
+    {
+      "icon_id": "11655395",
+      "name": "修改密码",
+      "font_class": "xiugaimima1",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "18205177",
+      "name": "icon-完善手机号01@2x",
+      "font_class": "icon-wanshanshoujihao012x",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "27755856",
+      "name": "在线客服",
+      "font_class": "zaixiankefu",
+      "unicode": "e6b5",
+      "unicode_decimal": 59061
+    },
+    {
       "icon_id": "425032",
       "name": "昵称",
       "font_class": "nicheng-copy",
@@ -27,39 +62,11 @@
       "unicode_decimal": 58982
     },
     {
-      "icon_id": "5152784",
-      "name": "性别",
-      "font_class": "xingbie",
-      "unicode": "e604",
-      "unicode_decimal": 58884
-    },
-    {
-      "icon_id": "9539032",
-      "name": "修改密码",
-      "font_class": "xiugaimima",
-      "unicode": "e629",
-      "unicode_decimal": 58921
-    },
-    {
-      "icon_id": "10191447",
-      "name": "生日",
-      "font_class": "shengri",
-      "unicode": "e6a0",
-      "unicode_decimal": 59040
-    },
-    {
       "icon_id": "15559683",
       "name": "微信",
       "font_class": "shejiaotubiao-37",
       "unicode": "e646",
       "unicode_decimal": 58950
-    },
-    {
-      "icon_id": "39768658",
-      "name": "手机",
-      "font_class": "cellular-phone-replenishing",
-      "unicode": "e7f2",
-      "unicode_decimal": 59378
     },
     {
       "icon_id": "30904454",
