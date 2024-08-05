@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
@@ -12,25 +9,26 @@ import 'package:rescue_station/app/modules/mine_module/user_model.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
+import '../../domains/upload_file_entity.dart';
 import '../../routes/api_info.dart';
 import '../../utils/dio_utils.dart';
-import '../../utils/shared_preferences_util.dart';
 
 
 class MineController extends GetxController{
-  var userInfo = UserInfoEntity().obs;
+  Rx<UserInfoEntity> userInfo = UserInfoEntity().obs;
+  Rx<String> profileImagePath = ''.obs;
   StreamSubscription? loginSub;
 
   var user = UserModel(
     nickname: '上官婉儿',
-    accountNumber: '18865654445',
+    chatNo: '18865654445',
     gender: '男',
     birthdate: DateTime(1998, 8, 18),
     address: '北京市海淀区',
     phoneNumber: '16315665412',
   ).obs;
 
-  var profileImagePath = ''.obs;
+
 
   @override
   void onReady() {
@@ -48,7 +46,6 @@ class MineController extends GetxController{
   void onClose() {
 
   }
-
 
   void logout() async{
     try {
@@ -69,54 +66,80 @@ class MineController extends GetxController{
 
 
   Future<void> pickImage(ImageSource source) async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: source);
-    if (image != null) {
-      profileImagePath.value = image.path;
-      // Upload the image to your server and update the user's profile picture URL
-      // Example: await uploadImage(image.path);
+    try{
+      final ImagePicker _picker = ImagePicker();
+      final XFile? image = await _picker.pickImage(source: source);
+      UploadFileEntity? uploadFile;
+      if (image != null) {
+        profileImagePath.value = image.path;
+        var imageName = image.name;
+        await EasyLoading.show(status: '正在上传头像...',maskType: EasyLoadingMaskType.black);
+        if (GetPlatform.isWeb) {
+          final bytes = await image.readAsBytes();
+          uploadFile = await DioUtil.uploadWebFile(imageName, bytes);
+        } else {
+          uploadFile = await DioUtil.uploadFile(imageName, "");
+        }
+        if(isNotEmpty(uploadFile)) {
+          var path  = uploadFile?.fullPath;
+          var response = await DioUtil().post(Api.EDIT_PORTRAIT, data: {"portrait": path});
+          print(response.data);
+          // ApiResponse apiRes = ApiResponse.fromJson(response.data);
+          profileImagePath.value =  uploadFile!.fullPath!;
+        }
+        await EasyLoading.dismiss();
+        EasyLoading.showSuccess('修改成功!');
+        this.refresh();
+      }
+    }catch(e){
+      EasyLoading.showError("修改头像异常，请稍后再试！");
     }
   }
 
+  ///修改昵称
   void updateNickname(String nickname) {
     user.update((val) {
       val?.nickname = nickname;
     });
   }
 
-  void updateAccountNumber(String accountNumber) {
+  ///修改微聊号
+  void updateChatNo(String chatNo) {
     user.update((val) {
-      val?.accountNumber = accountNumber;
+      val?.chatNo = chatNo;
     });
   }
 
+  ///修改等级
   void updateGender(String gender) {
     user.update((val) {
       val?.gender = gender;
     });
   }
 
+  ///修改生日
   void updateBirthdate(DateTime birthdate) {
     user.update((val) {
       val?.birthdate = birthdate;
     });
   }
 
+  ///修改地址
   void updateAddress(String address) {
     user.update((val) {
       val?.address = address;
     });
   }
 
+  ///修改手机号
   void updatePhoneNumber(String phoneNumber) {
     user.update((val) {
       val?.phoneNumber = phoneNumber;
     });
   }
 
+  ///修改密码
   void updatePassword(String newPassword) {
     // Handle password update logic here
   }
-
-
 }

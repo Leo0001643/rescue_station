@@ -9,7 +9,7 @@ class Constant{
   // static const String BASE_URL = "http://127.0.0.1:8088/";
 
   ///系统版本号
-  static const String VERSION = "1.0.1";
+  static const String VERSION = "1.1.2";
 
   static const locale = Locale("zh","CN");
 

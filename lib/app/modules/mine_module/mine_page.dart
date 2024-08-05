@@ -1,152 +1,28 @@
 import 'dart:io';
+import 'package:getwidget/components/avatar/gf_avatar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:getwidget/getwidget.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import '../../theme/app_text_theme.dart';
 import '../mine_module/mine_controller.dart';
 import '../../theme/app_colors_theme.dart';
 import '../../utils/AppLayout.dart';
 import '../../utils/Icon.dart';
 
-
 class MinePage extends GetView<MineController> {
-    final userController = Get.find<MineController>();
-    final TextEditingController passwordController = TextEditingController();
+  MineController userController = Get.find<MineController>();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            toolbarHeight: AppLayout.heigth(50),
-            leadingWidth: AppLayout.heigth(200),
-            backgroundColor: Colors.blue,
-            leading: Row(
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      _showImageSourceActionSheet(context, userController);
-                    },
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: userController.profileImagePath.value.isEmpty
-                          ? const NetworkImage('https://pic.rmb.bdstatic.com/bjh/2b67e6c5784ec80eae9c5282c978115c5399.jpeg@h_1280')
-                          : FileImage(File(userController.profileImagePath.value)) as ImageProvider,
-                    ),
-                  ),
-                  Gap(AppLayout.width(8)),
-                  Obx(() {
-                    return Text("${userController.userInfo.value.nickName}" ,style: TextStyle(fontSize: AppLayout.fontSize(18), color: Colors.white, fontWeight: FontWeight.w600));
-                  }),
-                ],
-              )
-          ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 12,),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Divider(height: 0.1,color: AppStyles.lightGreyWile),
-              ListTile(
-                leading: Icon(IconFont.NICKE, size: AppLayout.fontSize(28),color: Colors.lightBlue),
-                title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("昵称"),
-                      Obx(() {
-                        return Text("${userController.userInfo.value.nickName}");
-                      })
-                    ]
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                onTap: ()=> print("昵称"),
-              ),
-              Divider(height: 0.1,color: AppStyles.lightGreyWile),
-              ListTile(
-                leading: Icon(IconFont.WECHAT, size: AppLayout.fontSize(28), color: Colors.green),
-                title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("微聊号"),
-                      Obx(() {
-                        return Text("${userController.userInfo.value.chatNo}", overflow: TextOverflow.ellipsis, maxLines: 1, textAlign: TextAlign.right, softWrap: false);
-                      })
-                    ]
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                onTap: ()=> print("微聊号"),
-              ),
-              Divider(height: 0.1,color: AppStyles.lightGreyWile),
-
-              ListTile(
-                leading: Icon(IconFont.ADDRESS, size: AppLayout.fontSize(28), color: Colors.blueAccent),
-                title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("地址"),
-                      Obx(() {
-                        return Text("${userController.userInfo.value.provinces} ${userController.userInfo.value.city}");
-                      })
-                    ]
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                onTap: ()=> print("地址"),
-              ),
-              Divider(height: 0.1,color: AppStyles.lightGreyWile),
-
-              ListTile(
-                leading: Icon(IconFont.PHONE, size: AppLayout.fontSize(28), color: Colors.redAccent),
-                title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("手机号"),
-                      Obx(() {
-                        return Text("${userController.userInfo.value.phone}");
-                      })
-                    ]
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                onTap: ()=> print("手机号"),
-              ),
-              Divider(height: 0.1,color: AppStyles.lightGreyWile),
-
-              ListTile(
-                leading: Icon(IconFont.EDITPWD, size: AppLayout.fontSize(28), color: Colors.blueAccent),
-                title: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("修改密码"),
-                    ]
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                onTap: ()=> print("修改密码"),
-              ),
-              Divider(height: 0.1,color: AppStyles.lightGreyWile),
-              Gap(AppLayout.heigth(48)),
-              InkWell(
-                child: Container(
-                  height: AppLayout.heigth(48),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: AppStyles.buttonColor,
-                      borderRadius: BorderRadius.circular(8)
-                  ),
-                  child: Center(
-                    child: Text("退出账号", style: TextStyle(fontSize: AppLayout.fontSize(18), fontWeight: FontWeight.w700, color: Colors.white), textAlign: TextAlign.center),
-                  ),
-                ),
-                onTap: (){
-                  controller.logout();
-                },
-              )
-            ],
-          ),
-        ),
-    );
+    return Obx(()=>Scaffold(
+        appBar: _appBar(context),
+        body: _body()
+    ));
   }
 
   void _showImageSourceActionSheet(BuildContext context, MineController controller) {
@@ -157,16 +33,16 @@ class MinePage extends GetView<MineController> {
           child: Wrap(
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('选择照片'),
+                leading: const Icon(Icons.photo_library),
+                title: const Text('选择照片'),
                 onTap: () {
                   controller.pickImage(ImageSource.gallery);
-                  Navigator.of(context).pop();
+                  // Navigator.of(context).pop();
                 },
               ),
               ListTile(
-                leading: Icon(Icons.photo_camera),
-                title: Text('拍照'),
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('拍照'),
                 onTap: () {
                   controller.pickImage(ImageSource.camera);
                   Navigator.of(context).pop();
@@ -176,6 +52,163 @@ class MinePage extends GetView<MineController> {
           ),
         );
       },
+    );
+  }
+
+  Widget _body(){
+    return Padding(
+      padding: EdgeInsets.all(AppLayout.width(12)),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(AppLayout.width(12)),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ListTile(
+                  leading: Icon(IconFont.NICKE, size: AppLayout.fontSize(28),color: Colors.lightBlue),
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("昵称"),
+                        Obx(() {
+                          return Text("${userController.userInfo.value.nickName}");
+                        })
+                      ]
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  onTap: ()=> print("昵称"),
+                ),
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+                ListTile(
+                  leading: Icon(IconFont.WECHAT, size: AppLayout.fontSize(28), color: Colors.green),
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("微聊号"),
+                        Obx(() {
+                          return Text("${userController.userInfo.value.chatNo}", overflow: TextOverflow.ellipsis, maxLines: 1, textAlign: TextAlign.right, softWrap: false);
+                        })
+                      ]
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  onTap: ()=> print("微聊号"),
+                ),
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+                ListTile(
+                  leading: Icon(IconFont.ADDRESS, size: AppLayout.fontSize(28), color: Colors.blueAccent),
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("地址"),
+                        Obx(() {
+                          return Text("${userController.userInfo.value.provinces} ${userController.userInfo.value.city}");
+                        })
+                      ]
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  onTap: ()=> print("地址"),
+                ),
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+                ListTile(
+                  leading: Icon(IconFont.PHONE, size: AppLayout.fontSize(28), color: Colors.redAccent),
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("手机号"),
+                        Obx(() {
+                          return Text("${userController.userInfo.value.phone}");
+                        })
+                      ]
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  onTap: ()=> print("手机号"),
+                ),
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+
+                ListTile(
+                  leading: Icon(IconFont.EDITPWD, size: AppLayout.fontSize(28), color: Colors.blueAccent),
+                  title: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("修改密码"),
+                      ]
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  onTap: ()=> print("修改密码"),
+                ),
+                Divider(height: 0.1,color: AppStyles.lightGreyWile),
+                Gap(AppLayout.heigth(48)),
+                InkWell(
+                  child: Container(
+                    height: AppLayout.heigth(48),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: AppStyles.buttonColor,
+                        borderRadius: BorderRadius.circular(8)
+                    ),
+                    child: Center(
+                      child: Text("退出账号", style: TextStyle(fontSize: AppLayout.fontSize(18), fontWeight: FontWeight.w700, color: Colors.white), textAlign: TextAlign.center),
+                    ),
+                  ),
+                  onTap: (){
+                    controller.logout();
+                  },
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  PreferredSizeWidget _appBar(BuildContext context){
+    print("头像>>>:"+userController.profileImagePath.value);
+    return AppBar(
+        toolbarHeight: AppLayout.heigth(80),
+        leadingWidth: AppLayout.heigth(200),
+        backgroundColor: Colors.blue,
+        leading: Row(
+          children: [
+            Expanded(child: GestureDetector(
+              onTap: (){
+                _showImageSourceActionSheet(context, userController);
+              },
+              child: Padding(
+                padding: EdgeInsets.only(left: AppLayout.width(12)),
+                child: Row(children: [
+                  GFAvatar(
+                    radius: AppLayout.width(30),
+                    shape: GFAvatarShape.standard,
+                    borderRadius: BorderRadius.circular(AppLayout.width(8)),
+                    backgroundImage: userController.profileImagePath.value.isEmpty
+                        ?  NetworkImage(userController.profileImagePath.value)
+                        : FileImage(File(userController.profileImagePath.value)) as ImageProvider,
+                  ),
+                  Gap(AppLayout.width(8)),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("${userController.userInfo.value.nickName}" ,style: AppTextTheme.headLineStyle2.copyWith(color: Colors.white)),
+                      Gap(AppLayout.heigth(5)),
+                      Text("${userController.userInfo.value.phone}" ,style: AppTextTheme.headLineStyle5),
+                    ],
+                  )
+                ]),
+              ),
+            ))
+          ],
+        )
     );
   }
 

@@ -1,6 +1,6 @@
 class UserModel {
   String nickname;
-  String accountNumber;
+  String chatNo;
   String gender;
   DateTime birthdate;
   String address;
@@ -8,7 +8,7 @@ class UserModel {
 
   UserModel({
     required this.nickname,
-    required this.accountNumber,
+    required this.chatNo,
     required this.gender,
     required this.birthdate,
     required this.address,

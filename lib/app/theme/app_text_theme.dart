@@ -10,6 +10,8 @@ class AppTextTheme{
   static TextStyle headLineStyle3 = TextStyle(fontSize: AppLayout.fontSize(26), color: Colors.black87, fontWeight: FontWeight.w300);
   static TextStyle headLineStyle4 = TextStyle(fontSize: AppLayout.fontSize(32), color: Colors.black87, fontWeight: FontWeight.w600);
 
+  static TextStyle headLineStyle5 = TextStyle(fontSize: AppLayout.fontSize(12), color: AppStyles.lightGreyWile, fontWeight: FontWeight.w500);
+
 
   static List<String> fontFamily = ['Roboto','NotoColorEmoji'];
 

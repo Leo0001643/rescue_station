@@ -114,13 +114,5 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
           ]),
     ));
   }
-
-
-
-
-
-
-
-
 }
 
