@@ -1,15 +1,14 @@
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:marquee/marquee.dart';
-import 'package:rescue_station/app/utils/AppLayout.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
-import '../../routes/app_pages.dart';
-import '../../theme/app_text_theme.dart';
-import '../../theme/app_colors_theme.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:marquee/marquee.dart';
+import 'package:rescue_station/app/modules/tabs_module/tabs_controller.dart';
+import 'package:rescue_station/app/utils/AppLayout.dart';
+import '../../routes/app_pages.dart';
+import '../../theme/app_colors_theme.dart';
+import '../../theme/app_text_theme.dart';
 import 'home_controller.dart';
-
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,30 +17,14 @@ class HomePage extends StatefulWidget {
 
 class StateHomePage extends State<HomePage>{
   final controller = Get.find<HomeController>();
+  final tabsController = Get.find<TabsController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(AppLayout.heigth(60)),
-          child: AppBar(
-            elevation: 0,
-            titleSpacing: 0,
-            title: Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                width: AppLayout.width(160),
-                height: AppLayout.heigth(38),
-                child: Image.asset("assets/images/icon/logo-nav.png", fit: BoxFit.fitHeight),
-              ),
-            ),
-            actions: [
-              IconButton(onPressed: ()=>Get.toNamed(Routes.NOTICE),
-                  icon: Image.asset("assets/images/icon/email.png",fit: BoxFit.cover)),
-              IconButton(onPressed: ()=>Get.toNamed(Routes.MINE),
-                  icon: Image.asset("assets/images/icon/settings.png",fit: BoxFit.cover)),
-            ],
-          ),
+          child: _appBar(),
         ),
         body: SingleChildScrollView(
           child: Obx(()=>Container(
@@ -63,6 +46,27 @@ class StateHomePage extends State<HomePage>{
             ),
           )),
         )
+    );
+  }
+
+  Widget _appBar(){
+    return AppBar(
+      elevation: 0,
+      titleSpacing: 0,
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          width: AppLayout.width(160),
+          height: AppLayout.heigth(38),
+          child: Image.asset("assets/images/icon/logo-nav.png", fit: BoxFit.fitHeight),
+        ),
+      ),
+      actions: [
+        IconButton(onPressed: ()=>Get.toNamed(Routes.NOTICE),
+            icon: Image.asset("assets/images/icon/email.png",fit: BoxFit.cover)),
+        IconButton(onPressed: ()=>Get.toNamed(Routes.MINE),
+            icon: Image.asset("assets/images/icon/settings.png",fit: BoxFit.cover)),
+      ],
     );
   }
 
@@ -176,7 +180,13 @@ class StateHomePage extends State<HomePage>{
           child: Text("立即申请", style: AppTextTheme.headLineStyle2, textAlign: TextAlign.center),
         ),
       ),
-      onTap: ()=> Get.toNamed(Routes.LOAN),
+      onTap: (){
+        if(!tabsController.isLogin.value){
+          tabsController.navigateToLogin();
+        }else{
+          Get.toNamed(Routes.LOAN);
+        }
+      }
     );
   }
 }
