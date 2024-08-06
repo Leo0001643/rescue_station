@@ -117,7 +117,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
     var reply = (message as types.Message).repliedMessage;
 
     if (message.author.id == chatCtl.user.userId) {
-      return           Row(
+      return Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Column(
@@ -166,7 +166,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          buildAvatar(chatCtl.user.portrait.em()),
+          buildAvatar(chatCtl.friend.portrait.em()),
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,7 +279,8 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
       pressType: PressType.longPress,
       controller: controller,
       menuBuilder: ()=>buildLongPressMenu(message),
-      child: child,
+      child: message is types.ImageMessage ?
+      InkWell(child: child, onTap: ()=> chatCtl.showImageViewer(context,message.uri),) : child,
     );
   }
 

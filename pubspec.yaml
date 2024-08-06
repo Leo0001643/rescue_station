@@ -70,6 +70,7 @@ dependencies:
   google_fonts: ^6.2.1
   #相机权限
   permission_handler: ^10.2.0
+  easy_image_viewer: ^1.5.1
 
 dependency_overrides:
   meta: ^1.10.0 # 替换为你需要的meta库的版本号

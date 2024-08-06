@@ -137,7 +137,7 @@ class DioUtil {
 
   ///上传文件
   static Future<UploadFileEntity?> uploadWebFile(String filename,Uint8List bytes) async {
-    loggerArray(["上传的文件路径",]);
+    loggerArray(["上传的文件路径",filename]);
     var mufile = diod.MultipartFile.fromBytes(bytes, filename: filename,);
     var result = await DioUtil().postAny(Api.FILE_UPLOAD,data: diod.FormData.fromMap({"file": mufile}),
         options: diod.Options(contentType: "multipart/form-data",headers: {}));

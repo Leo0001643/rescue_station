@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -158,6 +159,8 @@ class ChatByFriendLogic extends GetxController {
       }
     });
   }
+
+
   void insertMessageList(SocketMessageEntity socketMsg, Map<String, dynamic> fromInfo, String createTime,{types.Message? replied}) {
     switch (find(socketMsg.msgContent?.msgType)) {
       case MessageTypeEnum.TEXT:

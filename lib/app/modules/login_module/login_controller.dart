@@ -24,6 +24,7 @@ class LoginController extends GetxController{
       final phone = phoneController.text;
       final password = passwordController.text;
       await EasyLoading.show(status: '登录中...',maskType: EasyLoadingMaskType.black,);
+      await AppData.clearUser();///登陆前先清除用户信息
       var response = await DioUtil().post(Api.MEMBER_LOGIN, data: {"phone":phone, "password": password});
       var entity = ApiResponse.fromJson(response.data);
       if(isNotEmpty(response) && entity.code == ApiCode.SUCCESS.code) {

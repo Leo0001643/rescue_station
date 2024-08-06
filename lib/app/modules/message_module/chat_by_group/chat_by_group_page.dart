@@ -13,6 +13,7 @@ import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_text_theme.dart';
 import 'package:rescue_station/app/utils/data_utils.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
@@ -88,7 +89,6 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
             l10n: const ChatL10nZhCN(),
             messages: state.messages.value,
             onSendPressed: (text) {},
-            // onMessageTap: (context, message) => logic.addMessage(),
             textMessageBuilder: buildTextMessage,
             user: types.User(
                 id: chatCtl.user.userId.em(),
@@ -201,7 +201,7 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
                 ),
               ),
               SizedBox(height: 5.h,),
-              buildAvatar(chatCtl.user.portrait.em()),
+              buildAvatar(message.author.imageUrl.em()),
             ],
           ),
           Column(
@@ -309,7 +309,8 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
       pressType: PressType.longPress,
       controller: controller,
       menuBuilder: ()=>buildLongPressMenu(message),
-      child: child,
+      child: message is types.ImageMessage ?
+      InkWell(child: child, onTap: ()=> chatCtl.showImageViewer(context,message.uri),) : child,
     );
   }
 
