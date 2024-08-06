@@ -51,9 +51,6 @@ class TabsController extends GetxController {
       ContactsPage(),
       MinePage()
     ];
-    GoogleFonts.pendingFonts([GoogleFonts.notoColorEmoji()]).then((v){
-      loggerArray(["字体库加载结果",v]);
-    });
     super.onInit();
   }
 

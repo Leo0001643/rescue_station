@@ -13,7 +13,7 @@ class AppTextTheme{
   static TextStyle headLineStyle5 = TextStyle(fontSize: AppLayout.fontSize(12), color: AppStyles.lightGreyWile, fontWeight: FontWeight.w500);
 
 
-  static List<String> fontFamily = ['Roboto','NotoColorEmoji'];
+  static List<String> fontFamily = ['Roboto','NotoColorEmoji','Apple Color Emoji','Segoe UI Emoji'];
 
 }
 
