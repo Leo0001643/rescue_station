@@ -56,9 +56,6 @@ class UserInfoEntity  extends ISuspensionBean {
 	@override
 	String getSuspensionTag() => tabIndex;
 
-
-
-
 }
 
 

@@ -30,25 +30,28 @@ class MinePage extends GetView<MineController> {
       context: context,
       builder: (BuildContext context) {
         return SafeArea(
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('选择照片'),
-                onTap: () {
-                  controller.pickImage(ImageSource.gallery);
-                  // Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_camera),
-                title: const Text('拍照'),
-                onTap: () {
-                  controller.pickImage(ImageSource.camera);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
+          child: FractionallySizedBox(
+            heightFactor: 0.5,
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text('选择照片'),
+                  onTap: () {
+                    controller.pickImage(ImageSource.gallery);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('拍照'),
+                  onTap: () {
+                    controller.pickImage(ImageSource.camera);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -133,7 +136,6 @@ class MinePage extends GetView<MineController> {
                   onTap: ()=> print("手机号"),
                 ),
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
-
                 ListTile(
                   leading: Icon(IconFont.EDITPWD, size: AppLayout.fontSize(28), color: Colors.blueAccent),
                   title: const Row(
@@ -173,7 +175,6 @@ class MinePage extends GetView<MineController> {
   }
 
   PreferredSizeWidget _appBar(BuildContext context){
-    print("头像>>>:"+userController.profileImagePath.value);
     return AppBar(
         toolbarHeight: AppLayout.heigth(80),
         leadingWidth: AppLayout.heigth(200),
@@ -191,9 +192,9 @@ class MinePage extends GetView<MineController> {
                     radius: AppLayout.width(30),
                     shape: GFAvatarShape.standard,
                     borderRadius: BorderRadius.circular(AppLayout.width(8)),
-                    backgroundImage: userController.profileImagePath.value.isEmpty
-                        ?  NetworkImage(userController.profileImagePath.value)
-                        : FileImage(File(userController.profileImagePath.value)) as ImageProvider,
+                    backgroundImage: ((userController.profileImagePath.value.isEmpty && userController.userInfo.value.portrait == null)
+                        ? const AssetImage('assets/images/icon/default_avatar.png')
+                        : NetworkImage(userController.userInfo.value.portrait!)) as ImageProvider<Object>?
                   ),
                   Gap(AppLayout.width(8)),
                   Column(

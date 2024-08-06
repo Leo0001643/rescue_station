@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/modules/mine_module/user_model.dart';
@@ -15,8 +15,8 @@ import '../../utils/dio_utils.dart';
 
 
 class MineController extends GetxController{
-  Rx<UserInfoEntity> userInfo = UserInfoEntity().obs;
-  Rx<String> profileImagePath = ''.obs;
+  var userInfo = UserInfoEntity().obs;
+  var profileImagePath = ''.obs;
   StreamSubscription? loginSub;
 
   var user = UserModel(
@@ -29,9 +29,18 @@ class MineController extends GetxController{
   ).obs;
 
 
+  @override
+  void onInit() {
+    print("生命周期onInit>>>>>>>>>>>");
+    loginSub = eventBus.on<LoginEvent>().listen((event) {
+      ///登录成功
+      userInfo.value = AppData.getUser()!;
+    });
+  }
 
   @override
   void onReady() {
+    print("生命周期onReady>>>>>>>>>>>");
     var user = AppData.getUser();
     if(isNotEmpty(user)){
       userInfo.value = user!;
@@ -67,32 +76,56 @@ class MineController extends GetxController{
 
   Future<void> pickImage(ImageSource source) async {
     try{
-      final ImagePicker _picker = ImagePicker();
-      final XFile? image = await _picker.pickImage(source: source);
       UploadFileEntity? uploadFile;
-      if (image != null) {
-        profileImagePath.value = image.path;
-        var imageName = image.name;
-        await EasyLoading.show(status: '正在上传头像...',maskType: EasyLoadingMaskType.black);
-        if (GetPlatform.isWeb) {
+      if (GetPlatform.isWeb) {
+        // Web 特定代码
+        final ImagePicker _picker = ImagePicker();
+        final XFile? image = await _picker.pickImage(source: source);
+        if (image != null) {
+          profileImagePath.value = image.path;
+          var imageName = image.name;
+          await EasyLoading.show(status: '正在上传头像...', maskType: EasyLoadingMaskType.black);
           final bytes = await image.readAsBytes();
           uploadFile = await DioUtil.uploadWebFile(imageName, bytes);
-        } else {
-          uploadFile = await DioUtil.uploadFile(imageName, "");
         }
-        if(isNotEmpty(uploadFile)) {
-          var path  = uploadFile?.fullPath;
-          var response = await DioUtil().post(Api.EDIT_PORTRAIT, data: {"portrait": path});
-          print(response.data);
-          // ApiResponse apiRes = ApiResponse.fromJson(response.data);
-          profileImagePath.value =  uploadFile!.fullPath!;
+      }else{
+        // 移动端特定代码
+        await checkAndRequestPhotosPermission();// 请求相册权限
+        final ImagePicker _picker = ImagePicker();
+        final XFile? image = await _picker.pickImage(source: source);
+        if (image != null) {
+          var imageName = image.name;
+          uploadFile = await DioUtil.uploadFile(imageName, image.path);
         }
-        await EasyLoading.dismiss();
-        EasyLoading.showSuccess('修改成功!');
-        this.refresh();
       }
+      if (isNotEmpty(uploadFile)) {
+        var path = uploadFile?.fullPath;
+        await DioUtil().post(Api.EDIT_PORTRAIT, data: {"portrait": path});
+        userInfo.update((user) {
+          user?.portrait = uploadFile?.fullPath!;
+        });
+        EasyLoading.showSuccess('修改成功!');
+      }
+      await EasyLoading.dismiss();
+      refresh();
     }catch(e){
       EasyLoading.showError("修改头像异常，请稍后再试！");
+      print(e);
+    }
+  }
+
+
+
+  Future<void> checkAndRequestPhotosPermission() async {
+    final status = await Permission.photos.status;
+    if (status.isGranted) {
+      print('照片权限已授权');
+    } else if (status.isDenied) {
+      // 权限被拒绝，尝试请求权限
+      final result = await Permission.photos.request();
+      result.isGranted? print('照片权限已授权') : print('照片权限未授权，请在设置中启用');
+    } else if (status.isPermanentlyDenied) {
+      await openAppSettings();
     }
   }
 
