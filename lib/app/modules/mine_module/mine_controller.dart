@@ -31,7 +31,6 @@ class MineController extends GetxController{
 
   @override
   void onInit() {
-    print("生命周期onInit>>>>>>>>>>>");
     loginSub = eventBus.on<LoginEvent>().listen((event) {
       ///登录成功
       userInfo.value = AppData.getUser()!;
@@ -40,7 +39,6 @@ class MineController extends GetxController{
 
   @override
   void onReady() {
-    print("生命周期onReady>>>>>>>>>>>");
     var user = AppData.getUser();
     if(isNotEmpty(user)){
       userInfo.value = user!;
@@ -49,11 +47,6 @@ class MineController extends GetxController{
       ///登录成功
       userInfo.value = AppData.getUser()!;
     });
-  }
-
-  @override
-  void onClose() {
-
   }
 
   void logout() async{

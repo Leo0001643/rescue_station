@@ -15,8 +15,8 @@ import '../../utils/app_data.dart';
 import '../../utils/dio_utils.dart';
 
 class LoginController extends GetxController{
-  var phoneController = TextEditingController(text: "13125554441");
-  var passwordController = TextEditingController(text: "123456");
+  var phoneController = TextEditingController();
+  var passwordController = TextEditingController();
 
   ///会员登录
   void login() async{

@@ -64,8 +64,8 @@ class StateHomePage extends State<HomePage>{
       actions: [
         IconButton(onPressed: ()=>Get.toNamed(Routes.NOTICE),
             icon: Image.asset("assets/images/icon/email.png",fit: BoxFit.cover)),
-        IconButton(onPressed: ()=>Get.toNamed(Routes.MINE),
-            icon: Image.asset("assets/images/icon/settings.png",fit: BoxFit.cover)),
+        // IconButton(onPressed: ()=>Get.toNamed(Routes.MINE),
+        //     icon: Image.asset("assets/images/icon/settings.png",fit: BoxFit.cover)),
       ],
     );
   }
