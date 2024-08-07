@@ -178,6 +178,11 @@ class ChatByFriendLogic extends GetxController {
             socketMsg.msgContent!.content.em(), UserInfoEntity.fromJson(fromInfo),
                 createdAt: DateUtil.getDateMsByTimeStr(createTime),msgId: socketMsg.msgId,replied: replied));
         break;
+      case MessageTypeEnum.ALERT:
+        state.messages.insert(0, SocketUtils().buildSystemText(
+            socketMsg.msgContent!.content.em(), UserInfoEntity.fromJson(fromInfo),
+            createdAt: DateUtil.getDateMsByTimeStr(createTime),msgId: socketMsg.msgId,replied: replied),);
+        break;
       default:
         break;
     }

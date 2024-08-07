@@ -9,11 +9,11 @@ import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/domains/item_model.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
+import 'package:rescue_station/app/event/edit_group_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_text_theme.dart';
 import 'package:rescue_station/app/utils/data_utils.dart';
-import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
@@ -44,7 +44,9 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
     state.chatEvent = event;
     chatCtl.group = event.group;
     chatCtl.user = event.user;
-    logic.queryChatMessage();
+    state.pageTitle.value = event.group.name.em();
+    logic.loadGroupDetail();
+    logic.queryChatMessage();//继续加载聊天信息
     super.initState();
   }
 
@@ -61,14 +63,14 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
       return Container();
     }
     return Scaffold(
-      appBar: WidgetUtils.buildAppBar(chatCtl.group.name.em(), actions: [
+      appBar: WidgetUtils.buildObxAppBar(state.pageTitle, actions: [
         IconButton(
           icon: Icon(
             Icons.more_vert_outlined,
             size: 30.r,
           ),
           onPressed: () =>
-              Get.toNamed(Routes.CHAT_GROUP_DETAIL, arguments: state.chatEvent),
+              Get.toNamed(Routes.CHAT_GROUP_DETAIL, arguments: EditGroupEvent(state.groupDetail.value,state.chatEvent,)),
         ),
       ]),
       backgroundColor: Colors.white,
@@ -91,8 +93,9 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
             onSendPressed: (text) {},
             textMessageBuilder: buildTextMessage,
             user: types.User(
-                id: chatCtl.user.userId.em(),
-                imageUrl: chatCtl.user.portrait.em()),
+              id: chatCtl.user.userId.em(),
+              imageUrl: chatCtl.user.portrait.em(),
+            ),
             showUserAvatars: false,
             showUserNames: false,
             dateLocale: Constant.locale.toString(),

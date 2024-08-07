@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lifecycle/lifecycle.dart';
 import 'package:rescue_station/app/utils/audio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
@@ -34,14 +33,6 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
       default:
         break;
     }
-  }
-
-  // late Future googleFontPending;
-
-  @override
-  void initState() {
-    super.initState();
-    // googleFontPending = GoogleFonts.pendingFonts([GoogleFonts.notoColorEmoji(fontStyle: FontStyle.normal)]);
   }
 
 

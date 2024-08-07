@@ -171,6 +171,17 @@ class SocketUtils{
     }
   }
 
+  types.Message buildSystemText(String text,UserInfoEntity user,{int? createdAt,types.Message? replied,String? msgId}){
+    return types.SystemMessage(
+      author: types.User(id: user.userId.em(),firstName: user.nickName,imageUrl: user.portrait.em()),
+      createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
+      id: randomString(),
+      text: text,
+      repliedMessage: replied,
+      metadata: {"msgId":msgId},
+    );
+  }
+
 
   types.Message buildUserText(String text,UserInfoEntity user,{int? createdAt,types.Message? replied,String? msgId}){
     return types.TextMessage(

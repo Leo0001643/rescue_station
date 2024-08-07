@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
+import 'package:rescue_station/app/event/edit_group_name_event.dart';
 import 'package:rescue_station/app/event/friend_delete_event.dart';
 import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
@@ -21,6 +22,7 @@ class MessageController extends GetxController {
   StreamSubscription? friendDelSub;
   StreamSubscription? newChatSub;
   StreamSubscription? loginSub;
+  StreamSubscription? editNameSub;
 
   @override
   void onReady() {
@@ -37,11 +39,15 @@ class MessageController extends GetxController {
       ///登录成功
       getMessageList();
     });
+    editNameSub = eventBus.on<EditGroupNameEvent>().listen((event){
+      getMessageList();
+    });
     super.onReady();
   }
 
   @override
   void onClose() {
+    editNameSub?.cancel();
     newChatSub?.cancel();
     friendDelSub?.cancel();
     loginSub?.cancel();

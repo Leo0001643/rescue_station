@@ -20,6 +20,10 @@ class GroupDetailEntity {
 	String toString() {
 		return jsonEncode(this);
 	}
+
+	bool getIsMaster() => master == 'Y';
+
+
 }
 
 @JsonSerializable()

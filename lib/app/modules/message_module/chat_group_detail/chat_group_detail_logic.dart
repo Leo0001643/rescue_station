@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/domains/group_detail_entity.dart';
+import 'package:rescue_station/app/event/add_group_event.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
+import 'package:rescue_station/app/event/edit_group_event.dart';
+import 'package:rescue_station/app/event/edit_group_name_event.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
@@ -17,18 +22,34 @@ import 'chat_group_detail_state.dart';
 class ChatGroupDetailLogic extends GetxController {
   final ChatGroupDetailState state = ChatGroupDetailState();
 
+  StreamSubscription? editNameSub;
+  StreamSubscription? addGroupSub;
+
+
   @override
   void onReady() {
-    state.chatEvent = Get.arguments;
-    state.isTop.value = state.chatEvent.messageBox.getIsTop();
-    state.isDisturb.value = state.chatEvent.messageBox.getIsDisturb();
-    getGroupDetail();
+    if(isNotEmpty(Get.arguments)){
+      EditGroupEvent event = Get.arguments;
+      state.groupDetail.value = event.group;
+      state.chatEvent = event.event;
+      state.isTop.value = state.chatEvent.messageBox.getIsTop();
+      state.isDisturb.value = state.chatEvent.messageBox.getIsDisturb();
+      // getGroupDetail();
+    }
+    editNameSub = eventBus.on<EditGroupNameEvent>().listen((event){
+      state.groupDetail.value.group?.name = event.name;
+      state.groupDetail.refresh();
+    });
+    addGroupSub = eventBus.on<AddGroupEvent>().listen((event){
+      getGroupDetail();
+    });
     super.onReady();
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
+    addGroupSub?.cancel();
+    editNameSub?.cancel();
     super.onClose();
   }
 

@@ -4,11 +4,14 @@ import 'package:common_utils/common_utils.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
+import 'package:rescue_station/app/domains/group_detail_entity.dart';
 import 'package:rescue_station/app/domains/item_model.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/domains/upload_file_entity.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
+import 'package:rescue_station/app/event/add_group_event.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
+import 'package:rescue_station/app/event/edit_group_name_event.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/data_utils.dart';
@@ -28,6 +31,8 @@ class ChatByGroupLogic extends GetxController {
   final chatCtl = Get.find<BottomChatController>();
   StreamSubscription? msgReceiveSub;
   StreamSubscription? msgClearSub;
+  StreamSubscription? editNameSub;
+  StreamSubscription? addGroupSub;
 
   @override
   void onReady() {
@@ -40,11 +45,21 @@ class ChatByGroupLogic extends GetxController {
       ///刷新消息列表
       queryChatMessage();
     });
+    editNameSub = eventBus.on<EditGroupNameEvent>().listen((event){
+      chatCtl.group.name = event.name;
+      state.groupDetail.value.group?.name = event.name;
+      state.pageTitle.value = event.name;
+    });
+    addGroupSub = eventBus.on<AddGroupEvent>().listen((event){
+      loadGroupDetail();
+    });
     super.onReady();
   }
 
   @override
   void onClose() {
+    addGroupSub?.cancel();
+    editNameSub?.cancel();
     msgReceiveSub?.cancel();
     msgClearSub?.cancel();
     state.popCtlList.forEach((v)=> v.dispose());
@@ -134,6 +149,21 @@ class ChatByGroupLogic extends GetxController {
     });
   }
 
+  void loadGroupDetail(){
+    loggerArray(["群详情", state.chatEvent.messageBox.toJson()]);
+    DioUtil().get(Api.GET_GROUP_INFO + state.chatEvent.messageBox.boxId.em(),).then((result) {
+      if (result.data["code"] == 200) {
+        state.groupDetail.value = GroupDetailEntity.fromJson(result.data['data']);
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
+      } else {
+        Get.snackbar('提醒', result.data["msg"]);
+      }
+    }).onError((e, stack) {
+      Get.snackbar('提醒', "系统异常！");
+    });
+  }
+
   void queryChatMessage() {
     DbHelper().queryChatMessageBox(AppData.getUser()!.userId.em(), chatCtl.group.groupId.em()).then((v) {
       if (v.isNotEmpty) {
@@ -175,6 +205,11 @@ class ChatByGroupLogic extends GetxController {
         state.messages.insert(0, SocketUtils().buildUserFileUrl(
             socketMsg.msgContent!.content.em(), UserInfoEntity.fromJson(fromInfo),
             createdAt: DateUtil.getDateMsByTimeStr(createTime),msgId: socketMsg.msgId,replied: replied));
+        break;
+      case MessageTypeEnum.ALERT:
+        state.messages.insert(0, SocketUtils().buildSystemText(
+            socketMsg.msgContent!.content.em(), UserInfoEntity.fromJson(fromInfo),
+            createdAt: DateUtil.getDateMsByTimeStr(createTime),msgId: socketMsg.msgId,replied: replied),);
         break;
       default:
         break;

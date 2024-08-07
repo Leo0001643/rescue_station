@@ -46,6 +46,7 @@ void main() async{
                 initialRoute: Routes.TABS,
                 defaultTransition:Transition.noTransition,//页面切换取消动画
                 getPages: AppPages.pages,
+                unknownRoute: AppPages.pages.first,
                 builder: EasyLoading.init(),
               );
             })

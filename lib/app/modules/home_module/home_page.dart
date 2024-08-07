@@ -45,7 +45,7 @@ class StateHomePage extends State<HomePage>{
               ],
             ),
           )),
-        )
+        ),
     );
   }
 

@@ -30,6 +30,19 @@ class WidgetUtils {
     );
   }
 
+  static AppBar buildObxAppBar(RxString title,{List<Widget>? actions,Color backgroundColor = Colors.white,Color? textColor}) {
+    return AppBar(
+      title: Obx(() {
+        return Text(title.value,style: TextStyle(fontSize: 18.sp,color: textColor ?? color_333,fontWeight: FontWeight.w700),);
+      }),
+      iconTheme: IconThemeData(color: textColor ?? color_333),
+      centerTitle: true,
+      toolbarHeight: AppLayout.heigth(60),
+      backgroundColor: backgroundColor,
+      actions: actions,
+    );
+  }
+
 
   static AppBar buildSearchAppBar(BuildContext context,String title,Widget rightIcon,{Function(String text)? onChange}){
     return AppBar(

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:rescue_station/app/db/message_box_table.dart';
 import 'package:rescue_station/app/domains/group_info_entity.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
@@ -192,9 +191,11 @@ class StateMessagePage extends State<MessagePage> {
 
   Widget buildLastMessage(SocketMsgContent msg) {
     // loggerArray(["没走这里吗",msg.msgType]);
-    if (msg.msgType == MessageTypeEnum.TEXT.name) {
+    if (msg.msgType == MessageTypeEnum.TEXT.name || msg.msgType == MessageTypeEnum.ALERT.name) {
       return Text(
         msg.content.em(),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: AppStyles.lightGrey,
           fontSize: AppLayout.fontSize(14),

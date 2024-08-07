@@ -52,7 +52,6 @@ dependencies:
   file_picker: 8.0.6
   #表情包
   emoji_picker_flutter: ^2.2.0
-#  google_fonts: ^6.2.1
   flutter_keyboard_visibility: ^6.0.0
   #socket通信
   web_socket_channel: ^3.0.1
@@ -67,7 +66,7 @@ dependencies:
   scrollable_positioned_list: ^0.3.8
   lpinyin: ^2.0.3
   custom_pop_up_menu: ^1.2.4
-  google_fonts: ^6.2.1
+#  google_fonts: ^6.2.1
   #相机权限
   permission_handler: ^10.2.0
   easy_image_viewer: ^1.5.1

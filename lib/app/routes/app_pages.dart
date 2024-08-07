@@ -2,12 +2,16 @@ import 'package:common_utils/common_utils.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/toast/gf_toast.dart';
+import 'package:rescue_station/app/modules/contacts_module/group_add/group_add_binding.dart';
+import 'package:rescue_station/app/modules/contacts_module/group_add/group_add_page.dart';
 import 'package:rescue_station/app/modules/contacts_module/new_friend/new_friend_binding.dart';
 import 'package:rescue_station/app/modules/contacts_module/new_friend/new_friend_page.dart';
 import 'package:rescue_station/app/modules/message_module/chat_friend_detail/chat_friend_detail_binding.dart';
 import 'package:rescue_station/app/modules/message_module/chat_friend_detail/chat_friend_detail_page.dart';
 import 'package:rescue_station/app/modules/message_module/chat_group_detail/chat_group_detail_binding.dart';
 import 'package:rescue_station/app/modules/message_module/chat_group_detail/chat_group_detail_page.dart';
+import 'package:rescue_station/app/modules/message_module/edit_group_name/edit_group_name_binding.dart';
+import 'package:rescue_station/app/modules/message_module/edit_group_name/edit_group_name_page.dart';
 import 'package:rescue_station/app/modules/message_module/forward_message/forward_message_binding.dart';
 import 'package:rescue_station/app/modules/message_module/forward_message/forward_message_page.dart';
 import 'package:rxdart/rxdart.dart';
@@ -165,6 +169,16 @@ abstract class AppPages {
       name: Routes.FORWARD_MESSAGE,
       page: () => ForwardMessagePage(),
       binding: ForwardMessageBinding(),
+    ),
+    GetPage(
+      name: Routes.EDIT_GROUP_NAME,
+      page: () => EditGroupNamePage(),
+      binding: EditGroupNameBinding(),
+    ),
+    GetPage(
+      name: Routes.GROUP_ADD,
+      page: () => GroupAddPage(),
+      binding: GroupAddBinding(),
     ),
   ];
 }

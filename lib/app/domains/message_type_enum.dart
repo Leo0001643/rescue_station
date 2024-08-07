@@ -6,7 +6,7 @@ enum MessageTypeEnum{
   VIDEO,
   VOICE,
   LOCATION,
-  CUSTOM,
+  ALERT,
   SYSTEM,
   NOTIFICATION,
   UNKNOWN,

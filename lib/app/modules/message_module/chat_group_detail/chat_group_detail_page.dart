@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rescue_station/app/event/edit_group_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
+import 'package:rescue_station/app/utils/Icon.dart';
 import 'package:rescue_station/app/utils/dialog_utils.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
@@ -63,14 +65,45 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
                       ),
                     );
                   }),
-                  // SizedBox(width: 10.w,),
-                  // WidgetUtils.buildImage(ImageFont.detail_add, 45.r, 45.r),
+                  SizedBox(width: 10.w,),
+                  InkWell(
+                    onTap: ()=> Get.toNamed(Routes.GROUP_ADD,arguments: state.groupDetail.value),
+                    child: WidgetUtils.buildImage(ImageFont.detail_add, 45.r, 45.r),
+                  ),
                 ],
               );
             }),
           ),
           SizedBox(
             height: 15.h,
+          ),
+          ListTile(
+            title: Text(
+              "群聊名称",
+              style: TextStyle(fontSize: 15.sp, color: Colors.black),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Obx(() {
+                  if (isEmpty(state.groupDetail.value.group)) {
+                    return Container();
+                  }
+                  return Text(state.groupDetail.value.group?.name.em() ?? "",style: TextStyle(fontSize: 14.sp,color: color_333),);
+                }),
+                Icon(Icons.arrow_forward_ios,color: color_d2d,size: 15.r,),
+              ],
+            ),
+            onTap: ()=> Get.toNamed(Routes.EDIT_GROUP_NAME,arguments: EditGroupEvent(state.groupDetail.value, state.chatEvent))?.then((text){
+              if(isNotEmpty(text)){
+                state.groupDetail.value.group?.name = text;
+                state.groupDetail.refresh();
+              }
+            }),
+            tileColor: Colors.white,
+          ),
+          SizedBox(
+            height: 1.h,
           ),
           ListTile(
             title: Text(

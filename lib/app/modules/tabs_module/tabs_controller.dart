@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/event/logout_event.dart';

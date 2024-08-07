@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 
 import '../../routes/app_pages.dart';
 
@@ -78,13 +79,10 @@ class StateGroupAvatarWidget extends State<GroupAvatarWidget> {
 
   List<Widget> buildGroupAvatar(List<String> portrait) {
     var list = portrait.length >= 4 ? portrait.sublist(0, 4) : portrait;
-    return list
-        .map((v) => Image.network(
-              v,
-              fit: BoxFit.fill,
-              width: 20.r,
-              height: 20.r,
-            ))
-        .toList();
+    return list.map((v) => Image.network(v, fit: BoxFit.fill, width: 20.r, height: 20.r,)).toList();
   }
+
+
+
+
 }
