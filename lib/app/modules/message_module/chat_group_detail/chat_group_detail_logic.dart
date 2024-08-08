@@ -59,8 +59,7 @@ class ChatGroupDetailLogic extends GetxController {
     DioUtil().get(Api.GET_GROUP_INFO + state.chatEvent.messageBox.boxId.em(),).then((result) {
       EasyLoading.dismiss();
       if (result.data["code"] == 200) {
-        state.groupDetail.value =
-            GroupDetailEntity.fromJson(result.data['data']);
+        state.groupDetail.value = GroupDetailEntity.fromJson(result.data['data']);
       } else if(result.data["code"] == 401){
         WidgetUtils.logSqueezeOut();
       } else {

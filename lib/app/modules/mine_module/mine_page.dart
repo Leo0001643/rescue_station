@@ -7,13 +7,23 @@ import 'package:getwidget/getwidget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:lifecycle/lifecycle.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
+import 'package:rescue_station/app/utils/app_data.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import '../../theme/app_text_theme.dart';
 import '../mine_module/mine_controller.dart';
 import '../../theme/app_colors_theme.dart';
 import '../../utils/AppLayout.dart';
 import '../../utils/Icon.dart';
 
-class MinePage extends GetView<MineController> {
+class MinePage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => StateMinePage();
+}
+
+
+class StateMinePage extends State<MinePage> with LifecycleAware, LifecycleMixin {
   MineController userController = Get.find<MineController>();
   final TextEditingController passwordController = TextEditingController();
 
@@ -163,7 +173,7 @@ class MinePage extends GetView<MineController> {
                     ),
                   ),
                   onTap: (){
-                    controller.logout();
+                    userController.logout();
                   },
                 )
               ],
@@ -189,12 +199,12 @@ class MinePage extends GetView<MineController> {
                 padding: EdgeInsets.only(left: AppLayout.width(12)),
                 child: Row(children: [
                   GFAvatar(
-                    radius: AppLayout.width(30),
-                    shape: GFAvatarShape.standard,
-                    borderRadius: BorderRadius.circular(AppLayout.width(8)),
-                    backgroundImage: ((userController.profileImagePath.value.isEmpty && userController.userInfo.value.portrait == null)
-                        ? const AssetImage('assets/images/icon/default_avatar.png')
-                        : NetworkImage(userController.userInfo.value.portrait!)) as ImageProvider<Object>?
+                      radius: AppLayout.width(30),
+                      shape: GFAvatarShape.standard,
+                      borderRadius: BorderRadius.circular(AppLayout.width(8)),
+                      backgroundImage: ((userController.profileImagePath.value.isEmpty && userController.userInfo.value.portrait == null)
+                          ? const AssetImage('assets/images/icon/default_avatar.png')
+                          : NetworkImage(userController.userInfo.value.portrait!)) as ImageProvider<Object>?
                   ),
                   Gap(AppLayout.width(8)),
                   Column(
@@ -263,4 +273,27 @@ class MinePage extends GetView<MineController> {
       ),
     );
   }
+
+  @override
+  void onLifecycleEvent(LifecycleEvent event) {
+    loggerArray(["生命周期变化了",event]);
+    switch (event) {
+      case LifecycleEvent.visible:
+        var user = AppData.getUser();
+        if(isNotEmpty(user)){
+          userController.userInfo.value = user!;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+
+
 }
+
+
+
+
+

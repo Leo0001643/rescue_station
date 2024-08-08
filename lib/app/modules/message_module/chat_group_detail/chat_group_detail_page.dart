@@ -40,20 +40,23 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
         children: [
           Container(
             color: Colors.white,
+            width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 15.w),
             child: Obx(() {
               if (isEmpty(state.groupDetail.value.user)) {
                 return Container();
               }
-              return Row(
+              return Wrap(
+                runSpacing: 10.r,
+                alignment: WrapAlignment.start,
+                runAlignment: WrapAlignment.start,
                 children: [
                   ...state.groupDetail.value.user!.map((item) {
                     return Container(
                       margin: EdgeInsets.symmetric(horizontal: 10.w),
                       child: Column(
                         children: [
-                          WidgetUtils.buildImage(
-                              item.portrait.em(), 45.r, 45.r),
+                          WidgetUtils.buildImage(item.portrait.em(), 45.r, 45.r,fit: BoxFit.cover),
                           Text(
                             item.nickName.em(),
                             style: TextStyle(
@@ -68,8 +71,23 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
                   SizedBox(width: 10.w,),
                   InkWell(
                     onTap: ()=> Get.toNamed(Routes.GROUP_ADD,arguments: state.groupDetail.value),
-                    child: WidgetUtils.buildImage(ImageFont.detail_add, 45.r, 45.r),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: WidgetUtils.buildImage(ImageFont.detail_add, 45.r, 45.r),
+                    ),
                   ),
+                  Obx(() {
+                    return Visibility(
+                      visible: state.groupDetail.value.getIsMaster(),
+                      child: InkWell(
+                        onTap: ()=> Get.toNamed(Routes.GROUP_REDUCE,arguments: state.groupDetail.value),
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10.w),
+                          child: WidgetUtils.buildImage(ImageFont.ic_detail_reduce, 45.r, 45.r),
+                        ),
+                      ),
+                    );
+                  }),
                 ],
               );
             }),

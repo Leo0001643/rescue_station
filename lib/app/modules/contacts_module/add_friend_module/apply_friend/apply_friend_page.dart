@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
@@ -18,7 +19,19 @@ class _ApplyFriendPageState extends State<ApplyFriendPage> {
   final state = Get.find<ApplyFriendLogic>().state;
 
   @override
+  void initState() {
+    if(isEmpty(Get.arguments)){
+      Get.until((ModalRoute.withName(Routes.TABS)));
+      return;
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if(isEmpty(Get.arguments)){
+      return Container();
+    }
     return Scaffold(
       appBar: WidgetUtils.buildAppBar("申请添加朋友"),
       backgroundColor: Colors.white,

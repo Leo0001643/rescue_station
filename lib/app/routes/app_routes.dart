@@ -29,6 +29,7 @@ abstract class Routes {
   static const FORWARD_MESSAGE = '/forward_message';// forward message
   static const EDIT_GROUP_NAME = '/edit_group_name';// edit group name
   static const GROUP_ADD = '/group_add';// group add
+  static const GROUP_REDUCE = '/group_reduce';// group reduce
 
 }
 

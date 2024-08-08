@@ -39,4 +39,6 @@ class ImageFont{
   static const open_camera = "assets/images/icon/ic_open_camera.png";
   static const select_collect = "assets/images/icon/ic_select_collect.png";
   static const detail_add = "assets/images/icon/ic_detail_add.png";
+  static const ic_detail_reduce = "assets/images/icon/ic_detail_reduce.png";
+
 }

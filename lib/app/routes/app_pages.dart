@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:getwidget/components/toast/gf_toast.dart';
 import 'package:rescue_station/app/modules/contacts_module/group_add/group_add_binding.dart';
 import 'package:rescue_station/app/modules/contacts_module/group_add/group_add_page.dart';
+import 'package:rescue_station/app/modules/contacts_module/group_reduce/group_reduce_binding.dart';
+import 'package:rescue_station/app/modules/contacts_module/group_reduce/group_reduce_page.dart';
 import 'package:rescue_station/app/modules/contacts_module/new_friend/new_friend_binding.dart';
 import 'package:rescue_station/app/modules/contacts_module/new_friend/new_friend_page.dart';
 import 'package:rescue_station/app/modules/message_module/chat_friend_detail/chat_friend_detail_binding.dart';
@@ -179,6 +181,11 @@ abstract class AppPages {
       name: Routes.GROUP_ADD,
       page: () => GroupAddPage(),
       binding: GroupAddBinding(),
+    ),
+    GetPage(
+      name: Routes.GROUP_REDUCE,
+      page: () => GroupReducePage(),
+      binding: GroupReduceBinding(),
     ),
   ];
 }

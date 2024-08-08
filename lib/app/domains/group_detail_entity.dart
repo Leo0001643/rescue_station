@@ -31,6 +31,7 @@ class GroupDetailUser {
 	String? userId;
 	String? nickName;
 	String? portrait;
+	bool select = false;
 
 	GroupDetailUser();
 

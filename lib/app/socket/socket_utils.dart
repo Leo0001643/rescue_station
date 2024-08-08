@@ -151,12 +151,13 @@ class SocketUtils{
   void pengPeriodic(){
     periodicTimer?.cancel();
     periodicTimer = null;
-    periodicTimer = Timer.periodic(Duration(seconds: 5), (timer) {
+    periodicTimer = Timer.periodic(Duration(seconds: 3), (timer) {
       if(isConnect){ channel?.sink.add("isConnect"); }
     });
   }
 
   void reConnect() {
+    loggerArray(["开始重连",!isConnect,AppData.getUser()?.token]);
     if(!isConnect && ObjectUtil.isNotEmpty(AppData.getUser()?.token)){
       ///如果已经登录了，有token
       SocketUtils().connect(callback: (result){
