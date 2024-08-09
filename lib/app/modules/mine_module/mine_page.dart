@@ -95,8 +95,9 @@ class StateMinePage extends State<MinePage> with LifecycleAware, LifecycleMixin 
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  onTap: ()=> print("昵称"),
+                  onTap: ()=> Get.toNamed(Routes.PWD_EDIT),
                 ),
+                
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
                 ListTile(
                   leading: Icon(IconFont.WECHAT, size: AppLayout.fontSize(28), color: Colors.green),
@@ -156,7 +157,7 @@ class StateMinePage extends State<MinePage> with LifecycleAware, LifecycleMixin 
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  onTap: ()=> print("修改密码"),
+                  onTap: ()=> Get.toNamed(Routes.PWD_EDIT, ),
                 ),
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
                 Gap(AppLayout.heigth(48)),

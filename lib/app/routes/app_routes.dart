@@ -8,9 +8,6 @@ abstract class Routes {
   // static const HOME = '/home'; // home
   static const NOTICE = '/notice'; // Notice page
   static const MINE = '/mine'; // Mine page
-  // static const MESSAGE = '/message'; // Message page
-  // static const CUSTOMER_SERVICE = '/customer_service'; // CustomerService page
-  // static const CONTACTS = '/contacts'; // Contacts page
   static const NOTICE_DETAIL = '/notice_detail'; // NoticeDetail page
   static const LOAN = '/loan'; // Loan page
   static const CREATE_GROUP = '/create_group'; // CreateGroup page
@@ -30,6 +27,8 @@ abstract class Routes {
   static const EDIT_GROUP_NAME = '/edit_group_name';// edit group name
   static const GROUP_ADD = '/group_add';// group add
   static const GROUP_REDUCE = '/group_reduce';// group reduce
+  static const MY_REFRESH = 'my/refresh';
+  static const PWD_EDIT = '/pwd_edit';
 
 }
 

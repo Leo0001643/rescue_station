@@ -27,7 +27,7 @@ class NoticeDetailPage extends GetView<NoticeDetailController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
-              child: Text('6月5日 23:14',style: TextStyle(color: Colors.grey, fontSize: AppLayout.fontSize(16))),
+              child: Text('8月8日 00:00',style: TextStyle(color: Colors.grey, fontSize: AppLayout.fontSize(16))),
             ),
             SizedBox(height: AppLayout.heigth(16)),
             Row(
@@ -54,7 +54,7 @@ class NoticeDetailPage extends GetView<NoticeDetailController> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          '尊敬的用户您好:\n\n' '李清照（1084年3月13日—1155年5月12日），北宋齐州（今山东省济南市）人，为中国历史上最著名的女词人。',
+                          '小水滴帮扶计划-及时雨: \n\n项目：2017年10月成立，主要帮助全国各地因多次就医导致不能维持正常生活的患病儿童家庭，解决实际生活问题，为其提供1000元到50000元不等的帮扶资金，并辅以专业志愿者陪伴支持，引导患儿及其家属正确面对疾病，积极配合治疗，从而收获更好的治疗效果。',
                           style: TextStyle(fontSize: AppLayout.fontSize(16)),
                         ),
                       ],

@@ -30,7 +30,7 @@ class NoticePage extends GetView<NoticeController> {
         elevation: 0,
       ),
       body: ListView.builder(
-        itemCount: 2,
+        itemCount: 1,
         itemBuilder: (context, index) {
           return  Column(
             children: [
@@ -41,12 +41,12 @@ class NoticePage extends GetView<NoticeController> {
                   child: Image.asset('assets/images/icon/unread_notice.png'),
                 ),
                 title: const Text('系统消息'),
-                subtitle: const Text("你好很高兴认识你"),
+                subtitle: const Text("水滴扶贫正式发布上线！"),
                 trailing: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("2024-06-06", style: TextStyle(color: Colors.grey)),
-                    Text("12:00:00", style: TextStyle(color: Colors.grey)),
+                    Text("2024-08-08", style: TextStyle(color: Colors.grey)),
+                    Text("00:00:00", style: TextStyle(color: Colors.grey)),
                   ],
                 ),
               ),

@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/domains/group_detail_entity.dart';
-import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_colors_theme.dart';
@@ -12,7 +11,7 @@ import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'group_reduce_logic.dart';
 
 class GroupReducePage extends StatefulWidget {
-  const GroupReducePage({Key? key}) : super(key: key);
+  const GroupReducePage({super.key});
 
   @override
   State<GroupReducePage> createState() => _GroupReducePageState();

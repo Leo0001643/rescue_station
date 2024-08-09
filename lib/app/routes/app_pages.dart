@@ -1,9 +1,11 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:get/get.dart';
-import 'package:getwidget/components/toast/gf_toast.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/modules/contacts_module/group_add/group_add_binding.dart';
 import 'package:rescue_station/app/modules/contacts_module/group_add/group_add_page.dart';
+import 'package:rescue_station/app/modules/contacts_module/group_list/group_list_binding.dart';
+import 'package:rescue_station/app/modules/contacts_module/group_list/group_list_page.dart';
 import 'package:rescue_station/app/modules/contacts_module/group_reduce/group_reduce_binding.dart';
 import 'package:rescue_station/app/modules/contacts_module/group_reduce/group_reduce_page.dart';
 import 'package:rescue_station/app/modules/contacts_module/new_friend/new_friend_binding.dart';
@@ -16,10 +18,9 @@ import 'package:rescue_station/app/modules/message_module/edit_group_name/edit_g
 import 'package:rescue_station/app/modules/message_module/edit_group_name/edit_group_name_page.dart';
 import 'package:rescue_station/app/modules/message_module/forward_message/forward_message_binding.dart';
 import 'package:rescue_station/app/modules/message_module/forward_message/forward_message_page.dart';
+import 'package:rescue_station/app/modules/mine_module/pwd_edit_page/pwd_edit_bindings.dart';
+import 'package:rescue_station/app/modules/mine_module/pwd_edit_page/pwd_edit_page.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:getwidget/getwidget.dart';
-import 'package:rescue_station/app/modules/contacts_module/group_list/group_list_binding.dart';
-import 'package:rescue_station/app/modules/contacts_module/group_list/group_list_page.dart';
 
 import '../../app/modules/contacts_module/contacts_bindings.dart';
 import '../../app/modules/home_module/home_bindings.dart';
@@ -83,33 +84,28 @@ abstract class AppPages {
     //   binding: MessageBinding(),
     // ),
     // GetPage(
-    //   name: Routes.CUSTOMER_SERVICE,
-    //   page: () => CustomerServicePage(),
-    //   binding: CustomerServiceBinding(),
-    // ),
-    // GetPage(
     //   name: Routes.CONTACTS,
     //   page: () => ContactsPage(),
     //   binding: ContactsBinding(),
     // ),
     GetPage(
       name: Routes.NOTICE_DETAIL,
-      page: () => NoticeDetailPage(),
+      page: () => const NoticeDetailPage(),
       binding: NoticeDetailBinding(),
     ),
     GetPage(
       name: Routes.LOAN,
-      page: () => LoanPage(),
+      page: () => const LoanPage(),
       binding: LoanBinding(),
     ),
     GetPage(
       name: Routes.CREATE_GROUP,
-      page: () => CreateGroupPage(),
+      page: () => const CreateGroupPage(),
       binding: CreateGroupBinding(),
     ),
     GetPage(
       name: Routes.ADD_FRIEND,
-      page: () => AddFriendPage(),
+      page: () => const AddFriendPage(),
       binding: AddFriendBinding(),
     ),
     GetPage(
@@ -129,63 +125,68 @@ abstract class AppPages {
     ),
     GetPage(
       name: Routes.CHAT_BY_FRIEND,
-      page: () => ChatByFriendPage(),
+      page: () => const ChatByFriendPage(),
       binding: ChatByFriendBinding(),
     ),
     GetPage(
       name: Routes.CHAT_BY_GROUP,
-      page: () => ChatByGroupPage(),
+      page: () => const ChatByGroupPage(),
       binding: ChatByGroupBinding(),
     ),
     GetPage(
       name: Routes.FRIEND_DETAIL,
-      page: () => FriendDetailPage(),
+      page: () => const FriendDetailPage(),
       binding: FriendDetailBinding(),
     ),
     GetPage(
       name: Routes.NEW_FRIEND,
-      page: () => NewFriendPage(),
+      page: () => const NewFriendPage(),
       binding: NewFriendBinding(),
     ),
     GetPage(
       name: Routes.APPLY_FRIEND,
-      page: () => ApplyFriendPage(),
+      page: () => const ApplyFriendPage(),
       binding: ApplyFriendBinding(),
     ),
     GetPage(
       name: Routes.GROUP_LIST,
-      page: () => GroupListPage(),
+      page: () => const GroupListPage(),
       binding: GroupListBinding(),
     ),
     GetPage(
       name: Routes.CHAT_FRIEND_DETAIL,
-      page: () => ChatFriendDetailPage(),
+      page: () => const ChatFriendDetailPage(),
       binding: ChatFriendDetailBinding(),
     ),
     GetPage(
       name: Routes.CHAT_GROUP_DETAIL,
-      page: () => ChatGroupDetailPage(),
+      page: () => const ChatGroupDetailPage(),
       binding: ChatGroupDetailBinding(),
     ),
     GetPage(
       name: Routes.FORWARD_MESSAGE,
-      page: () => ForwardMessagePage(),
+      page: () => const ForwardMessagePage(),
       binding: ForwardMessageBinding(),
     ),
     GetPage(
       name: Routes.EDIT_GROUP_NAME,
-      page: () => EditGroupNamePage(),
+      page: () => const EditGroupNamePage(),
       binding: EditGroupNameBinding(),
     ),
     GetPage(
       name: Routes.GROUP_ADD,
-      page: () => GroupAddPage(),
+      page: () => const GroupAddPage(),
       binding: GroupAddBinding(),
     ),
     GetPage(
       name: Routes.GROUP_REDUCE,
-      page: () => GroupReducePage(),
+      page: () => const GroupReducePage(),
       binding: GroupReduceBinding(),
+    ),
+    GetPage(
+      name: Routes.PWD_EDIT,
+      page: () => PwdEditPage(),
+      binding: PwdEditBinding(),
     ),
   ];
 }
