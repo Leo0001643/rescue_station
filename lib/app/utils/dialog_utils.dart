@@ -1,6 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_colors_theme.dart';
 import 'package:rescue_station/app/utils/AppLayout.dart';
@@ -111,6 +114,56 @@ class DialogUtils{
         });
   }
 
+
+  static void showCustomDialog({
+    required String title,
+    required String message,
+    required Color backgroundColor,
+    required IconData icon,
+    int displayDuration = 500,  // 设置默认显示时长为500毫秒
+  }) {
+    Get.defaultDialog(
+      title: '',
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: backgroundColor, size: AppLayout.fontSize(40)),
+              SizedBox(width: AppLayout.width(12)),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: AppLayout.fontSize(16),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+          Gap(AppLayout.heigth(20)),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: AppLayout.fontSize(14),
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[700],
+            ),
+          ),
+        ],
+      ),
+      backgroundColor: Colors.white,
+      radius: AppLayout.heigth(12),
+      barrierDismissible: false,  // 设置为false使得点击外部区域不会关闭对话框
+    );
+
+    // 自动在指定时间后关闭对话框
+    Future.delayed(Duration(milliseconds: displayDuration), () {
+      Get.back();  // 关闭对话框
+    });
+  }
 }
 
 

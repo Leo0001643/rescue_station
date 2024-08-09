@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -51,13 +52,13 @@ class MineController extends GetxController{
 
   void logout() async{
     try {
-      await EasyLoading.show(status: '正在登出...',maskType: EasyLoadingMaskType.black,);
+      await EasyLoading.show(status: '正在登出...',maskType: EasyLoadingMaskType.black);
       await DioUtil().get(Api.LOGOUT);
       await AppData.clearUser();
       await SocketUtils().destroy();
       eventBus.fire(LogoutEvent());
       // await DbHelper().clearUser();
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(milliseconds: 500));
       await EasyLoading.dismiss();
       EasyLoading.showSuccess('登出成功!');
       Get.toNamed(Routes.LOGIN);
@@ -76,6 +77,9 @@ class MineController extends GetxController{
         final XFile? image = await _picker.pickImage(source: source);
         if (image != null) {
           profileImagePath.value = image.path;
+          UserInfoEntity? userInfoCache =  await AppData.getUser();
+          userInfoCache?.portrait = profileImagePath.value;
+          await AppData.setUser(userInfoCache!);
           var imageName = image.name;
           await EasyLoading.show(status: '正在上传头像...', maskType: EasyLoadingMaskType.black);
           final bytes = await image.readAsBytes();
@@ -97,6 +101,9 @@ class MineController extends GetxController{
         userInfo.update((user) {
           user?.portrait = uploadFile?.fullPath!;
         });
+        UserInfoEntity? userInfoCache =  await AppData.getUser();
+        userInfoCache?.portrait = path;
+        await AppData.setUser(userInfoCache!);
         EasyLoading.showSuccess('修改成功!');
       }
       await EasyLoading.dismiss();

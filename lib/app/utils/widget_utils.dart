@@ -189,7 +189,17 @@ class WidgetUtils {
     });
   }
 
+  static String formatPhoneNumber(String phoneNumber) {
+    if (phoneNumber.length != 11) {
+      return phoneNumber;
+    }
 
+    String prefix = phoneNumber.substring(0, 2);
+    String suffix = phoneNumber.substring(8);
+    String masked = '*' * 6;
+
+    return '$prefix$masked$suffix';
+  }
 
 
 }

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors_theme.dart';
 import 'package:rescue_station/app/utils/AppLayout.dart';
+import 'package:rescue_station/app/utils/dialog_utils.dart';
 import '../tabs_module/tabs_controller.dart';
 import '../tabs_module/tabs_pages.dart';
 import 'login_controller.dart';
@@ -67,11 +68,11 @@ class LoginPage extends GetView<LoginController> {
                         style: const TextStyle(color: Colors.white),
                         inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9]')),],
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.person, size: AppLayout.heigth(36), color: Colors.white),
+                          prefixIcon: Icon(Icons.person, size: AppLayout.heigth(32), color: Colors.white),
                           // prefixText: '+86 ',
                           // prefixStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: Colors.white),
                           hintText: '请输入手机号/账号',
-                          hintStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: AppStyles.lightGreyWile),
+                          hintStyle: TextStyle(fontSize: AppLayout.fontSize(16), fontWeight: FontWeight.bold, color: AppStyles.lightGreyWile),
                           filled: true,
                           fillColor: Colors.white24,
                           errorStyle: TextStyle(fontSize: AppLayout.fontSize(16), fontWeight: FontWeight.w600, color: Colors.blue),
@@ -98,12 +99,12 @@ class LoginPage extends GetView<LoginController> {
                       child: TextFormField(
                         controller: controller.passwordController,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock, size: AppLayout.heigth(36), color: Colors.white),
+                          prefixIcon: Icon(Icons.lock, size: AppLayout.heigth(32), color: Colors.white),
                           hintText: '请输入密码',
-                          hintStyle: TextStyle(fontSize: AppLayout.fontSize(18), color: AppStyles.lightGreyWile),
+                          hintStyle: TextStyle(fontSize: AppLayout.fontSize(16), fontWeight: FontWeight.bold, color: AppStyles.lightGreyWile),
                           filled: true,
                           fillColor: Colors.white24,
-                          errorStyle: TextStyle(fontSize: AppLayout.fontSize(16), fontWeight: FontWeight.w600, color: Colors.blue),
+                          errorStyle: TextStyle(fontSize: AppLayout.fontSize(16), fontWeight: FontWeight.bold, color: Colors.blue),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(AppLayout.heigth(12)),
                             borderSide: BorderSide.none,
@@ -130,6 +131,7 @@ class LoginPage extends GetView<LoginController> {
                         child: TextButton(
                           onPressed: () {
                             // 忘记密码逻辑
+                            DialogUtils.showSingleDialog(context, "请联系在线客服进行处理！");
                           },
                           child: Text('忘记密码?',style: TextStyle(fontSize: AppLayout.fontSize(16), color: Colors.white),
                           ),
