@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:lifecycle/lifecycle.dart';
+import 'package:rescue_station/app/event/message_read_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/logger.dart';
@@ -218,7 +219,7 @@ class StateMinePage extends State<MinePage> with LifecycleAware, LifecycleMixin 
                   )
                 ]),
               ),
-            ))
+            )),
           ],
         )
     );
@@ -284,6 +285,7 @@ class StateMinePage extends State<MinePage> with LifecycleAware, LifecycleMixin 
         if(isNotEmpty(user)){
           userController.userInfo.value = user!;
         }
+        eventBus.fire(MessageReadEvent());
         break;
       default:
         break;

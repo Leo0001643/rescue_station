@@ -111,6 +111,7 @@ class StateMessagePage extends State<MessagePage> {
                 size: 20.r,
                 shape: GFBadgeShape.circle,
                 border: BorderSide.none,
+                text: "${item.unreadCount}",
               ),
             ),
           ),

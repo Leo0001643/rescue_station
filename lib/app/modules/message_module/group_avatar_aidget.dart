@@ -69,6 +69,7 @@ class StateGroupAvatarWidget extends State<GroupAvatarWidget> {
                 size: 20.r,
                 shape: GFBadgeShape.circle,
                 border: BorderSide.none,
+                text: "${widget.unreadCount}",
               ),
             ),
           ),

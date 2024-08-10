@@ -5,11 +5,14 @@ import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/event/logout_event.dart';
+import 'package:rescue_station/app/event/message_read_event.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
+import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_notice_entity.dart';
 import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
+import 'package:rescue_station/app/utils/dio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../contacts_module/contacts_page.dart';
@@ -30,9 +33,11 @@ class TabsController extends GetxController {
   StreamSubscription? loginSub;
   StreamSubscription? friendApplySub;
   StreamSubscription? newChatSub;
+  StreamSubscription? msgReadSub;
 
   @override
   void dispose() {
+    msgReadSub?.cancel();
     pageController.dispose();
     logoutSub?.cancel();
     loginSub?.cancel();
@@ -73,6 +78,10 @@ class TabsController extends GetxController {
       unReadContact.value = (event.msgContent?.friendApply?.count ?? 0) + (event.msgContent?.topicReply?.count ?? 0) ;
     });
     newChatSub = eventBus.on<NewChatEvent>().listen((event) {
+      ///有新消息
+      findUnReadCount();
+    });
+    msgReadSub = eventBus.on<MessageReadEvent>().listen((event) {
       ///有新消息
       findUnReadCount();
     });
@@ -121,6 +130,20 @@ class TabsController extends GetxController {
       });
     }
   }
+
+  void refreshMessage(){
+    DioUtil().get(Api.REFRESH,).then((result){
+      if(result.data["code"] == 200){
+      } else if(result.data["code"] == 401){
+        WidgetUtils.logSqueezeOut();
+      } else {
+        Get.snackbar('提醒', result.data["msg"]);
+      }
+    }).onError((e,stack){
+      Get.snackbar('提醒', "系统异常！");
+    });
+  }
+
 
 
 
