@@ -122,6 +122,9 @@ class Api{
   ///修改省市
   static const EDIT_CITY = "/my/editCity";
 
+  ///修改省市
+  static const EDIT_PHONE = "/my/editPhone";
+
   ///刷新
   static const REFRESH = "/my/refresh";
 

@@ -13,7 +13,11 @@ class PwdEditPage extends GetView<PwdEditController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('设置登录密码'),
+        title: Text('设置密码', style: TextStyle(fontSize: AppLayout.fontSize(18))),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: ()=>Get.back(),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(AppLayout.width(16)),
@@ -84,5 +88,4 @@ class PwdEditPage extends GetView<PwdEditController> {
       ),
     );
   }
-
 }

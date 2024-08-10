@@ -1,5 +1,6 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+
 import '../../../constant/api_code.dart';
 import '../../../domains/api_response.dart';
 import '../../../domains/user_info_entity.dart';
@@ -8,18 +9,18 @@ import '../../../routes/app_pages.dart';
 import '../../../utils/app_data.dart';
 import '../../../utils/dio_utils.dart';
 
-class NickNameEditController extends GetxController{
-  var nickName = ''.obs;
-  var nickNameError = ''.obs;
+class PhoneEditController extends GetxController{
+  var phone = ''.obs;
+  var phoneError = ''.obs;
 
-  void editNickName() async{
+  void editPhone() async{
     try {
       await EasyLoading.show(status: '提交中...',maskType: EasyLoadingMaskType.black);
-      var response = await DioUtil().post(Api.EDIT_NICK, data: {"nickName": nickName.value});
+      var response = await DioUtil().post(Api.EDIT_PHONE, data: {"phone": phone.value});
       var entity = ApiResponse.fromJson(response.data);
       if(isNotEmpty(response) && entity.code == ApiCode.SUCCESS.code) {
         UserInfoEntity? userInfoCache =  AppData.getUser();
-        userInfoCache?.nickName = nickName.value;
+        userInfoCache?.phone = maskPhoneNumber(phone.value);
         await AppData.setUser(userInfoCache!);
         await EasyLoading.dismiss();
         EasyLoading.showSuccess('修改成功!');
@@ -32,14 +33,20 @@ class NickNameEditController extends GetxController{
     }
   }
 
-  void validateNickName(String value) {
-    // 正则表达式：6-12位，包含数字、字母或中文汉字
-    final nickNameRegex = RegExp(r'^[a-zA-Z\d\u4e00-\u9fa5]{2,12}$');
+  void validatePhone(String value) {
+    final nickNameRegex = RegExp(r'^[0-9]{11}$');
     if (!nickNameRegex.hasMatch(value)) {
-      nickNameError.value = '请输入2~12位的数字,字母或汉字';
+      phoneError.value = '请输入正确的手机号！';
     } else {
-      nickNameError.value = '';  // 清除错误提示
+      phoneError.value = '';  // 清除错误提示
     }
+  }
+
+  String maskPhoneNumber(String number) {
+    final RegExp regExp = RegExp(r'^(\d{3})\d{6}(\d{2})$');
+    return number.replaceAllMapped(regExp, (match) {
+      return '${match.group(1)}****${match.group(2)}';
+    });
   }
 
 }

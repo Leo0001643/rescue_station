@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +18,8 @@ import '../../utils/AppLayout.dart';
 import '../../utils/Icon.dart';
 
 class MinePage extends StatefulWidget {
+  const MinePage({super.key});
+
   @override
   State<StatefulWidget> createState() => StateMinePage();
 }
@@ -113,7 +114,7 @@ class StateMinePage extends State<MinePage> with LifecycleAware, LifecycleMixin 
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  onTap: ()=> print("微聊号"),
+                  onTap: ()=> Get.toNamed(Routes.EDIT_CHATNO),
                 ),
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
                 ListTile(
@@ -129,7 +130,7 @@ class StateMinePage extends State<MinePage> with LifecycleAware, LifecycleMixin 
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  onTap: ()=> print("地址"),
+                  onTap: ()=> Get.toNamed(Routes.EDIT_ADDR),
                 ),
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
                 ListTile(
@@ -145,7 +146,7 @@ class StateMinePage extends State<MinePage> with LifecycleAware, LifecycleMixin 
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  onTap: ()=> print("手机号"),
+                  onTap: ()=> Get.toNamed(Routes.EDIT_PHONE),
                 ),
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
                 ListTile(
@@ -158,7 +159,7 @@ class StateMinePage extends State<MinePage> with LifecycleAware, LifecycleMixin 
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  onTap: ()=> Get.toNamed(Routes.PWD_EDIT, ),
+                  onTap: ()=> Get.toNamed(Routes.EDIT_PWD, ),
                 ),
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
                 Gap(AppLayout.heigth(48)),
@@ -188,9 +189,9 @@ class StateMinePage extends State<MinePage> with LifecycleAware, LifecycleMixin 
 
   PreferredSizeWidget _appBar(BuildContext context){
     return AppBar(
-        toolbarHeight: AppLayout.heigth(80),
+        toolbarHeight: AppLayout.heigth(120),
         leadingWidth: AppLayout.heigth(200),
-        backgroundColor: Colors.blue,
+        backgroundColor: AppStyles.primaryColor,
         leading: Row(
           children: [
             Expanded(child: GestureDetector(

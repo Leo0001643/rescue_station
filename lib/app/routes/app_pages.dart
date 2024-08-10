@@ -19,6 +19,12 @@ import '../modules/message_module/edit_group_name/edit_group_name_binding.dart';
 import '../modules/message_module/edit_group_name/edit_group_name_page.dart';
 import '../modules/message_module/forward_message/forward_message_binding.dart';
 import '../modules/message_module/forward_message/forward_message_page.dart';
+import '../modules/mine_module/addr_edit_module/addr_edit_bindings.dart';
+import '../modules/mine_module/addr_edit_module/addr_edit_page.dart';
+import '../modules/mine_module/chatNo_edit_module/chatNo_edit_bindings.dart';
+import '../modules/mine_module/chatNo_edit_module/chatNo_edit_page.dart';
+import '../modules/mine_module/phone_edit_module/phone_edit_bindings.dart';
+import '../modules/mine_module/phone_edit_module/phone_edit_page.dart';
 import '../modules/mine_module/pwd_edit_module/pwd_edit_bindings.dart';
 import '../modules/mine_module/pwd_edit_module/pwd_edit_page.dart';
 import '../modules/mine_module/nick_name_edit_module/nick_name_edit_page.dart';
@@ -52,7 +58,6 @@ import '../modules/message_module/chat_by_friend/chat_by_friend_page.dart';
 import '../modules/message_module/chat_by_group/chat_by_group_binding.dart';
 import '../modules/message_module/chat_by_group/chat_by_group_page.dart';
 import '../modules/mine_module/mine_page.dart';
-
 part './app_routes.dart';
 
 
@@ -60,7 +65,7 @@ abstract class AppPages {
   static final pages = [
     GetPage(
       name: Routes.TABS,
-      page: () => TabsPage(),
+      page: () => const TabsPage(),
       binding: TabsBinding(),
       bindings: [HomeBinding(),MessageBinding(),ContactsBinding(),MineBinding()]
     ),
@@ -113,11 +118,6 @@ abstract class AppPages {
       name: Routes.LOGIN,
       page: () => LoginPage(),
       binding: LoginBinding(),
-    ),
-    GetPage(
-      name: Routes.REGISTER,
-      page: () => RegisterPage(),
-      binding: RegisterBinding(),
     ),
     GetPage(
       name: Routes.REGISTER,
@@ -185,7 +185,7 @@ abstract class AppPages {
       binding: GroupReduceBinding(),
     ),
     GetPage(
-      name: Routes.PWD_EDIT,
+      name: Routes.EDIT_PWD,
       page: () => PwdEditPage(),
       binding: PwdEditBinding(),
     ),
@@ -193,6 +193,21 @@ abstract class AppPages {
       name: Routes.NICK_NAME_EDIT,
       page: () => const NickNameEditPage(),
       binding: NickNameEditBindings(),
+    ),
+    GetPage(
+      name: Routes.EDIT_CHATNO,
+      page: () => ChatNoEditPage(),
+      binding: ChatNoEditBinding(),
+    ),
+    GetPage(
+      name: Routes.EDIT_PHONE,
+      page: () => PhoneEditPage(),
+      binding: PhoneEditBinding(),
+    ),
+    GetPage(
+      name: Routes.EDIT_ADDR,
+      page: () => AddrEditPage(),
+      binding: AddrEditBinding(),
     ),
   ];
 }

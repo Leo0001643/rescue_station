@@ -3,19 +3,18 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import '../../../utils/AppLayout.dart';
 import '../../../utils/app_data.dart';
-import './nick_name_edit_controller.dart';
+import 'phone_edit_controller.dart';
 
-class NickNameEditPage extends GetView<NickNameEditController> {
-  const NickNameEditPage({super.key});
+class PhoneEditPage extends GetView<PhoneEditController> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('设置昵称', style: TextStyle(fontSize: AppLayout.fontSize(18))),
+        title: Text('设置手机号', style: TextStyle(fontSize: AppLayout.fontSize(18))),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: ()=>Get.back()
+            icon: const Icon(Icons.arrow_back),
+            onPressed: ()=>Get.back()
         ),
       ),
       body: Padding(
@@ -23,26 +22,25 @@ class NickNameEditPage extends GetView<NickNameEditController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('请为您的账号 ${AppData.getUser()!.phone} 修改昵称',style: TextStyle(fontSize: AppLayout.fontSize(16))),
+            Text('请为您的账号 ${AppData.getUser()!.phone} 修改手机号',style: TextStyle(fontSize: AppLayout.fontSize(16))),
             Gap(AppLayout.heigth(20)),
-
             Obx(() => TextField(
               onChanged: (value) {
-                controller.nickName.value = value;
-                controller.validateNickName(value);
+                controller.phone.value = value;
+                controller.validatePhone(value);
               },
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                labelText: '请填写2~12位数字,字母或者汉字',
-                errorText: controller.nickNameError.value.isNotEmpty ? controller.nickNameError.value : null,
+                labelText: '请填写手机号',
+                errorText: controller.phoneError.value.isNotEmpty ? controller.phoneError.value : null,
               ),
             )),
 
             Gap(AppLayout.heigth(40)),
             ElevatedButton(
               onPressed: () {
-                if (controller.nickNameError.value.isEmpty) {
-                  controller.editNickName();
+                if (controller.phoneError.value.isEmpty) {
+                  controller.editPhone();
                 } else {
                   Get.snackbar('错误', '请修正表单中的错误');
                 }

@@ -28,7 +28,10 @@ abstract class Routes {
   static const GROUP_ADD = '/group_add';// group add
   static const GROUP_REDUCE = '/group_reduce';// group reduce
   static const MY_REFRESH = 'my/refresh';
-  static const PWD_EDIT = '/pwd_edit';
+  static const EDIT_PWD = '/pwd_edit';
+  static const EDIT_CHATNO = '/editChatNo'; // ChatnoEdit page
+  static const EDIT_PHONE = '/edit_phone'; // phone_edit page
+  static const EDIT_ADDR = '/edit_addr'; // addrEdit page
 }
 
 
@@ -53,5 +56,4 @@ bool isEmpty(Object? any){
 
 bool isNotEmpty(Object? any){
   return ObjectUtil.isNotEmpty(any) && any != 'null';
-
 }
