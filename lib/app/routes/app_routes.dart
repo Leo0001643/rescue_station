@@ -29,7 +29,6 @@ abstract class Routes {
   static const GROUP_REDUCE = '/group_reduce';// group reduce
   static const MY_REFRESH = 'my/refresh';
   static const PWD_EDIT = '/pwd_edit';
-
 }
 
 
@@ -54,4 +53,5 @@ bool isEmpty(Object? any){
 
 bool isNotEmpty(Object? any){
   return ObjectUtil.isNotEmpty(any) && any != 'null';
+
 }

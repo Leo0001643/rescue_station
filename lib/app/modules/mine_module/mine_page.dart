@@ -96,7 +96,7 @@ class StateMinePage extends State<MinePage> with LifecycleAware, LifecycleMixin 
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  onTap: ()=> Get.toNamed(Routes.PWD_EDIT),
+                  onTap: ()=> Get.toNamed(Routes.NICK_NAME_EDIT),
                 ),
                 
                 Divider(height: 0.1,color: AppStyles.lightGreyWile),
