@@ -25,7 +25,9 @@ class FriendDetailLogic extends GetxController {
     // DbHelper().queryMessageAll().then((v){
     //   loggerArray(['信息列表',v]);
     // });
-    getFriendDetail(Get.arguments);
+    if(isNotEmpty(Get.arguments)){
+      getFriendDetail(Get.arguments);
+    }
     super.onReady();
   }
 

@@ -10,7 +10,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  get: 4.6.6
+  get: ^5.0.0-release-candidate-8
   #间距组件
   gap: ^3.0.1
   #网络请求
@@ -70,6 +70,8 @@ dependencies:
   #相机权限
   permission_handler: ^10.2.0
   easy_image_viewer: ^1.5.1
+  universal_html: ^2.2.4
+#  go_router: ^14.2.3
 
 dependency_overrides:
   meta: ^1.10.0 # 替换为你需要的meta库的版本号

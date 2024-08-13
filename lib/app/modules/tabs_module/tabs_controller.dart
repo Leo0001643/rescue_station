@@ -22,7 +22,7 @@ import '../mine_module/mine_page.dart';
 
 class TabsController extends GetxController {
   RxInt currentIndex = 0.obs;
-  RxBool isLogin = false.obs;
+  RxBool isLogin = SocketUtils().isConnect.obs;
 
   var unReadMsg = 0.obs;
   var unReadContact = 0.obs;
@@ -37,6 +37,8 @@ class TabsController extends GetxController {
 
   @override
   void dispose() {
+    socketTimer?.cancel();
+    socketTimer = null;
     msgReadSub?.cancel();
     pageController.dispose();
     logoutSub?.cancel();
@@ -61,7 +63,7 @@ class TabsController extends GetxController {
   @override
   void onReady() {
     ifLoginInit();
-
+    checkConnectTimer();
     logoutSub = eventBus.on<LogoutEvent>().listen((v){
       isLogin.value = false;
       unReadMsg.value = 0;
@@ -101,7 +103,9 @@ class TabsController extends GetxController {
       } else {
         setCurrentIndex(0); // 登录失败返回首页
       }
-      Get.until((ModalRoute.withName(Routes.TABS)));
+      if(Get.rootController.rootDelegate.canBack){
+        Get.until((route)=> Get.currentRoute == Routes.TABS);
+      }
     });
   }
 
@@ -144,6 +148,17 @@ class TabsController extends GetxController {
     });
   }
 
+  Timer? socketTimer;
+  void checkConnectTimer(){
+    socketTimer?.cancel();
+    socketTimer = null;
+    socketTimer = Timer.periodic(Duration(seconds: 5), (timer) {
+      loggerArray(["是否需要重连",!SocketUtils().isConnect,isNotEmpty(AppData.getUser()?.token)]);
+      if(!SocketUtils().isConnect && isNotEmpty(AppData.getUser()?.token)){
+        SocketUtils().reConnect();
+      }
+    });
+  }
 
 
 

@@ -100,8 +100,9 @@ class MineController extends GetxController{
         await DioUtil().post(Api.EDIT_PORTRAIT, data: {"portrait": path});
         userInfo.update((user) {
           user?.portrait = uploadFile?.fullPath!;
+          return user!;
         });
-        UserInfoEntity? userInfoCache =  await AppData.getUser();
+        UserInfoEntity? userInfoCache =  AppData.getUser();
         userInfoCache?.portrait = path;
         await AppData.setUser(userInfoCache!);
         EasyLoading.showSuccess('修改成功!');
@@ -133,6 +134,7 @@ class MineController extends GetxController{
   void updateNickname(String nickname) {
     user.update((val) {
       val?.nickname = nickname;
+      return val!;
     });
   }
 
@@ -140,6 +142,7 @@ class MineController extends GetxController{
   void updateChatNo(String chatNo) {
     user.update((val) {
       val?.chatNo = chatNo;
+      return val!;
     });
   }
 
@@ -147,6 +150,7 @@ class MineController extends GetxController{
   void updateGender(String gender) {
     user.update((val) {
       val?.gender = gender;
+      return val!;
     });
   }
 
@@ -154,6 +158,7 @@ class MineController extends GetxController{
   void updateBirthdate(DateTime birthdate) {
     user.update((val) {
       val?.birthdate = birthdate;
+      return val!;
     });
   }
 
@@ -161,6 +166,7 @@ class MineController extends GetxController{
   void updateAddress(String address) {
     user.update((val) {
       val?.address = address;
+      return val!;
     });
   }
 
@@ -168,6 +174,7 @@ class MineController extends GetxController{
   void updatePhoneNumber(String phoneNumber) {
     user.update((val) {
       val?.phoneNumber = phoneNumber;
+      return val!;
     });
   }
 

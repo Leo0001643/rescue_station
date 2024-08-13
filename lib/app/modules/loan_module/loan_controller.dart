@@ -42,8 +42,8 @@ class LoanController extends GetxController{
           RequestClient requestClient = RequestClient();
           var  user = await requestClient.post("loan/loanApplay", data: data, headers: headers);
           debugPrint("-------------$user");
-          Get.snackbar("提交成功", "系统审批中！",snackPosition: SnackPosition.TOP,duration: const Duration(seconds: 1), backgroundColor: AppStyles.primaryColor, colorText: AppStyles.textWhiteColor);
-          Get.close(1);
+          Get.snackbar("提交成功", "系统审批中！",snackPosition: SnackPosition.top,duration: const Duration(seconds: 1), backgroundColor: AppStyles.primaryColor, colorText: AppStyles.textWhiteColor);
+          Get.close();
           update();
       }else{
           Get.toNamed(Routes.LOGIN);

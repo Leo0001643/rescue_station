@@ -20,8 +20,8 @@ class _ApplyFriendPageState extends State<ApplyFriendPage> {
 
   @override
   void initState() {
-    if(isEmpty(Get.arguments)){
-      Get.until((ModalRoute.withName(Routes.TABS)));
+    if(WidgetUtils.checkRefresh()){
+      Get.toNamed(Routes.TABS);
       return;
     }
     super.initState();
@@ -29,7 +29,7 @@ class _ApplyFriendPageState extends State<ApplyFriendPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(isEmpty(Get.arguments)){
+    if(WidgetUtils.checkRefresh()){
       return Container();
     }
     return Scaffold(

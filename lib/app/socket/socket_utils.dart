@@ -50,7 +50,12 @@ class SocketUtils{
 
   WebSocketChannel? channel;
 
+  /// reconnect 是否需要重连
   void connect({Function? callback}) async {
+    if(isConnect){
+      callback?.call(isConnect);
+      return;
+    }
     // sendPort.send('Message from child Isolate');
     // var url = "ws://124.222.224.186:8800";
     var url ='${Constant.BASE_WS_URL}?Authorization=${AppData.getUser()?.token.em()}';
@@ -72,11 +77,15 @@ class SocketUtils{
 
     channel?.ready.then((value) {
       isConnect = true;
-      callback?.call(true);
+      callback?.call(isConnect);
       if(periodicTimer == null){
         pengPeriodic();
       }
       // sendPort.send(buildMessage("connected"));
+    },onError: (e){
+      isConnect = false;
+      callback?.call(isConnect);
+      loggerArray(["连接失败",e.toString()]);
     });
     channel?.stream.interval(const Duration(seconds: 1)).listen((event) {
       loggerArray(["异步任务收到长连接消息",event]);
@@ -125,17 +134,13 @@ class SocketUtils{
             break;
         }
       }
-    },onDone: (){
-      destroy().then((v){
-        if(!connecting && isNotEmpty(AppData.getUser()?.token)){
-          ///延时两秒自动重连
-          Future.delayed(Duration(seconds: 2),()=> reConnect());
-        }
-      });
+    },onError: (e){
+      loggerArray(["消息接收失败",e.toString()]);
+      isConnect = false;
+      callback?.call(isConnect);
+      destroy();
     });
   }
-
-  bool connecting = false;
 
   Future destroy() async {
     await channel?.sink.close(status.normalClosure);
@@ -152,9 +157,16 @@ class SocketUtils{
     periodicTimer?.cancel();
     periodicTimer = null;
     periodicTimer = Timer.periodic(Duration(seconds: 3), (timer) {
-      if(isConnect){ channel?.sink.add("isConnect"); }
+      if(isConnect){
+        try{
+          channel?.sink.add("isConnect");
+        }catch(e){
+          periodicTimer?.cancel();
+        }
+      }
     });
   }
+
 
   void reConnect() {
     loggerArray(["开始重连",!isConnect,AppData.getUser()?.token]);
@@ -162,7 +174,6 @@ class SocketUtils{
       ///如果已经登录了，有token
       SocketUtils().connect(callback: (result){
         loggerArray(["连接结果",result]);
-        connecting = true;
         if(result){
           ///连接成功
         } else {

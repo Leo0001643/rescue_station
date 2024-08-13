@@ -43,7 +43,7 @@ class ApplyFriendLogic extends GetxController {
     DioUtil().post(Api.APPLY_ADD,data: params).then((result){
       if(result.data["code"] == 200){
         Get.snackbar('添加好友提醒', "申请已发送！");
-        Get.until((ModalRoute.withName(Routes.TABS)));
+        Get.until((route)=> Get.currentRoute == Routes.TABS);
       } else if(result.data["code"] == 401){
         WidgetUtils.logSqueezeOut();
       } else {

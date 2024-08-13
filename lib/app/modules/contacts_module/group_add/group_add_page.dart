@@ -23,6 +23,10 @@ class _GroupAddPageState extends State<GroupAddPage> {
 
   @override
   void initState() {
+    if(WidgetUtils.checkRefresh()){
+      Get.toNamed(Routes.TABS);
+      return;
+    }
     if(isNotEmpty(Get.arguments)){
       state.groupDetail = Get.arguments;
     }

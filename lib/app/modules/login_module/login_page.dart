@@ -17,8 +17,8 @@ class LoginPage extends GetView<LoginController> {
   LoginPage({super.key}) {
     Get.put(LoginController());
   }
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  // final TextEditingController phoneController = TextEditingController();
+  // final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

@@ -19,8 +19,24 @@ import 'logger.dart';
 
 class WidgetUtils {
 
+  static bool checkRefresh(){
+    print("是否是刷新啦 ${!Get.rootController.rootDelegate.canBack}  ${Get.currentRoute == Routes.TABS}");
+    return !Get.rootController.rootDelegate.canBack && Get.currentRoute != Routes.TABS;
+  }
+
   static AppBar buildAppBar(String title,{List<Widget>? actions,Color backgroundColor = Colors.white,Color? textColor}) {
     return AppBar(
+      leading: InkWell(
+        onTap: (){
+          if(checkRefresh()){
+            Get.toNamed(Routes.TABS);
+          } else {
+            Get.back();
+          }
+        },
+        child: Icon(Icons.arrow_back_ios,size: 20.r,),
+      ),
+      automaticallyImplyLeading: false,
       title: Text(title,style: TextStyle(fontSize: 18.sp,color: textColor ?? color_333,fontWeight: FontWeight.w700),),
       iconTheme: IconThemeData(color: textColor ?? color_333),
       centerTitle: true,
@@ -46,6 +62,7 @@ class WidgetUtils {
 
   static AppBar buildSearchAppBar(BuildContext context,String title,Widget rightIcon,{Function(String text)? onChange}){
     return AppBar(
+      automaticallyImplyLeading: false,
       toolbarHeight: AppLayout.heigth(120),
       backgroundColor: color_703,
       centerTitle: true,
@@ -182,7 +199,7 @@ class WidgetUtils {
       await AppData.clearUser();
       await SocketUtils().destroy();
       eventBus.fire(LogoutEvent());
-      Get.until((ModalRoute.withName(Routes.TABS)));
+      Get.until((route)=> Get.currentRoute == Routes.TABS);
       Future.delayed(Duration(milliseconds: 300),(){
         Get.toNamed(Routes.LOGIN);
       });

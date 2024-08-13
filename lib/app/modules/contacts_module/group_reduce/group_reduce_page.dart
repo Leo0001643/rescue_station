@@ -24,9 +24,14 @@ class _GroupReducePageState extends State<GroupReducePage> {
 
   @override
   void initState() {
+    if(WidgetUtils.checkRefresh()){
+      Get.toNamed(Routes.TABS);
+      return;
+    }
     if(isNotEmpty(Get.arguments)){
       state.groupDetail = Get.arguments;
       state.contacts.value = state.groupDetail.user ?? [];
+      state.contacts.value.forEach((v){ v.select = false; });
     }
     super.initState();
   }

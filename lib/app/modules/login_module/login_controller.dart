@@ -11,12 +11,30 @@ import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
+import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../utils/app_data.dart';
 import '../../utils/dio_utils.dart';
 
 class LoginController extends GetxController{
   var phoneController = TextEditingController();
   var passwordController = TextEditingController();
+
+  @override
+  void onReady() {
+    if(WidgetUtils.checkRefresh()){
+      Get.toNamed(Routes.TABS);
+      return;
+    }
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    phoneController.dispose();
+    passwordController.dispose();
+    super.onClose();
+  }
+
 
   ///会员登录
   void login() async{
@@ -35,8 +53,11 @@ class LoginController extends GetxController{
             await Future.delayed(const Duration(seconds: 2));
             await EasyLoading.dismiss();
             EasyLoading.showSuccess('登录成功!');
-            // Get.back(result: true);
-            Get.offAllNamed(Routes.TABS);
+            Get.back(result: true);
+            // Get.until((route)=> Get.currentRoute == Routes.TABS);
+          } else {
+            await EasyLoading.dismiss();
+            EasyLoading.showError('登录失败!');
           }
         });
       } else {

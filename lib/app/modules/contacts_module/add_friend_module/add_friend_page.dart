@@ -5,14 +5,34 @@ import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
-
+import "package:universal_html/html.dart" as html;
 import '../../../utils/AppLayout.dart';
 import 'add_friend_controller.dart';
 
-class AddFriendPage extends GetView<AddFriendController> {
+class AddFriendPage extends StatefulWidget {
   const AddFriendPage({super.key});
+
+  @override
+  State<StatefulWidget> createState() => StateAddFriendPage();
+
+}
+
+class StateAddFriendPage extends State<AddFriendPage>{
+  final controller = Get.find<AddFriendController>();
+
+  @override
+  void initState() {
+    if(WidgetUtils.checkRefresh()){
+      Get.toNamed(Routes.TABS);
+      return;
+    }
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +46,8 @@ class AddFriendPage extends GetView<AddFriendController> {
           Container(
             margin: EdgeInsets.symmetric(horizontal: AppLayout.width(20)),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.r)
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.r)
             ),
             child: TextField(
               // controller: _searchController,
@@ -106,4 +126,8 @@ class AddFriendPage extends GetView<AddFriendController> {
     );
   }
 
+
+
+
 }
+

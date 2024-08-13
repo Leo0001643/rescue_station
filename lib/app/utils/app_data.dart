@@ -23,6 +23,25 @@ class AppData {
   }
 
 
+  static Future<bool> setPageRefresh(bool isRefresh){
+    return SharedPreferencesUtil.setBool("PageRefresh", isRefresh);
+  }
+
+  static bool pageRefresh(){
+    return SharedPreferencesUtil.getBool("PageRefresh",defaultValue: false) ?? false;
+  }
+
+  static Future<bool> setRouteHistory(String history){
+    return SharedPreferencesUtil.setString("RouteHistory", history);
+  }
+
+  static String routeHistory(){
+    return SharedPreferencesUtil.getString("RouteHistory") ?? '[]';
+  }
+
+
+
+
 }
 
 

@@ -22,6 +22,22 @@ class _NewFriendPageState extends State<NewFriendPage> {
   final state = Get.find<NewFriendLogic>().state;
 
   @override
+  void initState() {
+    if(WidgetUtils.checkRefresh()){
+      Get.toNamed(Routes.TABS);
+      return;
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    Get.delete<NewFriendLogic>();
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: WidgetUtils.buildAppBar("新的朋友"),
@@ -75,9 +91,4 @@ class _NewFriendPageState extends State<NewFriendPage> {
     );
   }
 
-  @override
-  void dispose() {
-    Get.delete<NewFriendLogic>();
-    super.dispose();
-  }
 }

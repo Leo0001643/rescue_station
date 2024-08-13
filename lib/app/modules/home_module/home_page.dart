@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -22,10 +23,7 @@ class StateHomePage extends State<HomePage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(AppLayout.heigth(60)),
-          child: _appBar(),
-        ),
+        appBar: _appBar(),
         body: SingleChildScrollView(
           child: Obx(()=>Container(
             padding: EdgeInsets.symmetric(horizontal: AppLayout.width(8)),
@@ -49,10 +47,11 @@ class StateHomePage extends State<HomePage>{
     );
   }
 
-  Widget _appBar(){
+  PreferredSizeWidget _appBar(){
     return AppBar(
       elevation: 0,
       titleSpacing: 0,
+      automaticallyImplyLeading: false,
       title: Align(
         alignment: Alignment.centerLeft,
         child: Container(
@@ -63,7 +62,7 @@ class StateHomePage extends State<HomePage>{
       ),
       actions: [
         IconButton(onPressed: ()=>Get.toNamed(Routes.NOTICE),
-            icon: Image.asset("assets/images/icon/email.png",fit: BoxFit.cover)),
+            icon: Image.asset("assets/images/icon/email.png",fit: BoxFit.cover,width: 24.r,)),
         // IconButton(onPressed: ()=>Get.toNamed(Routes.MINE),
         //     icon: Image.asset("assets/images/icon/settings.png",fit: BoxFit.cover)),
       ],
@@ -117,12 +116,13 @@ class StateHomePage extends State<HomePage>{
                 if(isEmpty(controller.data.value)) {
                   return Container();
                 }
-                return Marquee(
-                  text: "${controller.data.value.content}",
-                  blankSpace: AppLayout.width(18),
-                  style: TextStyle(fontSize: AppLayout.fontSize(16), color: Colors.black87),
-                  scrollAxis: Axis.horizontal,
-                );
+                return Container();
+                // return Marquee(
+                //   text: "${controller.data.value.content}",
+                //   blankSpace: AppLayout.width(18),
+                //   style: TextStyle(fontSize: AppLayout.fontSize(16), color: Colors.black87),
+                //   scrollAxis: Axis.horizontal,
+                // );
               })
           )
         ],

@@ -33,7 +33,7 @@ class StateMessagePage extends State<MessagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WidgetUtils.buildSearchAppBar(context, "消息", Container()),
+      appBar: WidgetUtils.buildSearchAppBar(context, "消息",Container()),
       body: Obx(() {
         return ListView.separated(
           itemCount: controller.messages.length,

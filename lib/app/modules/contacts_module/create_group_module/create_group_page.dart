@@ -14,6 +14,7 @@ class CreateGroupPage extends GetView<CreateGroupController> {
 
   const CreateGroupPage({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -14,6 +14,15 @@ class CreateGroupController extends GetxController{
   var selectList = RxList<UserInfoEntity>.empty(growable: true);
 
   @override
+  void onInit() {
+    if(WidgetUtils.checkRefresh()){
+      Get.toNamed(Routes.TABS);
+      return;
+    }
+    super.onInit();
+  }
+
+  @override
   void onReady() {
     ///如果已经登录了，有token
     var user = AppData.getUser();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/modules/message_module/group_avatar_aidget.dart';
+import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors_theme.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
@@ -19,7 +20,14 @@ class _GroupListPageState extends State<GroupListPage> {
   final logic = Get.find<GroupListLogic>();
   final state = Get.find<GroupListLogic>().state;
 
-
+  @override
+  void initState() {
+    if(WidgetUtils.checkRefresh()){
+      Get.toNamed(Routes.TABS);
+      return;
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {

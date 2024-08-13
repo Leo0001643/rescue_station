@@ -25,6 +25,15 @@ class _FriendDetailPageState extends State<FriendDetailPage> {
   final state = Get.find<FriendDetailLogic>().state;
 
   @override
+  void initState() {
+    if(WidgetUtils.checkRefresh()){
+      Get.toNamed(Routes.TABS);
+      return;
+    }
+    super.initState();
+  }
+
+  @override
   void dispose() {
     Get.delete<FriendDetailLogic>();
     super.dispose();
@@ -32,6 +41,9 @@ class _FriendDetailPageState extends State<FriendDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    if(WidgetUtils.checkRefresh()){
+      return Container();
+    }
     return Scaffold(
       appBar: WidgetUtils.buildAppBar(""),
       backgroundColor: Colors.white,
