@@ -27,7 +27,9 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
       case LifecycleEvent.visible:
       ///播放音乐
         AudioUtils().appForeground = true;
-        controller.refreshMessage();
+        if(controller.isLogin.value){
+          controller.refreshMessage();
+        }
         break;
       case LifecycleEvent.invisible:
         AudioUtils().appForeground = false;

@@ -47,6 +47,7 @@ class SocketUtils{
 
   ///长连接状态
   bool isConnect = false;
+  int lastTimeMill = DateTime.now().millisecondsSinceEpoch;
 
   WebSocketChannel? channel;
 
@@ -94,7 +95,8 @@ class SocketUtils{
       ///{"msgId":"1808765416252825601","pushType":"MSG","msgContent":{"msgType":"ALERT","content":"你邀请貂蝉加入了群聊","top":"N","disturb":"N"},"fromInfo":{"nickName":"上官婉儿的群聊-hi1f(2)","portrait":"[\"https://img.alicdn.com/imgextra/i3/87413133/O1CN01mHA9DJ1Z0xlORnKuW_!!87413133.png\"]","userId":"1808765416043110401","userType":"normal"},"createTime":"2024-07-03 23:30:55","groupInfo":{"nickName":"上官婉儿的群聊-hi1f(2)","portrait":"[\"https://img.alicdn.com/imgextra/i3/87413133/O1CN01mHA9DJ1Z0xlORnKuW_!!87413133.png\"]","userId":"1808765416043110401"}}
       if(event == "ok"){
         isConnect = true;
-        loggerArray(["什么情况，还活着呢",channel == null,periodicTimer == null]);
+        lastTimeMill = DateTime.now().millisecondsSinceEpoch;
+        // loggerArray(["什么情况，还活着呢",channel == null,periodicTimer == null]);
       } else if(event is String){
         var dataMap = jsonDecode(event);
         switch(dataMap["pushType"]){
@@ -162,6 +164,7 @@ class SocketUtils{
           channel?.sink.add("isConnect");
         }catch(e){
           periodicTimer?.cancel();
+          periodicTimer = null;
         }
       }
     });

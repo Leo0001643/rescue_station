@@ -2,9 +2,12 @@ import 'package:get/get.dart';
 
 import 'apply_friend_logic.dart';
 
-class ApplyFriendBinding extends Bindings {
+class ApplyFriendBinding extends Binding {
+
   @override
-  void dependencies() {
-    Get.lazyPut(() => ApplyFriendLogic());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => ApplyFriendLogic())];
   }
+
+
 }

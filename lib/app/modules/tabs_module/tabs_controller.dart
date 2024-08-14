@@ -105,7 +105,7 @@ class TabsController extends GetxController {
         setCurrentIndex(0); // 登录失败返回首页
       }
       if(Get.rootController.rootDelegate.canBack){
-        Get.until((route)=> Get.currentRoute == Routes.TABS);
+        Get.offNamedUntil(Routes.TABS, (route)=> route.name != Routes.TABS);
       }
     });
   }
@@ -158,8 +158,14 @@ class TabsController extends GetxController {
     socketTimer?.cancel();
     socketTimer = null;
     socketTimer = Timer.periodic(Duration(seconds: 5), (timer) {
-      loggerArray(["是否需要重连",!SocketUtils().isConnect,isNotEmpty(AppData.getUser()?.token)]);
+      var pingpengTime = DateTime.now().millisecondsSinceEpoch - SocketUtils().lastTimeMill;
+      loggerArray(["是否需要重连",!SocketUtils().isConnect,isNotEmpty(AppData.getUser()?.token), pingpengTime]);
       if(!SocketUtils().isConnect && isNotEmpty(AppData.getUser()?.token)){
+        ///如果未连接，就重新连接
+        SocketUtils().reConnect();
+      } else if(isNotEmpty(AppData.getUser()?.token) && pingpengTime > 5000){
+        SocketUtils().isConnect = false;
+        ///如果连接心跳超过5秒没刷新，就认为心跳断开，开始重连
         SocketUtils().reConnect();
       }
     });

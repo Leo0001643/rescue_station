@@ -2,9 +2,11 @@ import 'register_controller.dart';
 import 'package:get/get.dart';
 
 
-class RegisterBinding implements Bindings {
+class RegisterBinding implements Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => RegisterController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => RegisterController())];
   }
+
+
 }

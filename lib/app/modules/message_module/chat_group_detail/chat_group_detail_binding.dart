@@ -2,9 +2,12 @@ import 'package:get/get.dart';
 
 import 'chat_group_detail_logic.dart';
 
-class ChatGroupDetailBinding extends Bindings {
+class ChatGroupDetailBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => ChatGroupDetailLogic());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(()=> ChatGroupDetailLogic())];
   }
+
+
+
 }

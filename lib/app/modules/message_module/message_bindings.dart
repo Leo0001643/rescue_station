@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import 'message_controller.dart';
 
-class MessageBinding implements Bindings {
+class MessageBinding implements Binding {
+
   @override
-  void dependencies() {
-    Get.lazyPut(() => MessageController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => MessageController())];
   }
+
 }

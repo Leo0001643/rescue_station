@@ -4,9 +4,12 @@ import 'package:rescue_station/app/modules/contacts_module/add_friend_module/add
  * GetX Template Generator - fb.com/htngu.99
  * */
 
-class AddFriendBinding implements Bindings {
+class AddFriendBinding implements Binding {
+
   @override
-  void dependencies() {
-    Get.lazyPut(() => AddFriendController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => AddFriendController())];
   }
+
+
 }

@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import './chatNo_edit_controller.dart';
 
-class ChatNoEditBinding implements Bindings {
+class ChatNoEditBinding implements Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => ChatNoEditController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => ChatNoEditController())];
   }
+
+
 }

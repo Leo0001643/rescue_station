@@ -1,9 +1,10 @@
 import 'package:rescue_station/app/modules/login_module/login_controller.dart';
 import 'package:get/get.dart';
 
-class LoginBinding implements Bindings {
+class LoginBinding implements Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => LoginController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => LoginController())];
   }
+
 }
