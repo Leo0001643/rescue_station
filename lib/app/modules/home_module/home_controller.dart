@@ -1,4 +1,5 @@
 import 'package:common_utils/common_utils.dart';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/domains/marquee_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
@@ -30,7 +31,10 @@ class HomeController extends GetxController{
 
   ///获取广播内容
   getMarquee() async{
-    var response = await requestClient.get(Api.MARQUEE, headers: {"version": "1.0.1"});
+    Options options = Options(
+      headers: {'version': '1.0.0'},
+    );
+    var response = await requestClient.get(Api.MARQUEE, headers: {"version": "1.0.0"});
     if(isNotEmpty(response)){
       data.value = Data.fromJson(response);
       update();

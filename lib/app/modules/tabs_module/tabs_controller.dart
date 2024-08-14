@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/db/db_helper.dart';
@@ -136,7 +137,11 @@ class TabsController extends GetxController {
   }
 
   void refreshMessage(){
-    DioUtil().get(Api.REFRESH,).then((result){
+    Options options = Options(
+      headers: {'version': '1.0.0'}
+    );
+
+    DioUtil().get(Api.REFRESH, options: options).then((result){
       if(result.data["code"] == 200){
       } else if(result.data["code"] == 401){
         WidgetUtils.logSqueezeOut();

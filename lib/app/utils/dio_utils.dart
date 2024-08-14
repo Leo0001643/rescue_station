@@ -21,8 +21,8 @@ class DioUtil {
   DioUtil._internal() {
     BaseOptions options = BaseOptions(
       baseUrl: Constant.BASE_URL, // Replace with your base URL
-      connectTimeout: 60 * 1000,
-      receiveTimeout: 30 * 1000,
+      connectTimeout: 120 * 1000,
+      receiveTimeout: 120 * 1000,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

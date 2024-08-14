@@ -76,8 +76,4 @@ class LoginController extends GetxController{
   void register() {
     Get.toNamed(Routes.REGISTER);
   }
-
-
-
-
 }

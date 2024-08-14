@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors_theme.dart';
 import 'package:rescue_station/app/utils/AppLayout.dart';
 import 'package:rescue_station/app/utils/dialog_utils.dart';
-import '../tabs_module/tabs_controller.dart';
-import '../tabs_module/tabs_pages.dart';
+
 import 'login_controller.dart';
 
 
