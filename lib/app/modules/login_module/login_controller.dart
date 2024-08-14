@@ -53,8 +53,7 @@ class LoginController extends GetxController{
             await Future.delayed(const Duration(seconds: 2));
             await EasyLoading.dismiss();
             EasyLoading.showSuccess('登录成功!');
-            Get.back(result: true);
-            // Get.until((route)=> Get.currentRoute == Routes.TABS);
+            Get.offNamedUntil(Routes.TABS, (route)=> route.name != Routes.TABS);
           } else {
             await EasyLoading.dismiss();
             EasyLoading.showError('登录失败!');

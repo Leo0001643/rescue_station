@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import 'addr_edit_controller.dart';
 
-class AddrEditBinding implements Bindings {
+class AddrEditBinding implements Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => AddrEditController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => AddrEditController())];
   }
+
+
 }

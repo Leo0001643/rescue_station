@@ -4,9 +4,10 @@ import 'package:get/get.dart';
  * GetX Template Generator - fb.com/htngu.99
  * */
 
-class MineBinding implements Bindings {
+class MineBinding implements Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => MineController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => MineController())];
   }
+
 }

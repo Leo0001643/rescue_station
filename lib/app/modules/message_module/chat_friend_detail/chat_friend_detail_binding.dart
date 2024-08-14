@@ -2,9 +2,11 @@ import 'package:get/get.dart';
 
 import 'chat_friend_detail_logic.dart';
 
-class ChatFriendDetailBinding extends Bindings {
+class ChatFriendDetailBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => ChatFriendDetailLogic());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => ChatFriendDetailLogic())];
   }
+
+
 }

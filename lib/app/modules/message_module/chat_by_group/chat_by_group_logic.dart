@@ -180,16 +180,11 @@ class ChatByGroupLogic extends GetxController {
         }
       }
     });
-    ///消息标记已读
-    DbHelper().setMessageRead(state.chatEvent.messageBox).then((v){
-      loggerArray(["消息标记已读",v]);
-      if(v){
-        eventBus.fire(NewChatEvent()); //消息未读数变更，需要刷新列表
-      }
-    });
+
   }
 
   void insertMessageList(SocketMessageEntity socketMsg, Map<String, dynamic> fromInfo, String createTime,{types.Message? replied}) {
+    setMessageRead();
     switch (find(socketMsg.msgContent?.msgType)) {
       case MessageTypeEnum.TEXT:
         state.messages.insert(0, SocketUtils().buildUserText(
@@ -251,6 +246,17 @@ class ChatByGroupLogic extends GetxController {
       return SocketRefMsgContent();
     }
   }
+
+  void setMessageRead(){
+    ///消息标记已读
+    DbHelper().setMessageRead(state.chatEvent.messageBox).then((v){
+      loggerArray(["消息标记已读",v]);
+      if(v){
+        eventBus.fire(NewChatEvent()); //消息未读数变更，需要刷新列表
+      }
+    });
+  }
+
 
 
 }

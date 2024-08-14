@@ -2,9 +2,10 @@
 import 'package:get/get.dart';
 import 'phone_edit_controller.dart';
 
-class PhoneEditBinding implements Bindings {
+class PhoneEditBinding implements Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => PhoneEditController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => PhoneEditController())];
   }
+
 }

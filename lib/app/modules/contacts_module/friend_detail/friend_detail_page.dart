@@ -5,6 +5,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/AppLayout.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 
 import 'friend_detail_logic.dart';

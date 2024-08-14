@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import './nick_name_edit_controller.dart';
 
-class NickNameEditBindings implements Bindings {
+class NickNameEditBindings implements Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => NickNameEditController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => NickNameEditController())];
   }
+
+
 }

@@ -4,9 +4,12 @@ import 'package:rescue_station/app/modules/contacts_module/contacts_controller.d
  * GetX Template Generator - fb.com/htngu.99
  * */
 
-class ContactsBinding implements Bindings {
+class ContactsBinding implements Binding {
+
   @override
-  void dependencies() {
-    Get.lazyPut(() => ContactsController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => ContactsController())];
   }
+
+
 }

@@ -4,9 +4,10 @@ import 'package:get/get.dart';
  * GetX Template Generator - fb.com/htngu.99
  * */
 
-class NoticeBinding implements Bindings {
+class NoticeBinding implements Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => NoticeController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => NoticeController())];
   }
+
 }

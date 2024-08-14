@@ -193,13 +193,19 @@ class WidgetUtils {
     }
   }
 
+  static bool showLogoutDialog = false;
   ////token过期
   static void logSqueezeOut(){
+    if(showLogoutDialog){
+      return;
+    }
+    showLogoutDialog = true;
     DialogUtils.showSingleDialog(Get.context!, "您的登录已过期，请重新登录！").then((v) async {
+      showLogoutDialog = false;
       await AppData.clearUser();
       await SocketUtils().destroy();
       eventBus.fire(LogoutEvent());
-      Get.until((route)=> Get.currentRoute == Routes.TABS);
+      Get.offNamedUntil(Routes.TABS, (route)=> route.name != Routes.TABS);
       Future.delayed(Duration(milliseconds: 300),(){
         Get.toNamed(Routes.LOGIN);
       });

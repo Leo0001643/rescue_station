@@ -4,9 +4,10 @@ import 'package:get/get.dart';
  * GetX Template Generator - fb.com/htngu.99
  * */
 
-class LoanBinding implements Bindings {
+class LoanBinding implements Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => LoanController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => LoanController())];
   }
+
 }

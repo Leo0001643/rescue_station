@@ -2,9 +2,10 @@ import 'package:get/get.dart';
 
 import 'friend_detail_logic.dart';
 
-class FriendDetailBinding extends Bindings {
+class FriendDetailBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => FriendDetailLogic());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => FriendDetailLogic())];
   }
+
 }

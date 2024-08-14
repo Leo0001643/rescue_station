@@ -152,7 +152,7 @@ class ChatGroupDetailLogic extends GetxController {
           //聊天列表信息变更，需要刷新列表
           eventBus.fire(NewChatEvent());
           EasyLoading.dismiss();
-          Get.until((route)=> Get.currentRoute == Routes.TABS);
+          Get.offNamedUntil(Routes.TABS, (route)=> route.name != Routes.TABS);
         });
       } else if(result.data["code"] == 401){
         WidgetUtils.logSqueezeOut();

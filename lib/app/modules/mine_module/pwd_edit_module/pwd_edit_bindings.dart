@@ -2,9 +2,10 @@ import './pwd_edit_controller.dart';
 import 'package:get/get.dart';
 
 
-class PwdEditBinding implements Bindings {
+class PwdEditBinding implements Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => PwdEditController());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => PwdEditController())];
   }
+
 }

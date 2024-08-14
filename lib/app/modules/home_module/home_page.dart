@@ -116,13 +116,12 @@ class StateHomePage extends State<HomePage>{
                 if(isEmpty(controller.data.value)) {
                   return Container();
                 }
-                return Container();
-                // return Marquee(
-                //   text: "${controller.data.value.content}",
-                //   blankSpace: AppLayout.width(18),
-                //   style: TextStyle(fontSize: AppLayout.fontSize(16), color: Colors.black87),
-                //   scrollAxis: Axis.horizontal,
-                // );
+                return Marquee(
+                  text: "${controller.data.value.content}",
+                  blankSpace: AppLayout.width(18),
+                  style: TextStyle(fontSize: AppLayout.fontSize(16), color: Colors.black87),
+                  scrollAxis: Axis.horizontal,
+                );
               })
           )
         ],

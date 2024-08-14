@@ -2,9 +2,10 @@ import 'package:get/get.dart';
 
 import 'group_add_logic.dart';
 
-class GroupAddBinding extends Bindings {
+class GroupAddBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => GroupAddLogic());
+  List<Bind> dependencies() {
+    return [Bind.lazyPut(() => GroupAddLogic())];
   }
+
 }
