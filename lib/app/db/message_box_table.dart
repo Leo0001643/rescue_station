@@ -1,6 +1,5 @@
 
 import 'dart:convert';
-import 'package:common_utils/common_utils.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:rescue_station/generated/json/base/json_field.dart';

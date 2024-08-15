@@ -28,6 +28,12 @@ class StateGroupAvatarWidget extends State<GroupAvatarWidget> {
     // list.addAll(widget.portrait);
     // list.addAll(widget.portrait);
     // list.addAll(widget.portrait);
+    // list.addAll(widget.portrait);
+    // list.addAll(widget.portrait);
+    // list.addAll(widget.portrait);
+    // list.addAll(widget.portrait);
+    // list.addAll(widget.portrait);
+
     super.initState();
   }
 
@@ -79,8 +85,13 @@ class StateGroupAvatarWidget extends State<GroupAvatarWidget> {
   }
 
   List<Widget> buildGroupAvatar(List<String> portrait) {
-    var list = portrait.length >= 4 ? portrait.sublist(0, 4) : portrait;
-    return list.map((v) => Image.network(v, fit: BoxFit.fill, width: 20.r, height: 20.r,)).toList();
+    if(portrait.length <= 4){
+      var list = portrait.length >= 4 ? portrait.sublist(0, 4) : portrait;
+      return list.map((v) => Image.network(v, fit: BoxFit.fill, width: 20.r, height: 20.r,)).toList();
+    } else {
+      var list = portrait.length >= 9 ? portrait.sublist(0, 9) : portrait;
+      return list.map((v) => Image.network(v, fit: BoxFit.fill, width: 12.r, height: 12.r,)).toList();
+    }
   }
 
 

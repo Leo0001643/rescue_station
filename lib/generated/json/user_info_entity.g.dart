@@ -1,6 +1,5 @@
 import 'package:rescue_station/generated/json/base/json_convert_content.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
-import 'package:rescue_station/app/modules/contacts_module/azlistview/az_common.dart';
 
 
 UserInfoEntity $UserInfoEntityFromJson(Map<String, dynamic> json) {

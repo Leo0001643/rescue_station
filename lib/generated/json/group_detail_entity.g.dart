@@ -64,6 +64,10 @@ GroupDetailUser $GroupDetailUserFromJson(Map<String, dynamic> json) {
   if (portrait != null) {
     groupDetailUser.portrait = portrait;
   }
+  final bool? select = jsonConvert.convert<bool>(json['select']);
+  if (select != null) {
+    groupDetailUser.select = select;
+  }
   return groupDetailUser;
 }
 
@@ -72,6 +76,7 @@ Map<String, dynamic> $GroupDetailUserToJson(GroupDetailUser entity) {
   data['userId'] = entity.userId;
   data['nickName'] = entity.nickName;
   data['portrait'] = entity.portrait;
+  data['select'] = entity.select;
   return data;
 }
 
@@ -80,11 +85,13 @@ extension GroupDetailUserExtension on GroupDetailUser {
     String? userId,
     String? nickName,
     String? portrait,
+    bool? select,
   }) {
     return GroupDetailUser()
       ..userId = userId ?? this.userId
       ..nickName = nickName ?? this.nickName
-      ..portrait = portrait ?? this.portrait;
+      ..portrait = portrait ?? this.portrait
+      ..select = select ?? this.select;
   }
 }
 
