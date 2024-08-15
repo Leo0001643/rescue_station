@@ -1,10 +1,16 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import '../../constant/api_code.dart';
+import '../../domains/api_response.dart';
+import '../../routes/api_info.dart';
 import '../../routes/app_pages.dart';
 import '../../theme/app_colors_theme.dart';
 import '../../utils/app_data.dart';
+import '../../utils/dio_utils.dart';
 import '../../utils/network/request_client.dart';
 
 
@@ -27,7 +33,6 @@ class LoanController extends GetxController{
         formKey.currentState?.save();
         var userInfo = AppData.getUser();
         if(isNotEmpty(userInfo)){
-          var headers = {"version":"1.0.1", "Authorization": userInfo?.token};
           var data ={
             "realname": realname.value,
             "phone": phone.value,
@@ -39,10 +44,21 @@ class LoanController extends GetxController{
             "chatNo": userInfo?.chatNo,
             "userId": userInfo?.userId
           };
-          RequestClient requestClient = RequestClient();
-          var  user = await requestClient.post("loan/loanApplay", data: data, headers: headers);
-          debugPrint("-------------$user");
-          Get.snackbar("提交成功", "系统审批中！",snackPosition: SnackPosition.top,duration: const Duration(seconds: 1), backgroundColor: AppStyles.primaryColor, colorText: AppStyles.textWhiteColor);
+          Options options = Options(
+            headers: {"version":"1.0.1", "Authorization": userInfo?.token},
+          );
+          await EasyLoading.show(status: '提交申请中',maskType: EasyLoadingMaskType.black);
+          var response = await DioUtil().post(Api.LOAN_APPLY, data: data, options: options);
+          var entity = ApiResponse.fromJson(response.data);
+          if(isNotEmpty(response) && entity.code == ApiCode.SUCCESS.code) {
+            await EasyLoading.dismiss();
+            EasyLoading.showSuccess('提交成功,系统审批中,如有疑问请联系在线客服!');
+            Get.back();
+            //Get.snackbar("提交成功", "系统审批中！",snackPosition: SnackPosition.top,duration: const Duration(seconds: 1), backgroundColor: AppStyles.primaryColor, colorText: AppStyles.textWhiteColor);
+          }else{
+            await EasyLoading.dismiss();
+            EasyLoading.showError('提交失败,请联系在线客服!');
+          }
           Get.close();
           update();
       }else{

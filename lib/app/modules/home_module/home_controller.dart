@@ -6,6 +6,9 @@ import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/utils/network/request_client.dart';
 
+import '../../domains/api_response.dart';
+import '../../utils/dio_utils.dart';
+
 class HomeController extends GetxController{
   final RequestClient requestClient = RequestClient();
   RxDouble loanAmount = 0.0.obs;
@@ -34,11 +37,11 @@ class HomeController extends GetxController{
     Options options = Options(
       headers: {'version': '1.0.0'},
     );
-    var response = await requestClient.get(Api.MARQUEE, headers: {"version": "1.0.0"});
-    if(isNotEmpty(response)){
-      data.value = Data.fromJson(response);
+    var response = await DioUtil().get(Api.MARQUEE, options: options);
+    var entity = ApiResponse.fromJson(response.data);
+    if(isNotEmpty(entity)){
+      data.value = Data.fromJson(entity.data);
       update();
     }
   }
-
 }
