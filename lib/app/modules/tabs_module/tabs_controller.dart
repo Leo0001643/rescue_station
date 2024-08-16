@@ -11,7 +11,7 @@ import 'package:rescue_station/app/event/new_chat_event.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_notice_entity.dart';
-import 'package:rescue_station/app/socket/socket_utils.dart';
+import 'package:rescue_station/app/socket/socket_utils_bak.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
@@ -137,10 +137,7 @@ class TabsController extends GetxController {
   }
 
   void refreshMessage(){
-    Options options = Options(
-      headers: {'version': '1.0.0'}
-    );
-
+    Options options = Options(headers: {'version': '1.0.0'});
     DioUtil().get(Api.REFRESH, options: options).then((result){
       if(result.data["code"] == 200){
       } else if(result.data["code"] == 401){
@@ -157,20 +154,19 @@ class TabsController extends GetxController {
   void checkConnectTimer(){
     socketTimer?.cancel();
     socketTimer = null;
-    socketTimer = Timer.periodic(Duration(seconds: 5), (timer) {
+    socketTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       var pingpengTime = DateTime.now().millisecondsSinceEpoch - SocketUtils().lastTimeMill;
       loggerArray(["是否需要重连",!SocketUtils().isConnect,isNotEmpty(AppData.getUser()?.token), pingpengTime]);
       if(!SocketUtils().isConnect && isNotEmpty(AppData.getUser()?.token)){
         ///如果未连接，就重新连接
+        loggerArray(["TAB调用重连>>>",pingpengTime]);
         SocketUtils().reConnect();
       } else if(isNotEmpty(AppData.getUser()?.token) && pingpengTime > 5000){
+        loggerArray(["TAB超5秒调用重连>>>",pingpengTime]);
         SocketUtils().isConnect = false;
         ///如果连接心跳超过5秒没刷新，就认为心跳断开，开始重连
         SocketUtils().reConnect();
       }
     });
   }
-
-
-
 }

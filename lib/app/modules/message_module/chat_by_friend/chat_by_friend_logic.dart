@@ -15,7 +15,7 @@ import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
-import 'package:rescue_station/app/socket/socket_utils.dart';
+import 'package:rescue_station/app/socket/socket_utils_bak.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/data_utils.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';

@@ -27,7 +27,6 @@ abstract class Routes {
   static const EDIT_GROUP_NAME = '/edit_group_name';// edit group name
   static const GROUP_ADD = '/group_add';// group add
   static const GROUP_REDUCE = '/group_reduce';// group reduce
-  static const MY_REFRESH = 'my/refresh';
   static const EDIT_PWD = '/pwd_edit';
   static const EDIT_CHATNO = '/editChatNo'; // ChatnoEdit page
   static const EDIT_PHONE = '/edit_phone'; // phone_edit page

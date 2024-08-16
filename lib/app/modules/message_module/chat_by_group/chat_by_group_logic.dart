@@ -19,7 +19,7 @@ import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../../event/new_chat_event.dart';
 import '../../../routes/api_info.dart';
 import '../../../routes/app_pages.dart';
-import '../../../socket/socket_utils.dart';
+import '../../../socket/socket_utils_bak.dart';
 import '../../../utils/dio_utils.dart';
 import '../../../utils/logger.dart';
 import '../chat_by_friend/bottom_chat_controller.dart';

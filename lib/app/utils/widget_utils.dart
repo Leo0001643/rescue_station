@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
-import 'package:rescue_station/app/socket/socket_utils.dart';
+import 'package:rescue_station/app/socket/socket_utils_bak.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/utils/AppLayout.dart';
 import 'package:rescue_station/app/utils/Icon.dart';
@@ -82,7 +82,7 @@ class WidgetUtils {
                 child: Row(
                   children: [
                     SizedBox(width: 8.w,),
-                    Icon(Icons.search,),
+                    const Icon(Icons.search,),
                     Expanded(
                       child: TextField(
                         // keyboardType: TextInputType.number,
@@ -206,7 +206,7 @@ class WidgetUtils {
       await SocketUtils().destroy();
       eventBus.fire(LogoutEvent());
       Get.offNamedUntil(Routes.TABS, (route)=> route.name != Routes.TABS);
-      Future.delayed(Duration(milliseconds: 300),(){
+      Future.delayed(const Duration(milliseconds: 300),(){
         Get.toNamed(Routes.LOGIN);
       });
     });
@@ -216,7 +216,6 @@ class WidgetUtils {
     if (phoneNumber.length != 11) {
       return phoneNumber;
     }
-
     String prefix = phoneNumber.substring(0, 2);
     String suffix = phoneNumber.substring(8);
     String masked = '*' * 6;
