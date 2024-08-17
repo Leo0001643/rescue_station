@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:lifecycle/lifecycle.dart';
-import 'package:rescue_station/app/socket/socket_utils_bak.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/audio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'tabs_controller.dart';

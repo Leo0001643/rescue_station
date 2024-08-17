@@ -9,7 +9,7 @@ import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
-import 'package:rescue_station/app/socket/socket_utils_bak.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import '../../utils/app_data.dart';

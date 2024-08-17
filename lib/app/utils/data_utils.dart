@@ -4,7 +4,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
-import 'package:rescue_station/app/socket/socket_utils_bak.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 

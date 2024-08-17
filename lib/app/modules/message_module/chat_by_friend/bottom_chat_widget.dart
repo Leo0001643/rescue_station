@@ -1,18 +1,13 @@
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
-import 'package:rescue_station/app/socket/socket_message_entity.dart';
-import 'package:rescue_station/app/socket/socket_utils_bak.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_text_theme.dart';
 import 'package:rescue_station/app/utils/data_utils.dart';
-import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import 'bottom_chat_controller.dart';
 import 'bottom_emoji_widget.dart';

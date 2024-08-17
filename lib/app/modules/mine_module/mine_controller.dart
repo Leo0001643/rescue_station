@@ -8,7 +8,7 @@ import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/modules/mine_module/user_model.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
-import 'package:rescue_station/app/socket/socket_utils_bak.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import '../../domains/upload_file_entity.dart';
 import '../../routes/api_info.dart';

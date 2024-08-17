@@ -1,6 +1,6 @@
 {
-    "name": "rescue_station",
-    "short_name": "rescue_station",
+    "name": "水滴扶贫",
+    "short_name": "扶贫",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

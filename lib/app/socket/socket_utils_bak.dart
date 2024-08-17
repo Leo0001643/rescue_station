@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -18,10 +19,11 @@ import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/audio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
-import 'package:web_socket/io_web_socket.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/adapter_web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket/io_web_socket.dart';
 
 import '../constant/constant.dart';
 
@@ -40,184 +42,127 @@ class SocketUtils{
     instance ??= SocketUtils._internal();
     return instance;
   }
+
   factory SocketUtils() => getInstance();
+
   ///长连接状态
   bool isConnect = false;
   int lastTimeMill = DateTime.now().millisecondsSinceEpoch;
+
   WebSocketChannel? channel;
-  Timer? periodicTimer;
-  Timer? heartBeatTimer;
-  Timer? reconnectTimer;
 
-  /// 最大重连次数
-  static const int maxReconnectAttempts = 5000;
-  int reconnectAttempts = 0;
-
+  /// reconnect 是否需要重连
   void connect({Function? callback}) async {
-    if (isConnect) {
+    if(isConnect){
       callback?.call(isConnect);
       return;
     }
+    // sendPort.send('Message from child Isolate');
+    // var url = "ws://124.222.224.186:8800";
     var url ='${Constant.BASE_WS_URL}?Authorization=${AppData.getUser()?.token.em()}';
     var uri = Uri.parse(url);
-    loggerArray(["开始连接", url]);
+    loggerArray(["开始连接",url,]);
+    // SendPort sendPort = params[0];
+    if(GetPlatform.isWeb){
+      channel = WebSocketChannel.connect(uri);
+    } else {
+      HttpClient client = HttpClient();
+      client.badCertificateCallback = (X509Certificate cr, String host, int port) {
+        return true;
+      };
+      channel = AdapterWebSocketChannel(IOWebSocket.fromWebSocket(await WebSocket.connect(url,customClient: client)));
+    }
+    channel?.sink.add({
+      "version": Constant.VERSION
+    });
 
-    try {
-      if (GetPlatform.isWeb) {
-        channel = WebSocketChannel.connect(uri);
-      } else {
-        HttpClient client = HttpClient();
-        client.badCertificateCallback = (X509Certificate cr, String host, int port) {
-          return true;
-        };
-        channel = AdapterWebSocketChannel(IOWebSocket.fromWebSocket(await WebSocket.connect(url, customClient: client)));
+    channel?.ready.then((value) {
+      isConnect = true;
+      callback?.call(isConnect);
+      if(periodicTimer == null){
+        pengPeriodic();
       }
-      channel?.sink.add({"version": Constant.VERSION});
-
-      // 监听连接成功
-      channel?.ready.then((value) {
-        isConnect = true;
-        reconnectAttempts = 0; // Reset reconnect attempts on successful connection
-        callback?.call(isConnect);
-        if (periodicTimer == null) {
-          pengPeriodic();
-        }
-        if (heartBeatTimer == null) {
-          startHeartBeat();
-        }
-      }, onError: (e) {
-        isConnect = false;
-        callback?.call(isConnect);
-        loggerArray(["连接失败", e.toString()]);
-        handleReconnect();
-      });
-
-      // 监听消息
-      channel?.stream.listen((event) {
-        loggerArray(["异步任务收到长连接消息", event]);
-        if (event == "ok") {
-          isConnect = true;
-          lastTimeMill = DateTime.now().millisecondsSinceEpoch;
-        } else if (event is String) {
-          handleIncomingMessage(event);
-        }
-      }, onError: (e) {
-        loggerArray(["消息接收失败", e.toString()]);
-        isConnect = false;
-        handleReconnect();
-      });
-    } catch (e) {
+      // sendPort.send(buildMessage("connected"));
+    },onError: (e){
       isConnect = false;
       callback?.call(isConnect);
-      loggerArray(["连接异常", e.toString()]);
-      handleReconnect();
-    }
-  }
-
-  /// 处理消息
-  void handleIncomingMessage(String event) {
-    var dataMap = jsonDecode(event);
-    switch (dataMap["pushType"]) {
-      case "MSG":
-        handleMessage(dataMap);
-        break;
-      case "NOTICE":
-        handleNotice(dataMap);
-        break;
-    }
-  }
-  /// 处理消息类型
-  void handleMessage(Map<String, dynamic> dataMap) {
-    SocketMessageEntity response;
-    if (isEmpty(dataMap["groupInfo"])) {
-      response = SocketMessageEntity.fromJson(dataMap);
-      response.groupInfo = null;
-    } else {
-      response = SocketMessageEntity();
-      response.msgId = dataMap["msgId"];
-      response.pushType = dataMap["pushType"];
-      response.createTime = dataMap["createTime"];
-      response.msgContent = SocketMsgContent.fromJson(dataMap["msgContent"]);
-      response.fromInfo = UserInfoEntity.fromJson(dataMap["fromInfo"]);
-      var group = GroupInfoEntity();
-      group.name = dataMap["groupInfo"]["nickName"];
-      group.groupId = dataMap["groupInfo"]["userId"];
-      group.portrait = (jsonDecode(dataMap["groupInfo"]["portrait"]) as List).map<String>((e) => e.toString()).toList();
-      if (isNotEmpty(group.groupId)) {
-        response.groupInfo = group;
-      }
-    }
-    DbHelper().messageInsertOrUpdate(false, response).then((v) {
-      if (v) {
-        eventBus.fire(response);
-        eventBus.fire(NewChatEvent());
-        AudioUtils().playReceiveMsg();
-      }
+      loggerArray(["连接失败",e.toString()]);
     });
-  }
-
-  /// 处理通知类型
-  void handleNotice(Map<String, dynamic> dataMap) {
-    var response = SocketNoticeEntity.fromJson(dataMap);
-    eventBus.fire(response);
-    AudioUtils().playReceiveMsg();
-  }
-
-  /// 启动心跳检测
-  void startHeartBeat() {
-    heartBeatTimer = Timer.periodic(Duration(seconds: 10), (timer) {
-      if (isConnect) {
-        try {
-          channel?.sink.add("ping");
-        } catch (e) {
-          loggerArray(["心跳检测失败", e.toString()]);
-          destroy();
+    channel?.stream.interval(const Duration(seconds: 1)).listen((event) {
+      loggerArray(["异步任务收到长连接消息",event]);
+      ///{"msgId":"1805140119376756738","pushType":"MSG","msgContent":{"msgType":"TEXT","content":"哈哈哈哈","top":"N","disturb":"N"},"fromInfo":{"nickName":"上官婉儿","portrait":"http://q3z3-im.oss-cn-beijing.aliyuncs.com/61bed1c563de173eb00e8d8c.png","userId":"1800817039510786049","userType":"self"},"createTime":"2024-06-23 23:25:20","groupInfo":{}}
+      ///{"msgId":"1805438066169634817","pushType":"NOTICE","msgContent":{"friendApply":{"count":1},"topicRed":{},"topicReply":{}},"createTime":"2024-06-24 19:09:13","groupInfo":{}}
+      ///{"msgId":"1808765416252825601","pushType":"MSG","msgContent":{"msgType":"ALERT","content":"你邀请貂蝉加入了群聊","top":"N","disturb":"N"},"fromInfo":{"nickName":"上官婉儿的群聊-hi1f(2)","portrait":"[\"https://img.alicdn.com/imgextra/i3/87413133/O1CN01mHA9DJ1Z0xlORnKuW_!!87413133.png\"]","userId":"1808765416043110401","userType":"normal"},"createTime":"2024-07-03 23:30:55","groupInfo":{"nickName":"上官婉儿的群聊-hi1f(2)","portrait":"[\"https://img.alicdn.com/imgextra/i3/87413133/O1CN01mHA9DJ1Z0xlORnKuW_!!87413133.png\"]","userId":"1808765416043110401"}}
+      if(event == "ok"){
+        isConnect = true;
+        lastTimeMill = DateTime.now().millisecondsSinceEpoch;
+        // loggerArray(["什么情况，还活着呢",channel == null,periodicTimer == null]);
+      } else if(event is String){
+        var dataMap = jsonDecode(event);
+        switch(dataMap["pushType"]){
+          case "MSG":
+            SocketMessageEntity response;
+            if(isEmpty(dataMap["groupInfo"])){
+              response = SocketMessageEntity.fromJson(dataMap);
+              response.groupInfo = null;
+              // sendPort.send(response);
+            } else {
+              response = SocketMessageEntity();
+              response.msgId = dataMap["msgId"];
+              response.pushType = dataMap["pushType"];
+              response.createTime = dataMap["createTime"];
+              response.msgContent = SocketMsgContent.fromJson(dataMap["msgContent"]);
+              response.fromInfo = UserInfoEntity.fromJson(dataMap["fromInfo"]);
+              var group = GroupInfoEntity();
+              group.name = dataMap["groupInfo"]["nickName"];
+              group.groupId = dataMap["groupInfo"]["userId"];
+              group.portrait = (jsonDecode(dataMap["groupInfo"]["portrait"]) as List).map<String>((e) => e.toString()).toList();
+              if(isNotEmpty(group.groupId)){
+                response.groupInfo = group;
+              }
+            }
+            DbHelper().messageInsertOrUpdate(false,response).then((v){
+              if(v){
+                eventBus.fire(response);
+                eventBus.fire(NewChatEvent());//有新消息，需要刷新列表
+                AudioUtils().playReceiveMsg();//播放收到消息声音
+              }
+            });
+            break;
+          case "NOTICE":
+            var response = SocketNoticeEntity.fromJson(dataMap);
+            eventBus.fire(response);///发送添加好友通知
+            AudioUtils().playReceiveMsg();//播放收到消息声音
+            break;
         }
       }
+    },onError: (e){
+      loggerArray(["消息接收失败",e.toString()]);
+      isConnect = false;
+      callback?.call(isConnect);
+      destroy();
     });
   }
 
-  /// 处理重连
-  void handleReconnect() {
-    reconnectTimer?.cancel();
-    reconnectTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (!isConnect && reconnectAttempts < maxReconnectAttempts) {
-        reconnectAttempts++;
-        loggerArray(["尝试重连", reconnectAttempts]);
-        connect(callback: (result) {
-          if (result) {
-            reconnectTimer?.cancel();
-          }
-        });
-      } else if (reconnectAttempts >= maxReconnectAttempts) {
-        reconnectTimer?.cancel();
-        loggerArray(["达到最大重连次数，停止重连"]);
-      }
-    });
-  }
-
-  /// 断开连接
   Future destroy() async {
     await channel?.sink.close(status.normalClosure);
     channel = null;
     periodicTimer?.cancel();
     periodicTimer = null;
-    heartBeatTimer?.cancel();
-    heartBeatTimer = null;
     isConnect = false;
-    loggerArray(["已关闭长连接", channel == null, periodicTimer == null, heartBeatTimer == null]);
+    loggerArray(["已关闭长连接1",channel==null,periodicTimer == null]);
     return;
   }
 
-  /// 定时器心跳
-  void pengPeriodic() {
+  Timer? periodicTimer;
+  void pengPeriodic(){
     periodicTimer?.cancel();
     periodicTimer = null;
     periodicTimer = Timer.periodic(Duration(seconds: 3), (timer) {
-      if (isConnect) {
-        try {
-          channel?.sink.add("ping");
-        } catch (e) {
+      if(isConnect){
+        try{
+          channel?.sink.add("isConnect");
+        }catch(e){
           periodicTimer?.cancel();
           periodicTimer = null;
         }
@@ -225,60 +170,60 @@ class SocketUtils{
     });
   }
 
-  /// 重连
+
   void reConnect() {
-    loggerArray(["开始重连>>>", !isConnect, AppData.getUser()?.token]);
-    if (!isConnect && ObjectUtil.isNotEmpty(AppData.getUser()?.token)) {
-      connect(callback: (result) {
-        loggerArray(["连接结果", result]);
-        if (result) {
-          // 连接成功
-          isConnect == true;
+    loggerArray(["开始重连",!isConnect,AppData.getUser()?.token]);
+    if(!isConnect && ObjectUtil.isNotEmpty(AppData.getUser()?.token)){
+      ///如果已经登录了，有token
+      SocketUtils().connect(callback: (result){
+        loggerArray(["连接结果",result]);
+        if(result){
+          ///连接成功
         } else {
-          // 失败应退出登录
+          ///失败应退出登录
         }
       });
     }
   }
 
-  // 创建消息
-  types.Message buildSystemText(String text, UserInfoEntity user, {int? createdAt, types.Message? replied, String? msgId}) {
+  types.Message buildSystemText(String text,UserInfoEntity user,{int? createdAt,types.Message? replied,String? msgId}){
     return types.SystemMessage(
-      author: types.User(id: user.userId.em(), firstName: user.nickName, imageUrl: user.portrait.em()),
+      author: types.User(id: user.userId.em(),firstName: user.nickName,imageUrl: user.portrait.em()),
       createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
       id: randomString(),
       text: text,
       repliedMessage: replied,
-      metadata: {"msgId": msgId},
+      metadata: {"msgId":msgId},
     );
   }
 
-  types.Message buildUserText(String text, UserInfoEntity user, {int? createdAt, types.Message? replied, String? msgId}) {
+
+  types.Message buildUserText(String text,UserInfoEntity user,{int? createdAt,types.Message? replied,String? msgId}){
     return types.TextMessage(
-      author: types.User(id: user.userId.em(), firstName: user.nickName, imageUrl: user.portrait.em()),
+      author: types.User(id: user.userId.em(),firstName: user.nickName,imageUrl: user.portrait.em()),
       createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
       id: randomString(),
       text: text,
       repliedMessage: replied,
-      metadata: {"msgId": msgId},
+      metadata: {"msgId":msgId},
     );
   }
 
-  types.Message buildUserImage(PlatformFile image, UserInfoEntity user, {int? createdAt, types.Message? replied}) {
-    if (GetPlatform.isWeb) {
+  types.Message buildUserImage(PlatformFile image,UserInfoEntity user,{int? createdAt,types.Message? replied}){
+    if(GetPlatform.isWeb){
       return types.ImageMessage(
-        author: types.User(id: user.userId.em(), firstName: user.nickName, imageUrl: user.portrait.em()),
+        author: types.User(id: user.userId.em(),firstName: user.nickName,imageUrl: user.portrait.em()),
         createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
         id: randomString(),
         uri: "",
-        metadata: {"file": image.bytes},
+        metadata: {"file":image.bytes},
         size: image.size,
         name: image.name,
         repliedMessage: replied,
       );
     } else {
       return types.ImageMessage(
-        author: types.User(id: user.userId.em(), firstName: user.nickName, imageUrl: user.portrait.em()),
+        author: types.User(id: user.userId.em(),firstName: user.nickName,imageUrl: user.portrait.em()),
         createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
         id: randomString(),
         uri: image.path.em(),
@@ -289,21 +234,21 @@ class SocketUtils{
     }
   }
 
-  types.Message buildUserFile(PlatformFile image, UserInfoEntity user, {int? createdAt, types.Message? replied}) {
-    if (GetPlatform.isWeb) {
+  types.Message buildUserFile(PlatformFile image,UserInfoEntity user,{int? createdAt,types.Message? replied}){
+    if(GetPlatform.isWeb){
       return types.FileMessage(
-        author: types.User(id: user.userId.em(), firstName: user.nickName, imageUrl: user.portrait.em()),
+        author: types.User(id: user.userId.em(),firstName: user.nickName,imageUrl: user.portrait.em()),
         createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
         id: randomString(),
         uri: "",
-        metadata: {"file": image.bytes},
+        metadata: {"file":image.bytes},
         size: image.size,
         name: image.name,
         repliedMessage: replied,
       );
     } else {
       return types.FileMessage(
-        author: types.User(id: user.userId.em(), firstName: user.nickName, imageUrl: user.portrait.em()),
+        author: types.User(id: user.userId.em(),firstName: user.nickName,imageUrl: user.portrait.em()),
         createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
         id: randomString(),
         uri: image.path.em(),
@@ -314,16 +259,24 @@ class SocketUtils{
     }
   }
 
-  types.Message buildUserImageUrl(String content, UserInfoEntity user, {int? createdAt, types.Message? replied, String? msgId}) {
-    // Example implementation for building an image message
+  types.Message buildUserImageUrl(String content,UserInfoEntity user,{int? createdAt,types.Message? replied,String? msgId}){
+    UploadFileEntity uploadFile;
+    loggerArray(["这个是图片地址吗",content,isURL(content)]);
+    if(isURL(content)){
+      uploadFile = UploadFileEntity(fullPath: content);
+    } else {
+      uploadFile = UploadFileEntity.fromJson(jsonDecode(content));
+    }
+
     return types.ImageMessage(
-      author: types.User(id: user.userId.em(), firstName: user.nickName, imageUrl: user.portrait.em()),
+      author: types.User(id: user.userId.em(),firstName: user.nickName,imageUrl: user.portrait.em()),
       createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
-      id: msgId ?? randomString(),
-      uri: content,
-      size: 0,
-      name: 'Image',
+      id: randomString(),
+      uri: uploadFile.fullPath.em(),
+      size: parseSize(uploadFile.fileSize.em()),
+      name: uploadFile.fileName.em(),
       repliedMessage: replied,
+      metadata: {"msgId":msgId},
     );
   }
 
@@ -346,6 +299,7 @@ class SocketUtils{
     );
   }
 
+  // For the testing purposes, you should probably use https://pub.dev/packages/uuid.
   String randomString() {
     final random = Random.secure();
     final values = List<int>.generate(16, (i) => random.nextInt(255));

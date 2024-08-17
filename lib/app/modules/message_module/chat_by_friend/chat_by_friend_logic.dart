@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -9,18 +8,19 @@ import 'package:rescue_station/app/db/db_helper.dart';
 import 'package:rescue_station/app/domains/item_model.dart';
 import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/domains/upload_file_entity.dart';
+import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
-import 'package:rescue_station/app/domains/user_info_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_message_entity.dart';
-import 'package:rescue_station/app/socket/socket_utils_bak.dart';
+import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/app_data.dart';
 import 'package:rescue_station/app/utils/data_utils.dart';
 import 'package:rescue_station/app/utils/dio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
+
 import 'bottom_chat_controller.dart';
 import 'chat_by_friend_state.dart';
 
