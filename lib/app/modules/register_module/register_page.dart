@@ -156,10 +156,10 @@ class RegisterPage extends GetView<RegisterController> {
                   ),
                   Gap(AppLayout.heigth(20)),
                   TextFormField(
-                    controller: controller.emailController,
+                    controller: controller.promotionCodeController,
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.email, color: Colors.white),
-                      hintText: '请输入邮箱',
+                      prefixIcon: const Icon(Icons.share, color: Colors.white),
+                      hintText: '请填写推广码',
                       hintStyle: const TextStyle(color: Colors.white54),
                       filled: true,
                       fillColor: Colors.white12,
@@ -170,18 +170,14 @@ class RegisterPage extends GetView<RegisterController> {
                       errorStyle: TextStyle(fontSize: AppLayout.fontSize(14), color: Colors.redAccent),
                     ),
                     style: const TextStyle(color: Colors.white),
-                    keyboardType: TextInputType.emailAddress,
-                    /* validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return '请输入邮箱!';
+                    keyboardType: TextInputType.text,
+                      validator: (value) {
+                        final passwordRegex = RegExp(r'^|[A-Za-z\d]{4,30}$');
+                        if (!passwordRegex.hasMatch(value!)) {
+                          return '请填写正确的推广码!';
+                        }
+                        return null;
                       }
-                      // Regex for email validation
-                      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-                      if (!emailRegex.hasMatch(value)) {
-                        return '请输入有效的邮箱!';
-                      }
-                      return null;
-                    },*/
                   ),
                   Gap(AppLayout.heigth(40)),
                   ElevatedButton(
