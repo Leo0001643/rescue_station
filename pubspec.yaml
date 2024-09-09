@@ -66,6 +66,9 @@ dependencies:
   scrollable_positioned_list: ^0.3.8
   lpinyin: ^2.0.3
   custom_pop_up_menu: ^1.2.4
+  #WEBVIEW
+#  webview_flutter: ^4.8.0
+  url_launcher: ^6.3.0
   #相机权限
   permission_handler: ^10.2.0
   easy_image_viewer: ^1.5.1

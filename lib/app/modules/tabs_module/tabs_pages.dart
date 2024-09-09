@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:lifecycle/lifecycle.dart';
-import 'package:rescue_station/app/socket/socket_utils.dart';
 import 'package:rescue_station/app/utils/audio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'tabs_controller.dart';
 import '../../utils/Icon.dart';
 
@@ -19,6 +19,13 @@ class TabsPage extends StatefulWidget {
 
 class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin {
   final controller = Get.find<TabsController>();
+
+  Future<void> _launchUrl() async {
+    final Uri _url = Uri.parse('https://mdkhk3.kefuzixun.cn/web/im?cptid=312dce205c94');
+    if (!await launchUrl(_url)) {
+      throw Exception('无法打开网址 $_url');
+    }
+  }
 
   @override
   void onLifecycleEvent(LifecycleEvent event) {
@@ -39,7 +46,6 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
@@ -56,21 +62,23 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
           currentIndex: controller.currentIndex.value,
           type:BottomNavigationBarType.fixed,
           onTap: (index) {
-            if ((index == 1 || index == 2 || index == 3) && !controller.isLogin.value) {
+            if ((index == 1 || index == 2 || index == 4) && !controller.isLogin.value) {
               controller.navigateToLogin();
+            } else if(index ==3){
+              _launchUrl();
             } else {
               controller.setCurrentIndex(index);
             }
           },
           items: [
-            BottomNavigationBarItem(icon: Icon(IconFont.HOME), label: "首页"),
+            const BottomNavigationBarItem(icon: Icon(IconFont.HOME), label: "首页"),
             BottomNavigationBarItem(
               label: "消息",
               icon: Container(
                 width: 50.w,
                 child: Stack(
                   children: [
-                    Center(child: Icon(IconFont.MESSAGE),),
+                    const Center(child: Icon(IconFont.MESSAGE)),
                     Obx(() {
                       return Visibility(
                         visible: controller.unReadMsg > 0,
@@ -114,6 +122,7 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
                 ),
               ),
             ),
+            BottomNavigationBarItem(icon: Icon(IconFont.CUSTOMER), label: "在线客服"),
             BottomNavigationBarItem(icon: Icon(IconFont.MINE), label: "我的")
           ]),
     ));
