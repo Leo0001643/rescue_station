@@ -8,6 +8,7 @@ import 'package:rescue_station/app/domains/message_type_enum.dart';
 import 'package:rescue_station/app/event/logout_event.dart';
 import 'package:rescue_station/app/event/message_read_event.dart';
 import 'package:rescue_station/app/event/new_chat_event.dart';
+import 'package:rescue_station/app/modules/customer_service_module/customer_service_page.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/socket/socket_notice_entity.dart';
@@ -24,10 +25,8 @@ import '../mine_module/mine_page.dart';
 class TabsController extends GetxController {
   RxInt currentIndex = 0.obs;
   RxBool isLogin = SocketUtils().isConnect.obs;
-
   var unReadMsg = 0.obs;
   var unReadContact = 0.obs;
-
   late PageController pageController;
   late List<Widget> pages;
   StreamSubscription? logoutSub;
@@ -56,6 +55,7 @@ class TabsController extends GetxController {
       HomePage(),
       MessagePage(),
       ContactsPage(),
+      CustomerServicePage(),
       MinePage()
     ];
     super.onInit();

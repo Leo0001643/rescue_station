@@ -21,7 +21,7 @@ import 'message_controller.dart';
 import 'package:get/get.dart';
 
 class MessagePage extends StatefulWidget {
-  const MessagePage({super.key});
+  MessagePage({super.key});
 
   @override
   State<StatefulWidget> createState() => StateMessagePage();

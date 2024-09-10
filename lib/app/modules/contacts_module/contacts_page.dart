@@ -15,7 +15,7 @@ import 'contacts_controller.dart';
 
 
 class ContactsPage extends StatefulWidget {
-  const ContactsPage({super.key});
+  ContactsPage({super.key});
 
   @override
   State<StatefulWidget> createState() => StateContactsPage();

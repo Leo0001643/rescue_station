@@ -5,9 +5,8 @@ import 'package:getwidget/getwidget.dart';
 import 'package:lifecycle/lifecycle.dart';
 import 'package:rescue_station/app/utils/audio_utils.dart';
 import 'package:rescue_station/app/utils/logger.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'tabs_controller.dart';
 import '../../utils/Icon.dart';
+import 'tabs_controller.dart';
 
 class TabsPage extends StatefulWidget {
   const TabsPage({super.key});
@@ -20,12 +19,7 @@ class TabsPage extends StatefulWidget {
 class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin {
   final controller = Get.find<TabsController>();
 
-  Future<void> _launchUrl() async {
-    final Uri _url = Uri.parse('https://mdkhk3.kefuzixun.cn/web/im?cptid=312dce205c94');
-    if (!await launchUrl(_url)) {
-      throw Exception('无法打开网址 $_url');
-    }
-  }
+
 
   @override
   void onLifecycleEvent(LifecycleEvent event) {
@@ -64,9 +58,7 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
           onTap: (index) {
             if ((index == 1 || index == 2 || index == 4) && !controller.isLogin.value) {
               controller.navigateToLogin();
-            } else if(index ==3){
-              _launchUrl();
-            } else {
+            }else {
               controller.setCurrentIndex(index);
             }
           },
@@ -74,7 +66,7 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
             const BottomNavigationBarItem(icon: Icon(IconFont.HOME), label: "首页"),
             BottomNavigationBarItem(
               label: "消息",
-              icon: Container(
+              icon: SizedBox(
                 width: 50.w,
                 child: Stack(
                   children: [
@@ -122,8 +114,8 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
                 ),
               ),
             ),
-            BottomNavigationBarItem(icon: Icon(IconFont.CUSTOMER), label: "在线客服"),
-            BottomNavigationBarItem(icon: Icon(IconFont.MINE), label: "我的")
+            const BottomNavigationBarItem(icon: Icon(IconFont.CUSTOMER), label: "在线客服"),
+            const BottomNavigationBarItem(icon: Icon(IconFont.MINE), label: "我的")
           ]),
     ));
   }

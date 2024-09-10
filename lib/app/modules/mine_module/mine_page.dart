@@ -18,7 +18,7 @@ import '../../utils/AppLayout.dart';
 import '../../utils/Icon.dart';
 
 class MinePage extends StatefulWidget {
-  const MinePage({super.key});
+  MinePage({super.key});
 
   @override
   State<StatefulWidget> createState() => StateMinePage();
