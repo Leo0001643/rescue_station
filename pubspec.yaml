@@ -60,6 +60,7 @@ dependencies:
   #数据库
   sqflite: ^2.3.3+1
   sqflite_common_ffi_web: 0.4.3+2
+  sqflite_common_ffi: ^2.3.3
   cached_network_image: ^3.3.1
   just_audio: ^0.9.39
   lifecycle: ^0.8.0
@@ -73,6 +74,10 @@ dependencies:
   permission_handler: ^10.2.0
   easy_image_viewer: ^1.5.1
   universal_html: ^2.2.4
+
+flutter_web_plugins:
+  sdk: flutter
+  url_launcher: ^6.0.9 # Ensure you are using the correct version
 
 dependency_overrides:
   meta: ^1.10.0 # 替换为你需要的meta库的版本号
