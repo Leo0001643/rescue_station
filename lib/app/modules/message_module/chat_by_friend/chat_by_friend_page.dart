@@ -14,6 +14,7 @@ import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_text_theme.dart';
 import 'package:rescue_station/app/utils/data_utils.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
@@ -88,6 +89,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
             messages: state.messages.value,
             // imageMessageBuilder: buildImageMessage,
             textMessageBuilder: buildTextMessage,
+            fileMessageBuilder: buildFileMessage,
             // imageProviderBuilder: buildImageProvider,
             onSendPressed: (text) {},
             // onMessageTap: (context, message) => logic.addMessage(),
@@ -248,6 +250,22 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
     }
   }
 
+
+  Widget buildFileMessage(types.FileMessage message, {required int messageWidth}) {
+    if (message.author.id == chatCtl.user.userId) {
+      return FileMessage(message: message);
+    } else {
+      return InkWell(
+        onTap: (){
+          logger("处理点击下载事件啦");
+        },
+        child: FileMessage(message: message),
+      );
+    }
+  }
+
+
+
   ImageProvider<Object> buildImageProvider(
       {required Conditional conditional,
       required Map<String, String>? imageHeaders,
@@ -315,6 +333,10 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
       ),
     );
   }
+
+
+
+
 
 
 }

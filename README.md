@@ -25,60 +25,8 @@ samples, guidance on mobile development, and a full API reference.
  ### UI地址
     https://www.figma.com/design/aic95SqjbH11hTeojJ7iYz/%E6%89%B6%E8%B4%AB%E9%A1%B9%E7%9B%AE?node-id=0-1&t=NBPz7J0SJ5K7qE21-1
 
-
- ### WS通信
-    /**
-    * 通知
-    */
-    ALERT("ALERT", "通知"),
-    /**
-    * 文字/表情
-    */
-    TEXT("TEXT", "文字/表情"),
-    /**
-    * 图片/拍照
-      */
-      IMAGE("IMAGE", "图片/拍照"),
-      /**
-    * 声音
-      */
-      VOICE("VOICE", "声音"),
-      /**
-    * 视频
-      */
-      VIDEO("VIDEO", "视频"),
-      /**
-    * 位置
-      */
-      LOCATION("LOCATION", "位置"),
-      /**
-    * 收藏
-      */
-      COLLECTION("COLLECTION", "收藏"),
-      /**
-    * 名片
-      */
-      CARD("CARD", "名片"),
-      /**
-    * 文件
-      */
-      FILE("FILE", "文件"),
-      /**
-    * 实时语音开始
-      */
-      TRTC_VOICE_START("TRTC_VOICE_START", "实时语音开始"),
-      /**
-    * 实时语音结束
-      */
-      TRTC_VOICE_END("TRTC_VOICE_END", "实时语音结束"),
-      /**
-    * 实时视频开始
-      */
-      TRTC_VIDEO_START("TRTC_VIDEO_START", "实时视频开始"),
-      /**
-    * 实时视频结束
-      */
-      TRTC_VIDEO_END("TRTC_VIDEO_END", "实时视频结束"),
+ ### 编译web_sqflite.js
+    $ dart run sqflite_common_ffi_web:setup
 
 
 13125554441 上官婉儿 1800817039510786049
@@ -89,17 +37,15 @@ samples, guidance on mobile development, and a full API reference.
 
 15615102000 郭靖 1809063851485024258
 
+13128926159   123456
 
 
 
 
+修改群名，建立群好再添加好友进群踢出好友出群，群主打个标签，发送图片点击放大
 
 
-
-
-
-
-
+需要不少接口呢，例如：获取历史聊天窗口，好友的聊天记录，群聊天记录，删除聊天窗口，清空历史聊天消息，好友消息已读，群消息已读这些
 
 
 

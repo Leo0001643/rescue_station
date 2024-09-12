@@ -153,7 +153,7 @@ class LoginPage extends GetView<LoginController> {
                           controller.login();
                         }
                       },
-                    )
+                    ),
                   ],
                 )
             ),
