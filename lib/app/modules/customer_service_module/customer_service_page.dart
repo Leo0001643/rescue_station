@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:html' as html;  // 引入 dart:html
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:rescue_station/app/utils/Icon.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../utils/AppLayout.dart';
 import 'customer_service_controller.dart';
 import '../../theme/app_colors.dart';
@@ -55,8 +55,10 @@ class CustomerServicePage extends GetView<CustomerServiceController> {
                       ],
                     ),
                     onPressed: (){
-                    String url = 'https://mdkhk3.kefuzixun.cn/web/im?cptid=4ebeda2b9808';
-                    html.window.location.href = url;  // 替换当前页面
+                      ///这里不适配原生
+                    // String url = 'https://mdkhk3.kefuzixun.cn/web/im?cptid=4ebeda2b9808';
+                    // html.window.location.href = url;  // 替换当前页面
+                     launchUrlString("https://mdkhk3.kefuzixun.cn/web/im?cptid=4ebeda2b9808");
                     },
                   )
                 ],

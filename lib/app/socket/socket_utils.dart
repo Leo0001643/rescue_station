@@ -316,15 +316,29 @@ class SocketUtils{
 
   types.Message buildUserImageUrl(String content, UserInfoEntity user, {int? createdAt, types.Message? replied, String? msgId}) {
     // Example implementation for building an image message
-    return types.ImageMessage(
-      author: types.User(id: user.userId.em(), firstName: user.nickName, imageUrl: user.portrait.em()),
-      createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
-      id: msgId ?? randomString(),
-      uri: content,
-      size: 0,
-      name: 'Image',
-      repliedMessage: replied,
-    );
+    if(isURL(content)){
+      return types.ImageMessage(
+        author: types.User(id: user.userId.em(), firstName: user.nickName, imageUrl: user.portrait.em()),
+        createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
+        id: msgId ?? randomString(),
+        uri: content,
+        size: 0,
+        name: 'Image',
+        repliedMessage: replied,
+      );
+    } else {
+      var imgBean = UploadFileEntity.fromJson(jsonDecode(content));
+      return types.ImageMessage(
+        author: types.User(id: user.userId.em(), firstName: user.nickName, imageUrl: user.portrait.em()),
+        createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
+        id: msgId ?? randomString(),
+        uri: imgBean.fullPath.em(),
+        size: parseSize(imgBean.fileSize.em()),
+        name: imgBean.fileName.em(),
+        repliedMessage: replied,
+      );
+    }
+
   }
 
   types.Message buildUserFileUrl(String content,UserInfoEntity user,{int? createdAt,types.Message? replied,String? msgId}){
