@@ -270,7 +270,7 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
       {required Conditional conditional,
       required Map<String, String>? imageHeaders,
       required String uri}) {
-    // loggerArray(["走这里吗第三方水电费",uri,imageHeaders,conditional]);
+    loggerArray(["走这里吗第三方水电费",uri,imageHeaders,conditional]);
     return WidgetUtils.buildImageProvider(uri);
   }
 

@@ -1,7 +1,5 @@
 import 'package:bubble/bubble.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,8 +12,10 @@ import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
 import 'package:rescue_station/app/theme/app_text_theme.dart';
 import 'package:rescue_station/app/utils/data_utils.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import 'package:rescue_station/app/utils/widget_utils.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter/material.dart';
 
 import '../../../constant/constant.dart';
 import '../chat_by_friend/bottom_chat_controller.dart';
@@ -92,6 +92,7 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
             messages: state.messages.value,
             onSendPressed: (text) {},
             textMessageBuilder: buildTextMessage,
+            // imageProviderBuilder: buildImageProvider,
             user: types.User(
               id: chatCtl.user.userId.em(),
               imageUrl: chatCtl.user.portrait.em(),
@@ -292,7 +293,13 @@ class _ChatByGroupPageState extends State<ChatByGroupPage> {
     }
   }
 
-
+  ImageProvider<Object> buildImageProvider({
+    required Map<String, String>? imageHeaders,
+    required String uri,
+    required Object conditional,}) {
+    loggerArray(["走这里吗第三方水电费",uri,imageHeaders,conditional]);
+    return WidgetUtils.buildImageProvider(uri);
+  }
 
   List<ItemModel> menuItems = [
     ItemModel('复制', Icons.content_copy,0),
