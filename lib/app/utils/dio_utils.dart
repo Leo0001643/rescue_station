@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart' as diod;
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rescue_station/app/constant/constant.dart';
 import 'package:rescue_station/app/domains/upload_file_entity.dart';
 import 'package:rescue_station/app/routes/api_info.dart';
@@ -116,8 +119,6 @@ class DioUtil {
 
 
 
-
-
   ///上传文件
   static Future<UploadFileEntity?> uploadFile(String filename,String path) async {
     loggerArray(["上传的文件路径",path]);
@@ -149,6 +150,32 @@ class DioUtil {
     } else {
       Get.snackbar('提醒', result.data["msg"]);
       return null;
+    }
+  }
+
+
+  /// 开始下载
+  static void download(String filename,String uri) async {
+    // var destinationFilename = "${ConfigManager.getBucket()}_${DateUtil.formatDate(DateTime.now(),format: "yyyyMMddHHmmss")}.apk";
+    try {
+      var dir = await getDownloadsDirectory();
+      var fillName = "${dir?.path}/$filename";
+      loggerArray(["文件下载地址打印",uri,fillName]);
+
+      Dio().download(uri.em(), fillName).then((value) {
+        // EasyLoading.dismiss();
+        var response = value.data as ResponseBody;
+        if(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! <= 299){
+          loggerArray(["文件是否存在",fillName,File(fillName).existsSync()]);
+          if(File(fillName).existsSync()){
+            OpenFile.open(fillName);
+          }
+        } else {
+          // ErrorResponseHandler().onErrorHandle({"code": response.statusCode,"message": response.statusMessage.toString()});
+        }
+      },onError: (e){});
+    } catch (e) {
+      // ErrorResponseHandler().onErrorHandle(e);
     }
   }
 

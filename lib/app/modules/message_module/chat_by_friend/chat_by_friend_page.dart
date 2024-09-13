@@ -1,5 +1,7 @@
 import 'package:bubble/bubble.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:file_picker/_internal/file_picker_web.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_ui/src/conditional/conditional.dart';
@@ -7,8 +9,10 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:open_file/open_file.dart';
 import 'package:rescue_station/app/constant/constant.dart';
 import 'package:rescue_station/app/domains/item_model.dart';
+import 'package:rescue_station/app/domains/marquee_entity.dart';
 import 'package:rescue_station/app/event/chat_event.dart';
 import 'package:rescue_station/app/routes/app_pages.dart';
 import 'package:rescue_station/app/theme/app_colors.dart';
@@ -257,13 +261,23 @@ class _ChatByFriendPageState extends State<ChatByFriendPage> {
     } else {
       return InkWell(
         onTap: (){
-          logger("处理点击下载事件啦");
+          var index = state.messages.indexOf(message);
+          if(index > -1 && message.isLoading != true){
+            // var msg = types.FileMessage(author: message.author,createdAt: message.createdAt,id: message.id,isLoading: true,
+            //     metadata: message.metadata,mimeType: message.mimeType, name: message.name, size: message.size,uri: message.uri,repliedMessage: message.repliedMessage,
+            //     roomId: message.roomId,remoteId: message.remoteId,showStatus: message.showStatus,status: message.status,type: message.type);
+            // state.messages[index] = msg;
+            ///启动下载任务
+            // FilePickerWeb.platform.pickFiles(type: FileType.any).then((v){
+            //   loggerArray(["选择的文件下载地址",v]);
+            // });
+            DataUtils.downloadFile(message.name, message.uri);
+          }
         },
         child: FileMessage(message: message),
       );
     }
   }
-
 
 
   ImageProvider<Object> buildImageProvider(
