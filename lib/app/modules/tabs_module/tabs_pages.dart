@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rescue_station/app/utils/audio_utils.dart';
+import 'package:rescue_station/app/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:lifecycle/lifecycle.dart';
-import 'package:rescue_station/app/utils/audio_utils.dart';
-import 'package:rescue_station/app/utils/logger.dart';
 import '../../utils/Icon.dart';
 import 'tabs_controller.dart';
 
@@ -91,11 +91,11 @@ class StateTabsPage extends State<TabsPage>  with LifecycleAware, LifecycleMixin
             ),
             BottomNavigationBarItem(
               label: "通讯录",
-              icon: Container(
+              icon: SizedBox(
                 width: 50.w,
                 child: Stack(
                   children: [
-                    Center(child: Icon(IconFont.CONTACTS),),
+                    const Center(child: Icon(IconFont.CONTACTS)),
                     Obx(() {
                       return Visibility(
                         visible: controller.unReadContact > 0,
